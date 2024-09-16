@@ -1,9 +1,9 @@
 ---
-name: '✨ Feat'
+name: "✨ Feat"
 about: 새로운 기능 작업
-title: ''
-labels: '✨ Feat'
-assignees: ''
+title: ""
+labels: "✨ Feat"
+assignees: ""
 ---
 
 # ✨ Feat
