@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   storybook-preview:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: 저장소 체크아웃
         uses: actions/checkout@v3
@@ -24,11 +24,25 @@ jobs:
       - name: Node.js 설정
         uses: actions/setup-node@v3
         with:
-          node-version: "20"
+          node-version: "20" # 프로젝트의 Node.js 버전에 맞게 조정하세요
           cache: "yarn"
 
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+
+      - name: 캐시 종속성
+        uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - name: 종속성 설치
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile --prefer-offline
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
 
       - name: Chromatic에 게시
         id: chromatic
@@ -40,24 +54,17 @@ jobs:
           autoAcceptChanges: true
           exitZeroOnChanges: true
 
-    outputs:
-      storybook_url: ${{ steps.chromatic.outputs.storybookUrl }}
-
-  github-bot-storybook:
-    runs-on: ubuntu-latest
-    needs: [storybook-preview]
-    steps:
-      - name: 현재 시간 가져오기
-        uses: josStorer/get-current-time@v2
-        id: current-time
-        with:
-          format: "YYYY년 MM월 DD일 HH시 mm분 ss초"
-          utcOffset: "+09:00"
-
       - name: PR 코멘트 남기기
-        uses: thollander/actions-comment-pull-request@v2
+        uses: actions/github-script@v6
         with:
-          comment_tag: ${{github.event.number}}-storybook
-          message: |
-            💄 Storybook: ${{ needs.storybook-preview.outputs.storybook_url }}
-            🕖 Update: ${{ steps.current-time.outputs.formattedTime }}
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const now = new Date().toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'});
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `💄 Storybook: ${process.env.STORYBOOK_URL}\n🕖 Update: ${now}`
+            })
+        env:
+          STORYBOOK_URL: ${{ steps.chromatic.outputs.storybookUrl }}
