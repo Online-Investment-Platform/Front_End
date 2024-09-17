@@ -1,11 +1,10 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-.eslintcache
+
 # dependencies
 /node_modules
 /.pnp
 .pnp.js
 .yarn/install-state.gz
-
 
 # testing
 /coverage
@@ -37,4 +36,4 @@ yarn-error.log*
 next-env.d.ts
 
 *storybook.log
-
+.eslintcache
