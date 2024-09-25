@@ -1,0 +1,21 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "always",
+    "source.fixAll.eslint": "explicit"
+  },
+  "cSpell.words": [
+    "autodocs",
+    "chpt",
+    "classname",
+    "clsx",
+    "commitlint",
+    "hookform",
+    "nextjs",
+    "Parens",
+    "Pretendard",
+    "tailwindcss",
+    "zustand"
+  ]
+}
