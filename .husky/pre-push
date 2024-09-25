@@ -1,6 +1,6 @@
 #!/bin/sh
 
-yarn lint
+yarn lint --fix
 
 current_branch=$(git branch --show-current)
 
