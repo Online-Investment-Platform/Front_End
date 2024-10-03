@@ -1,10 +1,9 @@
 #!/bin/sh
-
 yarn lint
 
 current_branch=$(git branch --show-current)
 
-restricted_branches="^(develop)$"
+restricted_branches="^(main|develop)$"
 
 if [[ $current_branch =~ $restricted_branches ]]; then
   echo "❌ You are on a restricted branch: $current_branch.. ❌"

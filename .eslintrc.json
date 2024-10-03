@@ -18,6 +18,7 @@
     "@typescript-eslint",
     "jsx-a11y",
     "import",
+    "simple-import-sort",
     "prettier"
   ],
   "rules": {
@@ -36,12 +37,16 @@
       }
     ],
     "react/react-in-jsx-scope": "off",
-    // 'import/prefer-default-export': 'off',
-    // '@typescript-eslint/explicit-module-boundary-types': 'off',
     "react/prop-types": "off",
     "no-console": "error",
+    "react/require-default-props": "off",
     "react/jsx-props-no-spreading": "off",
-    "tailwindcss/no-custom-classname": "off"
+    "tailwindcss/no-custom-classname": "off",
+    "simple-import-sort/imports": "error",
+    "@typescript-eslint/naming-convention": "off",
+    "@typescript-eslint/dot-notation": "off",
+    "@typescript-eslint/no-throw-literal": "off",
+    "@typescript-eslint/lines-between-class-members": "off"
   },
   "settings": {
     "react": {
@@ -53,5 +58,6 @@
   },
   "parserOptions": {
     "project": ["./tsconfig.json"]
-  }
+  },
+  "parser": "@typescript-eslint/parser"
 }
