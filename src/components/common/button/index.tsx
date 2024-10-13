@@ -20,10 +20,10 @@ function Button({
     <button
       type="button"
       disabled={isDisabled}
-      className={clsx("max-w-[400px] rounded-2xl px-5 py-2", {
+      className={clsx("max-w-440 px-5 py-2", {
         "bg-gray-300 cursor-not-allowed": isDisabled,
-        "bg-blue-300 hover:bg-blue-400": variant === "primary" && !isDisabled,
-        "bg-red-300 hover:bg-red-400": variant === "secondary" && !isDisabled,
+        "bg-blue-400 hover:bg-blue-500": variant === "primary" && !isDisabled,
+        "bg-red-400 hover:bg-red-500": variant === "secondary" && !isDisabled,
       })}
       {...props}
     >
