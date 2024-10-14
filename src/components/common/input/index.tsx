@@ -33,7 +33,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       <div className="relative w-full">
         <input
           className={clsx(
-            "w-full rounded-lg px-10 leading-tight text-gray-700",
+            "w-full rounded-lg py-2 pl-13 pr-10 leading-tight text-gray-700",
             "border border-gray-300 bg-white focus:border-blue-500 focus:outline-none",
             "transition-all duration-200 ease-in-out",
             error
@@ -42,7 +42,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             props.disabled
               ? "cursor-not-allowed bg-gray-100 opacity-50"
               : "hover:border-gray-400",
-            className, // 여기에 외부에서 전달된 className을 적용합니다.
+            className,
           )}
           placeholder={placeholder}
           type={inputType}
@@ -51,19 +51,19 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         />
         {type === "password" && (
           <button
-            className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer pr-10 text-gray-400 hover:text-gray-600 focus:outline-none"
+            className="absolute right-10 top-47 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600 focus:outline-none"
             onClick={handleClickVisible}
             aria-label="Toggle password visibility"
             type="button"
           >
             {isVisible ? (
-              <MdOutlineVisibility className="mt-15 size-20" />
+              <MdOutlineVisibility className="size-25" />
             ) : (
-              <MdOutlineVisibilityOff className="mt-15 size-20" />
+              <MdOutlineVisibilityOff className="size-25" />
             )}
           </button>
         )}
-        {error && <p className="mt-3 text-14-400 text-red-400">{error}</p>}
+        {error && <p className="mt-1 text-14-400 text-red-400">{error}</p>}
       </div>
     );
   },
