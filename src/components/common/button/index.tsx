@@ -2,19 +2,14 @@ import { clsx } from "clsx";
 import { ComponentProps, ReactNode } from "react";
 
 interface ButtonProps extends ComponentProps<"button"> {
-  /** 버튼의 스타일 타입을 지정합니다. */
   variant?: "primary" | "secondary" | "outline";
-  /** 버튼의 활성화 여부를 지정합니다. */
   isDisabled?: boolean;
-  /** 버튼의 내용을 지정합니다. */
   children: ReactNode;
-  /** 추가적인 className입니다. */
   className?: string;
 }
 
 export default function Button({
   variant = "primary",
-
   isDisabled = false,
   children,
   className,

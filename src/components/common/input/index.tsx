@@ -10,30 +10,15 @@ interface InputProps extends Omit<ComponentProps<"input">, "type"> {
   /** input의 placeholder 속성입니다. */
   placeholder: string;
   /** input 의 타입입니다. text, email, password */
-  type?: "text" | "email" | "password";
+  type?: "text" | "email" | "password" | "number";
   /** 추가적인 className입니다. 너비와 높이 등을 설정할 수 있습니다. */
   className?: string;
   /** 에러 메시지입니다. */
   error?: string;
-  /** 인풋의 높이입니다. 기본값은 '48px'입니다. */
-  height?: string;
-  /** 인풋의 너비입니다. 기본값은 '100%'입니다. */
-  width?: string;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  (
-    {
-      placeholder,
-      type = "text",
-      className,
-      error,
-      height = "48px",
-      width = "100%",
-      ...props
-    },
-    ref,
-  ) => {
+  ({ placeholder, type = "text", className, error, ...props }, ref) => {
     const [inputType, setInputType] = useState(type);
     const { value: isVisible, handleToggle } = useToggle();
 
@@ -44,11 +29,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       );
     };
 
-    // 아이콘 크기 계산 (인풋 높이의 약 절반)
-    const iconSize = parseInt(height, 10) / 3;
-
     return (
-      <div className={clsx("relative")} style={{ width }}>
+      <div className="relative w-full">
         <input
           className={clsx(
             "w-full rounded-lg px-10 leading-tight text-gray-700",
@@ -60,9 +42,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             props.disabled
               ? "cursor-not-allowed bg-gray-100 opacity-50"
               : "hover:border-gray-400",
-            className,
+            className, // 여기에 외부에서 전달된 className을 적용합니다.
           )}
-          style={{ height, width }}
           placeholder={placeholder}
           type={inputType}
           ref={ref}
@@ -70,16 +51,15 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         />
         {type === "password" && (
           <button
-            className="absolute right-3 top-1/2 mr-8 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600 focus:outline-none"
+            className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer pr-10 text-gray-400 hover:text-gray-600 focus:outline-none"
             onClick={handleClickVisible}
             aria-label="Toggle password visibility"
             type="button"
-            style={{ height: `${iconSize}px`, width: `${iconSize}px` }}
           >
             {isVisible ? (
-              <MdOutlineVisibility size={iconSize} />
+              <MdOutlineVisibility className="mt-15 size-20" />
             ) : (
-              <MdOutlineVisibilityOff size={iconSize} />
+              <MdOutlineVisibilityOff className="mt-15 size-20" />
             )}
           </button>
         )}

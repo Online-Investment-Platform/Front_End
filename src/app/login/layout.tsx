@@ -12,7 +12,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="px-470 py-125">{children}</body>
+      <body className="flex size-full max-w-1400 flex-col items-center justify-center px-470 py-125">
+        {children}
+      </body>
     </html>
   );
 }
