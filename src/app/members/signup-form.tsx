@@ -9,16 +9,10 @@ import { useForm } from "react-hook-form";
 
 import Button from "@/components/common/button/index";
 import Input from "@/components/common/input/index";
-import {
-  SignupFormData,
-  SignUpResponse,
-  signupSchema,
-} from "@/validation/schema/auth/index";
+import { SignupFormData, signupSchema } from "@/validation/schema/auth/index";
 
 export default function SignupForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const [signupError, setSignupError] = useState<string | null>(null);
-  const [signupSuccess, setSignupSuccess] = useState(false);
   const router = useRouter();
 
   const {
@@ -32,74 +26,25 @@ export default function SignupForm() {
 
   const onSubmit = async (data: SignupFormData) => {
     setIsLoading(true);
-    setSignupError(null);
-    setSignupSuccess(false);
-
     const { confirmPassword, ...signupData } = data;
 
     try {
-      console.log("Sending signup data:", signupData);
-
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/members`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(signupData),
+      const response = await fetch(`/api/members`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
-
-      console.log("Response status:", response.status);
+        body: JSON.stringify(signupData),
+      });
 
       if (response.ok) {
-        const responseText = await response.text();
-        console.log("Raw response:", responseText);
-
-        let responseData: SignUpResponse;
-        if (responseText) {
-          try {
-            responseData = JSON.parse(responseText);
-            console.log("회원가입 성공:", responseData);
-            setSignupSuccess(true);
-            setTimeout(() => {
-              router.push("/login");
-            }, 2000);
-          } catch (error) {
-            console.warn(
-              "Response is not valid JSON, but signup was successful",
-            );
-            setSignupSuccess(true);
-            setTimeout(() => {
-              router.push("/login");
-            }, 2000);
-          }
-        } else {
-          console.log("회원가입 성공, 하지만 응답 본문이 비어있습니다.");
-          setSignupSuccess(true);
-          setTimeout(() => {
-            router.push("/login");
-          }, 2000);
-        }
+        router.push("/login");
       } else {
-        const errorData = await response.text();
-        console.error("Error data:", errorData);
-        throw new Error(errorData || "회원가입에 실패했습니다.");
+        const errorData = await response.json();
+        console.error("회원가입 실패:", errorData.message);
       }
     } catch (error) {
-      console.error("Error details:", error);
-      if (error instanceof Error) {
-        if (error.name === "TypeError" && error.message === "Failed to fetch") {
-          setSignupError(
-            "네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.",
-          );
-        } else {
-          setSignupError(`회원가입에 실패했습니다: ${error.message}`);
-        }
-      } else {
-        setSignupError("회원가입 중 알 수 없는 오류가 발생했습니다.");
-      }
+      console.error("회원가입 오류:", error);
     } finally {
       setIsLoading(false);
     }
@@ -162,15 +107,6 @@ export default function SignupForm() {
       >
         {isLoading ? "가입 중..." : "회원가입"}
       </Button>
-      {signupError && (
-        <p className="mb-4 text-center text-red-500">{signupError}</p>
-      )}
-      {signupSuccess && (
-        <p className="mb-4 text-center text-green-500">
-          회원가입이 성공적으로 완료되었습니다. 잠시 후 로그인 페이지로
-          이동합니다.
-        </p>
-      )}
       <div className="flex flex-col items-center justify-center gap-13">
         <Link href="/login">
           <div className="text-16-400">이미 계정이 있으신가요? 로그인</div>
