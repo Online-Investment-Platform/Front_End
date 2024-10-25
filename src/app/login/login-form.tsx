@@ -1,4 +1,4 @@
-/*eslint-disable*/
+/* eslint-disable no-console */
 
 "use client";
 
@@ -18,8 +18,6 @@ import {
 
 export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const [loginError, setLoginError] = useState<string | null>(null);
-  const [loginSuccess, setLoginSuccess] = useState(false);
   const router = useRouter();
 
   const {
@@ -33,19 +31,20 @@ export default function LoginForm() {
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
-    setLoginError(null);
-    setLoginSuccess(false);
 
     try {
       console.log("Sending login data:", data);
 
-      const response = await fetch(`/api/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
         },
-        body: JSON.stringify(data),
-      });
+      );
 
       console.log("Response status:", response.status);
 
@@ -61,10 +60,7 @@ export default function LoginForm() {
 
             if (responseData.token) {
               localStorage.setItem("token", responseData.token);
-              setLoginSuccess(true);
-              setTimeout(() => {
-                router.push("/");
-              }, 1500); // 1.5초 후 홈페이지로 리다이렉션
+              router.push("/");
             } else {
               throw new Error("토큰이 없습니다.");
             }
@@ -83,9 +79,9 @@ export default function LoginForm() {
     } catch (error) {
       console.error("Error details:", error);
       if (error instanceof Error) {
-        setLoginError(`로그인 실패: ${error.message}`);
+        console.log("Error message:", error.message);
       } else {
-        setLoginError("로그인 중 알 수 없는 오류가 발생했습니다.");
+        console.error("로그인 오류:", error);
       }
     } finally {
       setIsLoading(false);
@@ -117,14 +113,6 @@ export default function LoginForm() {
       >
         {isLoading ? "로그인 중..." : "로그인"}
       </Button>
-      {loginError && (
-        <p className="mb-4 text-center text-red-500">{loginError}</p>
-      )}
-      {loginSuccess && (
-        <p className="mb-4 text-center text-green-500">
-          로그인 성공! 곧 홈페이지로 이동합니다.
-        </p>
-      )}
       <div className="flex flex-col items-center justify-center gap-13">
         <Link href="/signup">
           <div className="text-16-400">회원가입</div>
