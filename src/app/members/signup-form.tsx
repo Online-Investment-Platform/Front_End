@@ -20,10 +20,19 @@ export default function SignupForm() {
     register,
     handleSubmit,
     formState: { errors, isValid },
+    watch,
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
     mode: "onChange",
   });
+
+  const password = watch("memberPassword");
+  const confirmedPassword = watch("confirmPassword") || "";
+
+  const passwordMatchError =
+    confirmedPassword && password !== confirmedPassword
+      ? "비밀번호가 일치하지 않습니다."
+      : "";
 
   const onSubmit = async (data: SignupFormData) => {
     setIsLoading(true);
@@ -94,7 +103,7 @@ export default function SignupForm() {
         className="mt-15 h-66 w-full rounded-10 bg-[#F3F4F6]"
         placeholder="비밀번호 확인"
         type="password"
-        error={errors.confirmPassword?.message}
+        error={passwordMatchError || errors.confirmPassword?.message}
         {...register("confirmPassword")}
       />
       <Input
@@ -107,7 +116,7 @@ export default function SignupForm() {
       />
       <Button
         className="mb-20 mt-15 h-66 w-full rounded-10 text-20-600"
-        isDisabled={!isValid || isLoading}
+        isDisabled={!isValid || isLoading || Boolean(passwordMatchError)}
         type="submit"
       >
         {isLoading ? "가입 중..." : "회원가입"}
