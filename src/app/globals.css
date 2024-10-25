@@ -7,8 +7,3 @@
   src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
     format("woff");
 }
-
-* {
-  font-family: "Pretendard-Regular", Arial, sans-serif, "PyeongChangPeace-Bold";
-  box-sizing: border-box;
-}
