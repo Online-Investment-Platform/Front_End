@@ -5,16 +5,14 @@ export const metadata: Metadata = {
   description: "로그인 페이지입니다",
 };
 
-export default function RootLayout({
+export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
-      <body className="flex size-full max-w-1400 flex-col items-center justify-center px-470 py-125">
-        {children}
-      </body>
-    </html>
+    <div className="flex h-screen w-full flex-col items-center justify-center px-4 py-8 md:px-12 lg:max-w-7xl lg:px-16">
+      {children}
+    </div>
   );
 }
