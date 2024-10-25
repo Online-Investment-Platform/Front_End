@@ -18,7 +18,7 @@ export default function IconButton({
     <button
       type="button"
       className={`flex flex-col items-center justify-center p-2 
-        ${isActive ? "text-blue-500" : "text-gray-500 hover:text-blue-400"}
+        ${isActive ? "text-zinc-950" : "text-gray-500 hover:text-zinc-900"}
         ${className}`}
       {...props}
     >

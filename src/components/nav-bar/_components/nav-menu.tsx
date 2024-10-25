@@ -21,7 +21,7 @@ export default function NavMenu() {
   return (
     <menu className="fixed left-0 top-0 flex h-screen w-82 flex-col items-center border-r bg-white py-4">
       <div className="mb-40 text-16-600">로고</div>
-      <ul className="flex flex-col items-center space-y-40">
+      <ul className="flex flex-col items-center space-y-45">
         {NAV_ITEMS.map((item) => {
           const isActive = pathname === item.href;
           return (
