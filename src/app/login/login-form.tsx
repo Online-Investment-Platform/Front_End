@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 
 import Button from "@/components/common/button/index";
 import Input from "@/components/common/input/index";
+import { setCookie } from "@/utils/next-cookies";
 import {
   LoginFormData,
   LoginResponse,
@@ -49,32 +50,29 @@ export default function LoginForm() {
       console.log("Response status:", response.status);
 
       if (response.ok) {
-        const responseText = await response.text();
-        console.log("Raw response:", responseText);
+        const responseData: LoginResponse = await response.json();
+        console.log("로그인 성공:", responseData);
 
-        let responseData: LoginResponse;
-        if (responseText) {
-          try {
-            responseData = JSON.parse(responseText);
-            console.log("로그인 성공:", responseData);
+        if (responseData.token) {
+          // 토큰을 쿠키에 저장
+          await setCookie("token", responseData.token, {
+            // 쿠키 유효기간 7일 설정
+            maxAge: 7 * 24 * 60 * 60,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/",
+          });
 
-            if (responseData.token) {
-              localStorage.setItem("token", responseData.token);
-              router.push("/");
-            } else {
-              throw new Error("토큰이 없습니다.");
-            }
-          } catch (error) {
-            console.error("Invalid JSON response:", error);
-            throw new Error("서버 응답을 처리하는 중 오류가 발생했습니다.");
-          }
+          router.push("/");
+          router.refresh();
         } else {
-          throw new Error("서버 응답이 비어있습니다.");
+          throw new Error("토큰이 없습니다.");
         }
       } else {
-        const errorData = await response.text();
+        const errorData = await response.json();
         console.error("Error data:", errorData);
-        throw new Error(errorData || "로그인에 실패했습니다.");
+        throw new Error(errorData.message || "로그인에 실패했습니다.");
       }
     } catch (error) {
       console.error("Error details:", error);
