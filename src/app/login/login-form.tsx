@@ -112,7 +112,7 @@ export default function LoginForm() {
         {isLoading ? "로그인 중..." : "로그인"}
       </Button>
       <div className="flex flex-col items-center justify-center gap-13">
-        <Link href="/signup">
+        <Link href="/members">
           <div className="text-16-400">회원가입</div>
         </Link>
         <Link href="/forgot-password">
