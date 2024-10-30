@@ -51,7 +51,6 @@ jobs:
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          workingDir: frontend
           storybookBuildDir: storybook-static
           onlyChanged: true
           exitZeroOnChanges: true
