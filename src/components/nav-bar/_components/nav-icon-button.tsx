@@ -1,4 +1,5 @@
-import { HTMLAttributes } from "react";
+import clsx from "clsx";
+import { HTMLAttributes, memo } from "react";
 
 interface IconButtonProps extends HTMLAttributes<HTMLButtonElement> {
   icon: React.FC<{ className?: string }>;
@@ -7,7 +8,7 @@ interface IconButtonProps extends HTMLAttributes<HTMLButtonElement> {
   onClick?: () => void;
 }
 
-export default function IconButton({
+function IconButtonComponent({
   icon: Icon,
   label,
   isActive = false,
@@ -17,9 +18,11 @@ export default function IconButton({
   return (
     <button
       type="button"
-      className={`flex flex-col items-center justify-center p-2 
-        ${isActive ? "text-zinc-950" : "text-gray-500 hover:text-zinc-900"}
-        ${className}`}
+      className={clsx(
+        "flex flex-col items-center justify-center p-2",
+        isActive ? "text-zinc-950" : "text-gray-500 hover:text-zinc-900",
+        className,
+      )}
       {...props}
     >
       <div className="mb-5">
@@ -31,3 +34,5 @@ export default function IconButton({
     </button>
   );
 }
+
+export default memo(IconButtonComponent);
