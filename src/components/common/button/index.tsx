@@ -22,7 +22,7 @@ export default function Button({
       className={clsx(
         "inline-flex items-center justify-center rounded-md px-8 font-medium transition-colors focus:outline-none",
         {
-          "bg-blue-400 text-white hover:bg-blue-500 ":
+          "bg-[#0FED60] text-black hover:bg-[#0FED88] ":
             variant === "primary" && !isDisabled,
           "bg-gray-200 text-gray-800 hover:bg-gray-300":
             variant === "secondary" && !isDisabled,
