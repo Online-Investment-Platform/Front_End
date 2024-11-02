@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 
 import NavBar from "@/components/nav-bar";
+import AuthInitializer from "@/provider/AuthInitializer";
 
 export const metadata: Metadata = {
   title: "Online-Investment-Platform",
@@ -17,6 +18,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="flex">
+        <AuthInitializer />
         <NavBar />
         <main className="ml-95 flex-1">{children}</main>
       </body>

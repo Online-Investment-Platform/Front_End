@@ -2,8 +2,6 @@ name: Optimized Preview
 on:
   pull_request:
     branches: ["main", "develop"]
-    paths:
-      - "frontend/**"
 
 permissions:
   contents: read
@@ -41,12 +39,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd frontend
           yarn install --prefer-offline --frozen-lockfile
 
       - name: Build Storybook
         run: |
-          cd frontend
           yarn build-storybook
 
       - name: Publish to Chromatic
@@ -55,7 +51,6 @@ jobs:
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          workingDir: frontend
           storybookBuildDir: storybook-static
           onlyChanged: true
           exitZeroOnChanges: true
@@ -79,4 +74,4 @@ jobs:
         with:
           comment_tag: ${{github.event.number}}-storybook
           message: |
-            💄 Storybook: ${{ needs.storybook-preview.outputs.storybook_url }}  # 출력된 URL 참조
+            💄 Storybook: ${{ needs.storybook-preview.outputs.storybook_url }}
