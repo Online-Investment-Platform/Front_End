@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description: "회원가입 페이지입니다",
 };
 
-export default function RootLayout({
+export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
