@@ -100,7 +100,7 @@ export default function SignupForm() {
         error={errors.annualIncome?.message}
       />
       <Button
-        className="mb-20 mt-15 h-66 w-full rounded-10 text-20-600"
+        className="mb-20 mt-15 h-66 w-full rounded-10 text-18-700"
         isDisabled={!isValid || isLoading || passwordMatchError}
         type="submit"
       >

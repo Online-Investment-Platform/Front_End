@@ -163,22 +163,45 @@ export const AnnualIncomeInput = memo(({ control, error }: FormInputProps) => {
     name: "annualIncome",
   });
 
+  const formatDisplayValue = (value: number | undefined | "") => {
+    if (!value && value !== 0) return "";
+    // 원 단위를 만원 단위로 변환 (나누기 10000)
+    return Math.floor(Number(value) / 10000).toString();
+  };
+
+  const convertToWon = (manwonValue: string) => {
+    // 만원 단위를 원 단위로 변환 (곱하기 10000)
+    const numericValue = manwonValue.replace(/[^0-9]/g, "");
+    return numericValue ? Number(numericValue) * 10000 : "";
+  };
+
   return (
-    <Controller
-      name="annualIncome"
-      control={control}
-      render={({ field: { onChange, ...field } }) => (
-        <Input
-          {...field}
-          onChange={(e) => onChange(Number(e.target.value))}
-          id="annualIncome"
-          className="mt-15 h-66 w-full rounded-10 bg-[#F3F4F6]"
-          placeholder="연간 소득"
-          type="number"
-          error={error}
-        />
-      )}
-    />
+    <div className="relative w-full">
+      <Controller
+        name="annualIncome"
+        control={control}
+        render={({ field: { onChange, value, ...field } }) => (
+          <div className="relative">
+            <Input
+              {...field}
+              value={formatDisplayValue(value)}
+              onChange={(e) => {
+                const wonValue = convertToWon(e.target.value);
+                onChange(wonValue);
+              }}
+              id="annualIncome"
+              className="mt-4 h-66 w-full rounded-lg bg-[#F3F4F6] pr-12"
+              placeholder="연간 소득"
+              type="text"
+              error={error}
+            />
+            <span className="absolute right-10 top-1/2 -translate-y-1/2 text-18-700 text-gray-500">
+              만원
+            </span>
+          </div>
+        )}
+      />
+    </div>
   );
 });
 

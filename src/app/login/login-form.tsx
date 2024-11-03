@@ -99,7 +99,7 @@ export default function LoginForm() {
       <EmailInput control={control} error={errors.memberEmail?.message} />
       <PasswordInput control={control} error={errors.memberPassword?.message} />
       <Button
-        className="mb-20 mt-15 h-66 w-full rounded-10 text-20-600"
+        className="mb-20 mt-15 h-66 w-full rounded-10 text-20-700"
         isDisabled={!isValid || isLoading}
         type="submit"
       >

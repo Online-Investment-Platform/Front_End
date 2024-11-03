@@ -20,7 +20,7 @@ export default function Button({
       type="button"
       disabled={isDisabled}
       className={clsx(
-        "inline-flex items-center justify-center rounded-md px-8 font-medium transition-colors focus:outline-none",
+        "inline-flex items-center justify-center rounded-md px-8 transition-colors focus:outline-none",
         {
           "bg-[#0FED60] text-black hover:bg-[#0FED88] ":
             variant === "primary" && !isDisabled,
