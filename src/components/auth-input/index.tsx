@@ -176,7 +176,7 @@ export const AnnualIncomeInput = memo(({ control, error }: FormInputProps) => {
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative mt-20 w-full">
       <Controller
         name="annualIncome"
         control={control}
@@ -190,12 +190,12 @@ export const AnnualIncomeInput = memo(({ control, error }: FormInputProps) => {
                 onChange(wonValue);
               }}
               id="annualIncome"
-              className="mt-4 h-66 w-full rounded-lg bg-[#F3F4F6] pr-12"
+              className="h-66 w-full rounded-lg bg-[#F3F4F6] pr-12"
               placeholder="연간 소득"
               type="text"
               error={error}
             />
-            <span className="absolute right-10 top-1/2 -translate-y-1/2 text-18-700 text-gray-500">
+            <span className="absolute right-27 top-1/2 -translate-y-1/2 text-18-700 text-gray-500">
               만원
             </span>
           </div>
