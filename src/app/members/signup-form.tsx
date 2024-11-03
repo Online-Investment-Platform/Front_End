@@ -5,38 +5,59 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { memo, useState } from "react";
+import { Path, useForm, useWatch } from "react-hook-form";
 
-import Button from "@/components/common/button/index";
-import Input from "@/components/common/input/index";
-import { SignupFormData, signupSchema } from "@/validation/schema/auth/index";
+import {
+  AnnualIncomeInput,
+  ConfirmPasswordInput,
+  EmailInput,
+  NameInput,
+  NicknameInput,
+  PasswordInput,
+} from "@/components/auth-input/index";
+import Button from "@/components/common/button";
+import { AuthFormData } from "@/types/auth";
+import { signupSchema } from "@/validation/schema/auth";
+
+const FormLinks = memo(() => (
+  <div className="flex flex-col items-center justify-center gap-13">
+    <Link href="/login">
+      <div className="text-16-400">이미 계정이 있으신가요? 로그인</div>
+    </Link>
+  </div>
+));
+
+FormLinks.displayName = "FormLinks";
 
 export default function SignupForm() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors, isValid },
-    watch,
-  } = useForm<SignupFormData>({
+  } = useForm<AuthFormData>({
     resolver: zodResolver(signupSchema),
     mode: "onChange",
   });
 
-  const password = watch("memberPassword");
-  const confirmedPassword = watch("confirmPassword") || "";
+  const password = useWatch({
+    control,
+    name: "memberPassword" as Path<AuthFormData>,
+  });
 
-  const passwordMatchError =
-    confirmedPassword && password !== confirmedPassword
-      ? "비밀번호가 일치하지 않습니다."
-      : "";
+  const confirmPassword = useWatch({
+    control,
+    name: "confirmPassword" as Path<AuthFormData>,
+  });
 
-  const onSubmit = async (data: SignupFormData) => {
+  const passwordMatchError = confirmPassword && password !== confirmPassword;
+
+  const onSubmit = async (data: AuthFormData) => {
     setIsLoading(true);
-    const { confirmPassword, ...signupData } = data;
+    const { confirmPassword: _, ...signupData } = data;
 
     try {
       const response = await fetch(
@@ -66,66 +87,26 @@ export default function SignupForm() {
 
   return (
     <form className="flex w-443 flex-col" onSubmit={handleSubmit(onSubmit)}>
-      <Input
-        id="memberEmail"
-        className="h-66 w-full rounded-10 bg-[#F3F4F6]"
-        placeholder="이메일"
-        type="email"
-        error={errors.memberEmail?.message}
-        {...register("memberEmail")}
+      <EmailInput control={control} error={errors.memberEmail?.message} />
+      <NameInput control={control} error={errors.memberName?.message} />
+      <NicknameInput control={control} error={errors.memberNickName?.message} />
+      <PasswordInput control={control} error={errors.memberPassword?.message} />
+      <ConfirmPasswordInput
+        control={control}
+        error={errors.confirmPassword?.message}
       />
-      <Input
-        id="memberName"
-        className="mt-15 h-66 w-full rounded-10 bg-[#F3F4F6]"
-        placeholder="이름"
-        type="text"
-        error={errors.memberName?.message}
-        {...register("memberName")}
-      />
-      <Input
-        id="memberNickName"
-        className="mt-15 h-66 w-full rounded-10 bg-[#F3F4F6]"
-        placeholder="닉네임"
-        type="text"
-        error={errors.memberNickName?.message}
-        {...register("memberNickName")}
-      />
-      <Input
-        id="memberPassword"
-        className="mt-15 h-66 w-full rounded-10 bg-[#F3F4F6]"
-        placeholder="비밀번호"
-        type="password"
-        error={errors.memberPassword?.message}
-        {...register("memberPassword")}
-      />
-      <Input
-        id="confirmPassword"
-        className="mt-15 h-66 w-full rounded-10 bg-[#F3F4F6]"
-        placeholder="비밀번호 확인"
-        type="password"
-        error={passwordMatchError || errors.confirmPassword?.message}
-        {...register("confirmPassword")}
-      />
-      <Input
-        id="annualIncome"
-        className="mt-15 h-66 w-full rounded-10 bg-[#F3F4F6]"
-        placeholder="연간 소득"
-        type="number"
+      <AnnualIncomeInput
+        control={control}
         error={errors.annualIncome?.message}
-        {...register("annualIncome", { valueAsNumber: true })}
       />
       <Button
         className="mb-20 mt-15 h-66 w-full rounded-10 text-20-600"
-        isDisabled={!isValid || isLoading || Boolean(passwordMatchError)}
+        isDisabled={!isValid || isLoading || passwordMatchError}
         type="submit"
       >
         {isLoading ? "가입 중..." : "회원가입"}
       </Button>
-      <div className="flex flex-col items-center justify-center gap-13">
-        <Link href="/login">
-          <div className="text-16-400">이미 계정이 있으신가요? 로그인</div>
-        </Link>
-      </div>
+      <FormLinks />
     </form>
   );
 }
