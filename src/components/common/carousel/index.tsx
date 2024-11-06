@@ -15,7 +15,6 @@ function Carousel({
   const [isHovered, setIsHovered] = useState(false);
   const itemsToShow = 3;
 
-  // index 파라미터 제거
   const slides = useMemo(() => {
     const items = Array.isArray(children) ? children : [children];
     return items.map((slide) => ({
