@@ -4,6 +4,47 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { CarouselProps } from "./types";
 
+/**
+ * 슬라이드 형태로 컨텐츠를 표시하는 캐러셀 컴포넌트
+ *
+ * @example
+ * // 기본 사용
+ * <Carousel title="주가 지수">
+ *   <StockCard title="코스닥" value={35.33347} change={-200.2} />
+ *   <StockCard title="코스피" value={42.12345} change={150.8} />
+ *   <StockCard title="나스닥" value={28.98765} change={-180.5} />
+ * </Carousel>
+ *
+ * // 자동 재생 비활성화
+ * <Carousel
+ *   title="실시간 지수"
+ *   autoPlay={false}
+ * >
+ *   <StockCard title="코스닥" value={35.33347} change={-200.2} />
+ *   <StockCard title="코스피" value={42.12345} change={150.8} />
+ * </Carousel>
+ *
+ * // 재생 간격 조정 및 스타일 커스터마이징
+ * <Carousel
+ *   title="글로벌 지수"
+ *   autoPlayInterval={5000}
+ *   className="bg-gray-50 p-4 rounded-xl"
+ * >
+ *   <StockCard title="코스닥" value={35.33347} change={-200.2} />
+ *   <StockCard title="코스피" value={42.12345} change={150.8} />
+ *   <StockCard title="나스닥" value={28.98765} change={-180.5} />
+ * </Carousel>
+ *
+ * @param {Object} props - 컴포넌트 props
+ * @param {string} props.title - 캐러셀 제목
+ * @param {ReactNode} props.children - 캐러셀에 표시될 컨텐츠
+ * @param {boolean} [props.autoPlay=true] - 자동 재생 여부
+ * @param {number} [props.autoPlayInterval=3000] - 자동 재생 간격 (밀리초)
+ * @param {string} [props.className] - 추가 스타일 클래스
+ *
+ * @returns {JSX.Element} Carousel 컴포넌트
+ */
+
 function Carousel({
   title,
   children,
