@@ -5,13 +5,13 @@ export const metadata: Metadata = {
   description: "회원가입 페이지입니다",
 };
 
-export default function RootLayout({
+export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center px-4 py-8 md:px-12 lg:max-w-7xl lg:px-16">
+    <div className="lg:max-w-2000 flex h-screen w-full flex-col items-center justify-center px-4 py-8 md:px-12 lg:px-16">
       {children}
     </div>
   );
