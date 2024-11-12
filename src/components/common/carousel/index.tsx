@@ -1,3 +1,5 @@
+"use client";
+
 import Arrowleft from "public/icons/arrow-left.svg";
 import Arrowright from "public/icons/arrow-right.svg";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -93,7 +95,7 @@ function Carousel({
   }, [autoPlay, isHovered, nextSlide, autoPlayInterval]);
 
   return (
-    <div className={`w-full ${className}`}>
+    <div className={`w-900 ${className}`}>
       <div className="mb-10 flex items-center justify-between">
         <h2 className="text-20-700">{title}</h2>
         <div className="flex gap-10">
@@ -137,7 +139,7 @@ function Carousel({
             {slides.map((slide) => (
               <div
                 key={slide.id}
-                className="shrink-0 px-2"
+                className="mx-10 shrink-0"
                 style={{ width: `${100 / slidesCount}%` }}
               >
                 {slide.content}
