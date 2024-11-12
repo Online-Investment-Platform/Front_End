@@ -56,7 +56,9 @@ function Carousel({
 }: CarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const itemsToShow = 3;
+  const SLIDE_WIDTH = 308; // 고정 슬라이드 너비
+  const SLIDE_MARGIN = 20; // 오른쪽 마진
+  const VISIBLE_SLIDES = 3; // 한 번에 보여질 슬라이드 수
 
   const slides = useMemo(() => {
     const items = Array.isArray(children) ? children : [children];
@@ -67,18 +69,15 @@ function Carousel({
   }, [children]);
 
   const slidesCount = slides.length;
+  const maxIndex = Math.max(0, slidesCount - VISIBLE_SLIDES);
 
   const nextSlide = useCallback(() => {
-    setCurrentIndex((prev) =>
-      prev + itemsToShow >= slidesCount ? 0 : prev + 1,
-    );
-  }, [slidesCount]);
+    setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+  }, [maxIndex]);
 
   const prevSlide = useCallback(() => {
-    setCurrentIndex((prev) =>
-      prev === 0 ? Math.max(0, slidesCount - itemsToShow) : prev - 1,
-    );
-  }, [slidesCount]);
+    setCurrentIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
+  }, [maxIndex]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined;
@@ -95,7 +94,7 @@ function Carousel({
   }, [autoPlay, isHovered, nextSlide, autoPlayInterval]);
 
   return (
-    <div className={`w-900 ${className}`}>
+    <div className={`w-full ${className}`}>
       <div className="mb-10 flex items-center justify-between">
         <h2 className="text-20-700">{title}</h2>
         <div className="flex gap-10">
@@ -123,24 +122,27 @@ function Carousel({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* 오버플로우 컨테이너 */}
-        <div className="relative overflow-hidden">
-          {/* 블러 효과를 위한 그라데이션 오버레이 */}
-          <div className="absolute right-0 top-0 z-10 h-full w-100 bg-gradient-to-r from-transparent to-white/90" />
+        <div
+          className="relative overflow-hidden"
+          style={{
+            width: `${(SLIDE_WIDTH + SLIDE_MARGIN) * VISIBLE_SLIDES - SLIDE_MARGIN}px`,
+          }}
+        >
+          {/* 양쪽 블러 효과 */}
+          <div className="absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-white/90 to-transparent" />
+          <div className="absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-white/90 to-transparent" />
 
-          {/* 캐러셀 컨텐츠 */}
           <div
             className="flex transition-transform duration-300 ease-in-out"
             style={{
-              transform: `translateX(-${currentIndex * (100 / itemsToShow)}%)`,
-              width: `${(slidesCount * 100) / itemsToShow}%`,
+              transform: `translateX(-${currentIndex * (SLIDE_WIDTH + SLIDE_MARGIN)}px)`,
             }}
           >
             {slides.map((slide) => (
               <div
                 key={slide.id}
-                className="mx-10 shrink-0"
-                style={{ width: `${100 / slidesCount}%` }}
+                className="mr-20 shrink-0" // mx-10을 mr-20으로 변경
+                style={{ width: `${SLIDE_WIDTH}px` }}
               >
                 {slide.content}
               </div>

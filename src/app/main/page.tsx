@@ -8,7 +8,7 @@ export default function Home() {
       <Carousel
         title="주가 지수"
         autoPlay // false로 설정하면 자동 재생 비활성화
-        autoPlayInterval={5000} // 5초로 변경
+        autoPlayInterval={10000}
       >
         <StockIndexCard endpoint="kospi" />
         <StockIndexCard endpoint="kosdaq" />
