@@ -5,7 +5,6 @@ import Arrowright from "public/icons/arrow-right.svg";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { CarouselProps } from "./types";
-
 /**
  * 슬라이드 형태로 컨텐츠를 표시하는 캐러셀 컴포넌트
  *
@@ -46,43 +45,92 @@ import { CarouselProps } from "./types";
  *
  * @returns {JSX.Element} Carousel 컴포넌트
  */
-
 function Carousel({
   title,
   children,
   autoPlay = true,
   autoPlayInterval = 3000,
   className = "",
-}: CarouselProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+}: CarouselProps): JSX.Element {
+  const SLIDE_WIDTH = 308;
+  const SLIDE_MARGIN = 20;
+  const VISIBLE_SLIDES = 3;
+
+  // 원본 슬라이드 개수 계산
+  const originalItems = useMemo(
+    () =>
+      Array.isArray(children)
+        ? children.filter((child) => child !== null && child !== undefined)
+        : [children].filter((child) => child !== null && child !== undefined),
+    [children],
+  );
+
+  const originalLength = originalItems.length;
+
+  // 시작 위치를 originalLength로 설정하여 앞쪽에 완전한 세트가 있도록 함
+  const [currentIndex, setCurrentIndex] = useState(originalLength);
   const [isHovered, setIsHovered] = useState(false);
-  const SLIDE_WIDTH = 308; // 고정 슬라이드 너비
-  const SLIDE_MARGIN = 20; // 오른쪽 마진
-  const VISIBLE_SLIDES = 3; // 한 번에 보여질 슬라이드 수
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const slides = useMemo(() => {
-    const items = Array.isArray(children) ? children : [children];
-    return items.map((slide) => ({
-      id: `slide-${crypto.randomUUID()}`,
-      content: slide,
-    }));
-  }, [children]);
+    if (originalItems.length === 0) return [];
 
-  const slidesCount = slides.length;
-  const maxIndex = Math.max(0, slidesCount - VISIBLE_SLIDES);
+    // 원본 세트를 3개 만들어서 앞뒤로 배치
+    const duplicatedItems = [
+      ...originalItems, // 앞쪽 세트
+      ...originalItems, // 중간 세트 (시작 위치)
+      ...originalItems, // 뒤쪽 세트
+    ].map((item, index) => ({
+      id: `slide-${index}-${crypto.randomUUID()}`,
+      content: item,
+      originalIndex: index % originalLength,
+    }));
+
+    return duplicatedItems;
+  }, [originalItems, originalLength]);
+
+  // transition 없이 위치만 즉시 이동
+  const jumpToPosition = useCallback((index: number) => {
+    setIsTransitioning(false);
+    // transition 스타일을 제거하기 위해 setTimeout 사용
+    setTimeout(() => {
+      setCurrentIndex(index);
+    }, 0);
+  }, []);
+
+  const resetPosition = useCallback(() => {
+    // 마지막 세트에 도달했을 때
+    if (currentIndex >= originalLength * 2) {
+      jumpToPosition(originalLength);
+    }
+    // 첫 번째 세트 이전으로 갔을 때
+    else if (currentIndex < originalLength) {
+      jumpToPosition(originalLength * 2 - 1);
+    } else {
+      setIsTransitioning(false);
+    }
+  }, [currentIndex, originalLength, jumpToPosition]);
 
   const nextSlide = useCallback(() => {
-    setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
-  }, [maxIndex]);
+    if (!isTransitioning && slides.length > 0) {
+      setIsTransitioning(true);
+      setCurrentIndex((prev) => prev + 1);
+    }
+  }, [isTransitioning, slides.length]);
 
   const prevSlide = useCallback(() => {
-    setCurrentIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
-  }, [maxIndex]);
+    if (!isTransitioning && slides.length > 0) {
+      setIsTransitioning(true);
+      setCurrentIndex((prev) => prev - 1);
+    }
+  }, [isTransitioning, slides.length]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined;
 
-    if (autoPlay && !isHovered) {
+    const shouldAutoPlay =
+      autoPlay && !isHovered && !isTransitioning && slides.length > 0;
+    if (shouldAutoPlay) {
       interval = setInterval(nextSlide, autoPlayInterval);
     }
 
@@ -91,7 +139,24 @@ function Carousel({
         clearInterval(interval);
       }
     };
-  }, [autoPlay, isHovered, nextSlide, autoPlayInterval]);
+  }, [
+    autoPlay,
+    isHovered,
+    isTransitioning,
+    nextSlide,
+    autoPlayInterval,
+    slides.length,
+  ]);
+
+  if (slides.length === 0) {
+    return (
+      <div className={`w-full ${className}`}>
+        <div className="mb-10">
+          <h2 className="text-20-700">{title}</h2>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`w-full ${className}`}>
@@ -101,16 +166,18 @@ function Carousel({
           <button
             type="button"
             onClick={prevSlide}
-            className="rounded-full p-1 hover:bg-gray-100"
+            className="rounded-full p-1 hover:bg-gray-100 disabled:opacity-50"
             aria-label="Previous slide"
+            disabled={isTransitioning}
           >
             <Arrowleft />
           </button>
           <button
             type="button"
             onClick={nextSlide}
-            className="rounded-full p-1 hover:bg-gray-100"
+            className="rounded-full p-1 hover:bg-gray-100 disabled:opacity-50"
             aria-label="Next slide"
+            disabled={isTransitioning}
           >
             <Arrowright />
           </button>
@@ -128,20 +195,20 @@ function Carousel({
             width: `${(SLIDE_WIDTH + SLIDE_MARGIN) * VISIBLE_SLIDES - SLIDE_MARGIN}px`,
           }}
         >
-          {/* 양쪽 블러 효과 */}
           <div className="absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-white/90 to-transparent" />
           <div className="absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-white/90 to-transparent" />
 
           <div
-            className="flex transition-transform duration-300 ease-in-out"
+            className={`flex ${isTransitioning ? "transition-transform duration-300 ease-in-out" : ""}`}
             style={{
               transform: `translateX(-${currentIndex * (SLIDE_WIDTH + SLIDE_MARGIN)}px)`,
             }}
+            onTransitionEnd={resetPosition}
           >
             {slides.map((slide) => (
               <div
                 key={slide.id}
-                className="mr-20 shrink-0" // mx-10을 mr-20으로 변경
+                className="mr-20 shrink-0"
                 style={{ width: `${SLIDE_WIDTH}px` }}
               >
                 {slide.content}

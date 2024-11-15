@@ -20,7 +20,7 @@ export default function RootLayout({
       <body className="flex">
         <AuthInitializer />
         <NavBar />
-        <main className="ml-95 flex-1">{children}</main>
+        <main className="ml-82 flex-1">{children}</main>
       </body>
     </html>
   );
