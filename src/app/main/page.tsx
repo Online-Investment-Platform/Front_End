@@ -1,20 +1,29 @@
-import Carousel from "@/components/common/carousel/index";
+import { getFluctuation, getTradingVolume } from "@/api/ranking-table/index";
 
-import StockIndexCard from "./_components/stock-card";
+import FluctuationTable from "./_components/flucctuate-table";
+import RankingStock from "./_components/ranking-stock";
+import SearchStock from "./_components/search-stock";
+import StockIndexCarousel from "./_components/stock-carousel";
 
-export default function Home() {
+export default async function Home() {
+  const traddata = await getTradingVolume();
+  const flucdata = await getFluctuation();
+
   return (
-    <div className="p-20">
-      <Carousel
-        title="주가 지수"
-        autoPlay // false로 설정하면 자동 재생 비활성화
-        autoPlayInterval={10000}
-      >
-        <StockIndexCard endpoint="kospi" />
-        <StockIndexCard endpoint="kosdaq" />
-        <StockIndexCard endpoint="kospi" />
-        <StockIndexCard endpoint="kosdaq" />
-      </Carousel>
+    <div className="flex flex-col gap-40">
+      <SearchStock />
+      <StockIndexCarousel />
+      <div className="flex flex-col gap-10">
+        <h2 className="text-24-700">실시간 랭킹</h2>
+        <div className="flex w-full gap-30">
+          <div className="w-400">
+            <RankingStock data={traddata} />
+          </div>
+          <div className="w-400">
+            <FluctuationTable data={flucdata} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -2,7 +2,15 @@
 
 import Arrowleft from "public/icons/arrow-left.svg";
 import Arrowright from "public/icons/arrow-right.svg";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  cloneElement,
+  isValidElement,
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+} from "react";
 
 import { CarouselProps } from "./types";
 /**
@@ -56,7 +64,9 @@ function Carousel({
   const SLIDE_MARGIN = 20;
   const VISIBLE_SLIDES = 3;
 
-  // 원본 슬라이드 개수 계산
+  const slideId = useId();
+
+  // 원본 슬라이드 컴포넌트 준비
   const originalItems = useMemo(
     () =>
       Array.isArray(children)
@@ -67,44 +77,59 @@ function Carousel({
 
   const originalLength = originalItems.length;
 
-  // 시작 위치를 originalLength로 설정하여 앞쪽에 완전한 세트가 있도록 함
-  const [currentIndex, setCurrentIndex] = useState(originalLength);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  // 컴포넌트 복제 및 key 할당
+  const cloneSlide = useCallback(
+    (item: React.ReactNode, index: number, prefix: string) => {
+      if (isValidElement(item)) {
+        return cloneElement(item, {
+          key: `${slideId}-${prefix}-${index}`,
+          ...item.props,
+        });
+      }
+      return item;
+    },
+    [slideId],
+  );
 
+  // 슬라이드 세트 생성
   const slides = useMemo(() => {
     if (originalItems.length === 0) return [];
 
     // 원본 세트를 3개 만들어서 앞뒤로 배치
-    const duplicatedItems = [
-      ...originalItems, // 앞쪽 세트
-      ...originalItems, // 중간 세트 (시작 위치)
-      ...originalItems, // 뒤쪽 세트
-    ].map((item, index) => ({
-      id: `slide-${index}-${crypto.randomUUID()}`,
-      content: item,
-      originalIndex: index % originalLength,
-    }));
+    return [
+      ...originalItems.map((item, i) => ({
+        id: `${slideId}-prev-${i}`,
+        content: cloneSlide(item, i, "prev"),
+        originalIndex: i,
+      })),
+      ...originalItems.map((item, i) => ({
+        id: `${slideId}-main-${i}`,
+        content: cloneSlide(item, i, "main"),
+        originalIndex: i,
+      })),
+      ...originalItems.map((item, i) => ({
+        id: `${slideId}-next-${i}`,
+        content: cloneSlide(item, i, "next"),
+        originalIndex: i,
+      })),
+    ];
+  }, [originalItems, cloneSlide, slideId]);
 
-    return duplicatedItems;
-  }, [originalItems, originalLength]);
+  const [currentIndex, setCurrentIndex] = useState(originalLength);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // transition 없이 위치만 즉시 이동
   const jumpToPosition = useCallback((index: number) => {
     setIsTransitioning(false);
-    // transition 스타일을 제거하기 위해 setTimeout 사용
     setTimeout(() => {
       setCurrentIndex(index);
     }, 0);
   }, []);
 
   const resetPosition = useCallback(() => {
-    // 마지막 세트에 도달했을 때
     if (currentIndex >= originalLength * 2) {
       jumpToPosition(originalLength);
-    }
-    // 첫 번째 세트 이전으로 갔을 때
-    else if (currentIndex < originalLength) {
+    } else if (currentIndex < originalLength) {
       jumpToPosition(originalLength * 2 - 1);
     } else {
       setIsTransitioning(false);
