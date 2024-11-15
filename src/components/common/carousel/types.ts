@@ -1,6 +1,8 @@
+import { ReactNode } from "react";
+
 export interface CarouselProps {
   title: string;
-  children: React.ReactNode;
+  children: ReactNode | ReactNode[];
   autoPlay?: boolean;
   autoPlayInterval?: number;
   className?: string;
