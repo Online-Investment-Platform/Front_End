@@ -184,8 +184,8 @@ function Carousel({
   }
 
   return (
-    <div className={`w-full ${className}`}>
-      <div className="mb-10 flex items-center justify-between">
+    <div className={`w-full max-w-1400 ${className}`}>
+      <div className="mb-20 flex w-full  items-center justify-between">
         <h2 className="text-20-700">{title}</h2>
         <div className="flex gap-10">
           <button
