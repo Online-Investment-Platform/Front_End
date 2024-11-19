@@ -12,3 +12,8 @@ export interface TradingVolume {
   prevVolume: number;
   volumeChangeRate: number;
 }
+
+export interface News {
+  title: string;
+  link: string;
+}
