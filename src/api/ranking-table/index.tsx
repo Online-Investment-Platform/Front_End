@@ -16,7 +16,6 @@ interface Fluctuation {
   prevChangeRate: number;
 }
 
-// app/lib/api.ts
 export async function getTradingVolume(): Promise<TradingVolume[]> {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/home/tradingVolume`,

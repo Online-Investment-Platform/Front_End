@@ -1,11 +1,10 @@
-// app/page.tsx
 import { QueryClient } from "@tanstack/react-query";
 
 import getInitialStockData from "@/api/kospi-kosdac/index";
-// import getNews from "@/api/news";
+import getNews from "@/api/news";
 import { getFluctuation, getTradingVolume } from "@/api/ranking-table/index";
 import FluctuationTable from "@/app/main/_components/flucctuate-table";
-// import NewsCarousel from "@/app/main/_components/nes-carousel";
+import NewsCarousel from "@/app/main/_components/nes-carousel";
 import RankingStock from "@/app/main/_components/ranking-stock";
 import SearchStock from "@/app/main/_components/search-stock";
 import StockIndexCarousel from "@/app/main/_components/stock-carousel";
@@ -20,12 +19,12 @@ export default async function Home() {
     initialData: initialStockData,
   });
 
-  // const initialNews = await getNews();
-  // await queryClient.prefetchQuery({
-  //   queryKey: ["news"],
-  //   queryFn: getNews,
-  //   initialData: initialNews,
-  // });
+  const initialNews = await getNews();
+  await queryClient.prefetchQuery({
+    queryKey: ["news"],
+    queryFn: getNews,
+    initialData: initialNews,
+  });
 
   const [traddata, flucdata] = await Promise.all([
     getTradingVolume(),
@@ -46,7 +45,7 @@ export default async function Home() {
             <FluctuationTable data={flucdata} />
           </div>
         </div>
-        {/* <NewsCarousel initialData={initialNews} /> */}
+        <NewsCarousel initialData={initialNews} />
       </div>
     </div>
   );

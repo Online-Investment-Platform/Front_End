@@ -14,21 +14,21 @@ function NewsCard({ title, link }: NewsCardProps) {
     <button
       type="button"
       onClick={handleClick}
-      className="h-271 w-308 overflow-hidden rounded-lg border border-gray-200 bg-white text-left transition-shadow hover:shadow-md"
+      className="h-281 w-308 overflow-hidden rounded-lg bg-white text-left transition-shadow hover:shadow-md"
     >
-      <div className="relative h-182 overflow-hidden">
+      <div className="relative h-182 overflow-hidden pt-0">
         <Image
-          src="/images/news-placeholder.jpg" // public 폴더 내 기본 이미지
+          src="/images/NEWs.jpg"
           alt={title}
           fill
-          className="object-cover"
+          className="rounded-lg object-cover px-5"
           sizes="308px"
         />
       </div>
-      <div className="p-4">
+      <div className="p-6">
         <div className="group relative">
-          <h3 className="truncate text-14-400 text-gray-900">{title}</h3>
-          <div className="absolute left-0 top-full z-20 hidden max-w-308 rounded-md bg-white p-2 text-14-400 shadow-lg group-hover:block">
+          <h3 className="mt-5 truncate text-16-600 text-gray-900">{title}</h3>
+          <div className="absolute left-0 z-20 hidden max-w-308 rounded-md bg-white p-2 text-14-400 shadow-lg group-hover:block">
             {title}
           </div>
         </div>
