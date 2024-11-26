@@ -6,17 +6,6 @@ import { memo } from "react";
 import { DEFAULT_STYLES, TEXT_ALIGN_MAP } from "./constant";
 import { TableHeaderProps } from "./types";
 
-/**
- * 테이블 헤더 컴포넌트
- * @example
- * ```tsx
- * <TableHeader<User>
- *   columns={columns}
- *   className="bg-gray-100"
- *   cellClassName="p-4 font-medium"
- * />
- * ```
- */
 function TableHeader<T>({
   columns,
   className,
@@ -42,4 +31,6 @@ function TableHeader<T>({
   );
 }
 
-export default memo(TableHeader);
+export default memo(TableHeader) as <T>(
+  props: TableHeaderProps<T>,
+) => React.ReactElement;

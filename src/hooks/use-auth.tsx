@@ -6,12 +6,22 @@ import { create } from "zustand";
 
 import { deleteCookie, getCookie, setCookie } from "@/utils/next-cookies";
 
+interface LoginResponse {
+  memberName: string;
+  memberNickName: string;
+  token: string;
+}
+
 interface AuthStore {
   token: string | null;
-  setToken: (token: string) => Promise<void>;
-  clearToken: () => Promise<void>;
-  initToken: () => Promise<void>;
+  memberName: string | null;
+  memberNickName: string | null;
+  isAuthenticated: boolean;
+  setAuth: (response: LoginResponse) => Promise<void>;
+  clearAuth: () => Promise<void>;
+  initAuth: () => Promise<void>;
 }
+
 /**
  * 인증 토큰을 관리하는 Zustand 스토어 훅
  *
@@ -66,19 +76,47 @@ interface AuthStore {
 
 export const useAuth = create<AuthStore>((set) => ({
   token: null,
+  memberName: null,
+  memberNickName: null,
+  isAuthenticated: false,
 
-  setToken: async (token: string) => {
+  setAuth: async (response: LoginResponse) => {
+    const { token, memberName, memberNickName } = response;
     await setCookie("token", token);
-    set({ token });
+    await setCookie("memberName", memberName);
+    await setCookie("memberNickName", memberNickName);
+
+    set({
+      token,
+      memberName,
+      memberNickName,
+      isAuthenticated: true,
+    });
   },
 
-  clearToken: async () => {
+  clearAuth: async () => {
     await deleteCookie("token");
-    set({ token: null });
+    await deleteCookie("memberName");
+    await deleteCookie("memberNickName");
+
+    set({
+      token: null,
+      memberName: null,
+      memberNickName: null,
+      isAuthenticated: false,
+    });
   },
 
-  initToken: async () => {
+  initAuth: async () => {
     const token = await getCookie("token");
-    if (token) set({ token });
+    const memberName = await getCookie("memberName");
+    const memberNickName = await getCookie("memberNickName");
+
+    set({
+      token,
+      memberName,
+      memberNickName,
+      isAuthenticated: !!token,
+    });
   },
 }));

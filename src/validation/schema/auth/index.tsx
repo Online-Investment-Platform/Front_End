@@ -24,6 +24,8 @@ export type LoginFormData = z.infer<typeof loginSchema>;
 export type SignupFormData = z.infer<typeof signupSchema>;
 
 export interface LoginResponse {
+  memberName: string;
+  memberNickName: string;
   token: string;
 }
 
