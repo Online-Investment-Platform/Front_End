@@ -64,6 +64,7 @@ function TabsList({ children }: { children: ReactNode }) {
  * @param {string} buttonColor 버튼의 색상입니다. 기본값은 'green'입니다.
  * @param {string} rounded 버튼의 모서리 크기입니다. 'sm:rounded-2' 또는 'md:rounded-4' 값이 가능합니다.
  * @param {string} padding 버튼의 패딩 크기입니다. 'sm:px-4 py-2' 또는 'md:px-16 py-4' 값이 가능합니다.
+ * @param {string} className 추가적인 CSS 클래스를 지정할 수 있습니다.
  * @returns {JSX.Element} 클릭 시 활성 탭을 변경하는 버튼을 렌더링합니다.
  */
 function TabsTrigger({
@@ -72,12 +73,14 @@ function TabsTrigger({
   buttonColor = "green",
   rounded = "sm",
   padding = "sm",
+  className,
 }: {
   value: string;
   children: ReactNode;
   buttonColor?: "green" | "red" | "blue";
   rounded?: "sm" | "md";
   padding?: "sm" | "md";
+  className?: string;
 }) {
   const { activeTab, setActiveTab } = useTabsContext();
 
@@ -96,6 +99,7 @@ function TabsTrigger({
         isActive ? backgroundColors[buttonColor] : "text-[#B6B6B6]",
         rounded === "md" && "rounded-4",
         padding === "md" && "px-16 py-4",
+        className,
       )}
       onClick={() => setActiveTab(value)}
     >
