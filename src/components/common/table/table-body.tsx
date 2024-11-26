@@ -5,19 +5,7 @@ import { memo } from "react";
 
 import { DEFAULT_STYLES, TEXT_ALIGN_MAP } from "./constant";
 import { CommonTableColumn, TableBodyProps } from "./types";
-/**
- * 테이블 바디 컴포넌트
- * @example
- * ```tsx
- * <TableBody<User>
- *   columns={columns}
- *   data={users}
- *   rowKeyField="id"
- *   cellClassName="p-4"
- *   onRowClick={(user) => console.log(user)}
- * />
- * ```
- */
+
 function TableBody<T>({
   columns,
   data,
@@ -60,4 +48,6 @@ function TableBody<T>({
   );
 }
 
-export default memo(TableBody);
+export default memo(TableBody) as <T>(
+  props: TableBodyProps<T>,
+) => React.ReactElement;
