@@ -5,7 +5,7 @@ import getNews from "@/api/news";
 import { getFluctuation, getTradingVolume } from "@/api/ranking-table/index";
 import AssetInfo from "@/app/main/_components/asset-info";
 import FluctuationTable from "@/app/main/_components/flucctuate-table";
-import NewsCarousel from "@/app/main/_components/nes-carousel";
+import NewsCarousel from "@/app/main/_components/news-carousel";
 import RankingStock from "@/app/main/_components/ranking-stock";
 import SearchStock from "@/app/main/_components/search-stock";
 import StockIndexCarousel from "@/app/main/_components/stock-carousel";
