@@ -1,9 +1,18 @@
+"use client";
+
 import Arrowleft from "public/icons/arrow-left.svg";
 import Arrowright from "public/icons/arrow-right.svg";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  cloneElement,
+  isValidElement,
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+} from "react";
 
 import { CarouselProps } from "./types";
-
 /**
  * 슬라이드 형태로 컨텐츠를 표시하는 캐러셀 컴포넌트
  *
@@ -44,44 +53,109 @@ import { CarouselProps } from "./types";
  *
  * @returns {JSX.Element} Carousel 컴포넌트
  */
-
 function Carousel({
   title,
   children,
   autoPlay = true,
   autoPlayInterval = 3000,
   className = "",
-}: CarouselProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const itemsToShow = 3;
+}: CarouselProps): JSX.Element {
+  const SLIDE_WIDTH = 308;
+  const SLIDE_MARGIN = 20;
+  const VISIBLE_SLIDES = 3;
 
+  const slideId = useId();
+
+  // 원본 슬라이드 컴포넌트 준비
+  const originalItems = useMemo(
+    () =>
+      Array.isArray(children)
+        ? children.filter((child) => child !== null && child !== undefined)
+        : [children].filter((child) => child !== null && child !== undefined),
+    [children],
+  );
+
+  const originalLength = originalItems.length;
+
+  // 컴포넌트 복제 및 key 할당
+  const cloneSlide = useCallback(
+    (item: React.ReactNode, index: number, prefix: string) => {
+      if (isValidElement(item)) {
+        return cloneElement(item, {
+          key: `${slideId}-${prefix}-${index}`,
+          ...item.props,
+        });
+      }
+      return item;
+    },
+    [slideId],
+  );
+
+  // 슬라이드 세트 생성
   const slides = useMemo(() => {
-    const items = Array.isArray(children) ? children : [children];
-    return items.map((slide) => ({
-      id: `slide-${crypto.randomUUID()}`,
-      content: slide,
-    }));
-  }, [children]);
+    if (originalItems.length === 0) return [];
 
-  const slidesCount = slides.length;
+    // 원본 세트를 3개 만들어서 앞뒤로 배치
+    return [
+      ...originalItems.map((item, i) => ({
+        id: `${slideId}-prev-${i}`,
+        content: cloneSlide(item, i, "prev"),
+        originalIndex: i,
+      })),
+      ...originalItems.map((item, i) => ({
+        id: `${slideId}-main-${i}`,
+        content: cloneSlide(item, i, "main"),
+        originalIndex: i,
+      })),
+      ...originalItems.map((item, i) => ({
+        id: `${slideId}-next-${i}`,
+        content: cloneSlide(item, i, "next"),
+        originalIndex: i,
+      })),
+    ];
+  }, [originalItems, cloneSlide, slideId]);
+
+  const [currentIndex, setCurrentIndex] = useState(originalLength);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const jumpToPosition = useCallback((index: number) => {
+    setIsTransitioning(false);
+    setTimeout(() => {
+      setCurrentIndex(index);
+    }, 0);
+  }, []);
+
+  const resetPosition = useCallback(() => {
+    if (currentIndex >= originalLength * 2) {
+      jumpToPosition(originalLength);
+    } else if (currentIndex < originalLength) {
+      jumpToPosition(originalLength * 2 - 1);
+    } else {
+      setIsTransitioning(false);
+    }
+  }, [currentIndex, originalLength, jumpToPosition]);
 
   const nextSlide = useCallback(() => {
-    setCurrentIndex((prev) =>
-      prev + itemsToShow >= slidesCount ? 0 : prev + 1,
-    );
-  }, [slidesCount]);
+    if (!isTransitioning && slides.length > 0) {
+      setIsTransitioning(true);
+      setCurrentIndex((prev) => prev + 1);
+    }
+  }, [isTransitioning, slides.length]);
 
   const prevSlide = useCallback(() => {
-    setCurrentIndex((prev) =>
-      prev === 0 ? Math.max(0, slidesCount - itemsToShow) : prev - 1,
-    );
-  }, [slidesCount]);
+    if (!isTransitioning && slides.length > 0) {
+      setIsTransitioning(true);
+      setCurrentIndex((prev) => prev - 1);
+    }
+  }, [isTransitioning, slides.length]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined;
 
-    if (autoPlay && !isHovered) {
+    const shouldAutoPlay =
+      autoPlay && !isHovered && !isTransitioning && slides.length > 0;
+    if (shouldAutoPlay) {
       interval = setInterval(nextSlide, autoPlayInterval);
     }
 
@@ -90,26 +164,45 @@ function Carousel({
         clearInterval(interval);
       }
     };
-  }, [autoPlay, isHovered, nextSlide, autoPlayInterval]);
+  }, [
+    autoPlay,
+    isHovered,
+    isTransitioning,
+    nextSlide,
+    autoPlayInterval,
+    slides.length,
+  ]);
+
+  if (slides.length === 0) {
+    return (
+      <div className={`w-full ${className}`}>
+        <div className="mb-10">
+          <h2 className="text-20-700">{title}</h2>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className={`w-full ${className}`}>
-      <div className="mb-10 flex items-center justify-between">
+    <div className={`w-full max-w-1400 ${className}`}>
+      <div className="mb-20 flex w-full  items-center justify-between">
         <h2 className="text-20-700">{title}</h2>
         <div className="flex gap-10">
           <button
             type="button"
             onClick={prevSlide}
-            className="rounded-full p-1 hover:bg-gray-100"
+            className="rounded-full p-1 hover:bg-gray-100 disabled:opacity-50"
             aria-label="Previous slide"
+            disabled={isTransitioning}
           >
             <Arrowleft />
           </button>
           <button
             type="button"
             onClick={nextSlide}
-            className="rounded-full p-1 hover:bg-gray-100"
+            className="rounded-full p-1 hover:bg-gray-100 disabled:opacity-50"
             aria-label="Next slide"
+            disabled={isTransitioning}
           >
             <Arrowright />
           </button>
@@ -121,24 +214,27 @@ function Carousel({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* 오버플로우 컨테이너 */}
-        <div className="relative overflow-hidden">
-          {/* 블러 효과를 위한 그라데이션 오버레이 */}
-          <div className="absolute right-0 top-0 z-10 h-full w-100 bg-gradient-to-r from-transparent to-white/90" />
+        <div
+          className="relative overflow-hidden"
+          style={{
+            width: `${(SLIDE_WIDTH + SLIDE_MARGIN) * VISIBLE_SLIDES - SLIDE_MARGIN}px`,
+          }}
+        >
+          <div className="absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-white/90 to-transparent" />
+          <div className="absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-white/90 to-transparent" />
 
-          {/* 캐러셀 컨텐츠 */}
           <div
-            className="flex transition-transform duration-300 ease-in-out"
+            className={`flex ${isTransitioning ? "transition-transform duration-300 ease-in-out" : ""}`}
             style={{
-              transform: `translateX(-${currentIndex * (100 / itemsToShow)}%)`,
-              width: `${(slidesCount * 100) / itemsToShow}%`,
+              transform: `translateX(-${currentIndex * (SLIDE_WIDTH + SLIDE_MARGIN)}px)`,
             }}
+            onTransitionEnd={resetPosition}
           >
             {slides.map((slide) => (
               <div
                 key={slide.id}
-                className="shrink-0 px-2"
-                style={{ width: `${100 / slidesCount}%` }}
+                className="mr-20 shrink-0"
+                style={{ width: `${SLIDE_WIDTH}px` }}
               >
                 {slide.content}
               </div>

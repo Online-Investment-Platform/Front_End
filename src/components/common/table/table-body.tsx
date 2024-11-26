@@ -1,9 +1,10 @@
+"use client";
+
 import clsx from "clsx";
 import { memo } from "react";
 
 import { DEFAULT_STYLES, TEXT_ALIGN_MAP } from "./constant";
 import { CommonTableColumn, TableBodyProps } from "./types";
-
 /**
  * 테이블 바디 컴포넌트
  * @example

@@ -35,7 +35,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           className={clsx(
             "w-full rounded-lg py-2 pl-13 pr-10 leading-tight text-gray-700",
             "border border-gray-300 bg-white focus:border-green-500 focus:outline-none",
-            "transition-all duration-200 ease-in-out",
+
             error
               ? "border-red-500 focus:border-red-500"
               : "focus:shadow-outline",

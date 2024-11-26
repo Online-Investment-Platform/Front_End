@@ -32,6 +32,11 @@ const config: Config = {
       "32-600": ["32px", { lineHeight: "38px", fontWeight: "600" }],
       "32-500": ["32px", { lineHeight: "38px", fontWeight: "500" }],
 
+      // 2.5xl (28px)
+      "28-700": ["28px", { lineHeight: "38px", fontWeight: "700" }],
+      "28-600": ["28px", { lineHeight: "38px", fontWeight: "600" }],
+      "28-500": ["28px", { lineHeight: "38px", fontWeight: "500" }],
+
       // 2xl (24px)
       "24-700": ["24px", { lineHeight: "28px", fontWeight: "700" }],
       "24-600": ["24px", { lineHeight: "28px", fontWeight: "600" }],
