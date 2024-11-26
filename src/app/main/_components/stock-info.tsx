@@ -43,7 +43,7 @@ function StockTable({ data }: { data: StockHolding[] }) {
           </div>
           <div>
             <div className="text-14-600">{row.stockName}</div>
-            {/* <div className="text-12-400 text-gray-500">5주</div> */}
+            <div className="text-12-400 text-gray-500">5주</div>
           </div>
         </div>
       ),

@@ -29,8 +29,11 @@ const formatKoreanCurrency = (amount: number) => {
   return `${amount.toLocaleString()}원`;
 };
 
+// 초기 자산 값 (1억)
+const INITIAL_ASSET = 100_000_000;
+
 export default function AssetInfo() {
-  const { isAuthenticated, memberNickName, token } = useAuth();
+  const { isAuthenticated, memberNickName, token, clearAuth } = useAuth();
   const [assetInfo, setAssetInfo] = useState<AssetResponse | null>(null);
 
   useEffect(() => {
@@ -51,7 +54,7 @@ export default function AssetInfo() {
           setAssetInfo(data);
         }
       } catch (error) {
-        console.error("자산 정보 조회 실패:", error); //eslint-disable-line
+        console.error("자산 정보 조회 실패:", error); // eslint-disable-line
       }
     };
 
@@ -59,6 +62,38 @@ export default function AssetInfo() {
       fetchAssetInfo();
     }
   }, [isAuthenticated, token]);
+
+  // 상승 또는 하락 비율 계산
+  const getChangeText = () => {
+    if (!assetInfo?.asset) return <>로딩중...</>;
+
+    const currentAsset = parseInt(assetInfo.asset, 10);
+    const changePercentage =
+      ((currentAsset - INITIAL_ASSET) / INITIAL_ASSET) * 100;
+
+    if (changePercentage > 0) {
+      return (
+        <>
+          저번주 보다 <br />
+          {changePercentage.toFixed(1)}% 상승했어요!
+        </>
+      );
+    }
+    if (changePercentage < 0) {
+      return (
+        <>
+          저번주 보다 <br />
+          {Math.abs(changePercentage).toFixed(1)}% 하락했어요!
+        </>
+      );
+    }
+    return <>저번주와 동일한 자산입니다!</>;
+  };
+
+  // 로그아웃 처리
+  const handleLogout = async () => {
+    await clearAuth();
+  };
 
   if (!isAuthenticated) {
     return (
@@ -99,17 +134,22 @@ export default function AssetInfo() {
       <div>
         <h2 className="text-20-700">내 자산</h2>
         <div className="mt-10">
-          <p className="flex-col gap-5 text-16-600">
-            저번주 보다
-            <br />
-            0.5% 상승했어요!
-          </p>
+          <p className="flex-col gap-5 text-16-600">{getChangeText()}</p>
+          <div className="pt-40">
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="h-30 rounded-5 border-none bg-red-300 px-10 text-16-700 text-gray-600"
+            >
+              로그아웃
+            </button>
+          </div>
         </div>
       </div>
       <div className="absolute top-4 ml-100">
         <Image src={coinsIcon} alt="자산 아이콘" width={210} height={210} />
       </div>
-      <div className="mt-90 flex h-105 w-264 flex-col items-center justify-center rounded-8 bg-[#11E977] p-16">
+      <div className="mt-30 flex h-105 w-264 flex-col items-center justify-center rounded-8 bg-[#11E977] p-16">
         <p className="text-14-500 text-gray-600">
           {memberNickName}님의 총 자산
         </p>
