@@ -7849,6 +7849,11 @@ synckit@^0.9.1:
     "@pkgr/core" "^0.1.0"
     tslib "^2.6.2"
 
+tailwind-merge@^2.5.4:
+  version "2.5.4"
+  resolved "https://registry.yarnpkg.com/tailwind-merge/-/tailwind-merge-2.5.4.tgz#4bf574e81fa061adeceba099ae4df56edcee78d1"
+  integrity sha512-0q8cfZHMu9nuYP/b5Shb7Y7Sh1B7Nnl5GqNr1U+n2p6+mybvRtayrQ+0042Z5byvTA8ihjlP8Odo8/VnHbZu4Q==
+
 tailwindcss-preset-px-to-rem@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/tailwindcss-preset-px-to-rem/-/tailwindcss-preset-px-to-rem-1.2.1.tgz#88f99099a61a02518d8cf1318b6b873a743b3b59"
