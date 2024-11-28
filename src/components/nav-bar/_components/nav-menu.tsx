@@ -23,7 +23,7 @@ const NAV_ITEMS = [
     activeIcon: HomeActiveIcon,
   },
   {
-    href: "/shows",
+    href: "/search",
     name: "주식 조회",
     icon: ChartIcon,
     activeIcon: ChartActiveIcon,

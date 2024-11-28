@@ -10,8 +10,8 @@ import { useForm } from "react-hook-form";
 
 import { EmailInput, PasswordInput } from "@/components/auth-input/index";
 import Button from "@/components/common/button/index";
+import { useAuth } from "@/hooks/use-auth";
 import { AuthFormData } from "@/types/auth";
-import { setCookie } from "@/utils/next-cookies";
 import { LoginResponse, loginSchema } from "@/validation/schema/auth/index";
 
 const FormLinks = memo(() => (
@@ -30,6 +30,7 @@ FormLinks.displayName = "FormLinks";
 export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { setAuth } = useAuth();
 
   const {
     control,
@@ -63,20 +64,11 @@ export default function LoginForm() {
         const responseData: LoginResponse = await response.json();
         console.log("로그인 성공:", responseData);
 
-        if (responseData.token) {
-          await setCookie("token", responseData.token, {
-            maxAge: 7 * 24 * 60 * 60,
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-            path: "/",
-          });
+        // useAuth 스토어 업데이트 및 쿠키 저장
+        await setAuth(responseData);
 
-          router.push("/");
-          router.refresh();
-        } else {
-          throw new Error("토큰이 없습니다.");
-        }
+        router.push("/");
+        router.refresh();
       } else {
         const errorData = await response.json();
         console.error("Error data:", errorData);
