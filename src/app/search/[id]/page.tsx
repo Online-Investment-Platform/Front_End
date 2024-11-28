@@ -1,31 +1,41 @@
-/* eslint-disable */
 import CandlestickChartContainer from "./_components/candle-chart-container";
-import { ChartResponse } from "./types/index";
+import { ChartResponse, VolumeResponse } from "./types/index";
 
-async function getInitialChartData(id: string) {
+async function getInitialData(id: string) {
   try {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/search/chart/day?stockName=${id}`;
-    console.log("Fetching URL:", url);
+    const [chartResponse, volumeResponse] = await Promise.all([
+      fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/search/chart/day?stockName=${id}`,
+        {
+          cache: "no-store",
+          headers: { "Content-Type": "application/json" },
+        },
+      ),
+      fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/search/chart/tradingVolume/day?stockName=${id}`,
+        {
+          cache: "no-store",
+          headers: { "Content-Type": "application/json" },
+        },
+      ),
+    ]);
 
-    const response = await fetch(url, {
-      cache: "no-store",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Response status:", response.status);
-      console.error("Response text:", errorText);
-      throw new Error(`HTTP error! status: ${response.status}`);
+    if (!chartResponse.ok || !volumeResponse.ok) {
+      throw new Error(`HTTP error! status: ${chartResponse.status}`);
     }
 
-    // Promise를 await으로 처리
-    return (await response.json()) as ChartResponse;
+    const [chartData, volumeData] = await Promise.all([
+      chartResponse.json() as Promise<ChartResponse>,
+      volumeResponse.json() as Promise<VolumeResponse>,
+    ]);
+
+    return {
+      chartData,
+      volumeData,
+    };
   } catch (error) {
-    console.error("Error fetching chart data:", error);
-    throw new Error("Failed to fetch chart data");
+    console.error("Error fetching data:", error); //eslint-disable-line
+    throw error;
   }
 }
 
@@ -35,18 +45,28 @@ export default async function StockPage({
   params: { id: string };
 }) {
   try {
-    const initialData = await getInitialChartData(params.id);
+    const initialData = await getInitialData(params.id);
+    const stockName = decodeURIComponent(params.id);
     return (
-      <CandlestickChartContainer
-        stockName={params.id}
-        initialData={initialData}
-      />
+      <>
+        <div className="mb-40 text-24-700">{stockName}</div>
+        <CandlestickChartContainer
+          stockName={params.id}
+          initialChartData={initialData.chartData}
+          initialVolumeData={initialData.volumeData}
+        />
+      </>
     );
   } catch (error) {
+    const errorMessage =
+      error instanceof Error
+        ? error.message
+        : "알 수 없는 오류가 발생했습니다.";
     return (
       <div className="p-4 text-center">
         <h2 className="text-xl mb-2 font-bold">데이터 로딩 실패</h2>
-        <p>잠시 후 다시 시도해주세요.</p>
+        <p>{errorMessage}</p>
+        <p className="mt-2">잠시 후 다시 시도해주세요.</p>
       </div>
     );
   }

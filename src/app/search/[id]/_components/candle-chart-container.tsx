@@ -4,46 +4,75 @@
 
 import { useEffect, useState } from "react";
 
-import { ChartDTO, ChartResponse, PeriodType } from "../types";
+import {
+  ChartDTO,
+  ChartResponse,
+  PeriodType,
+  VolumeDTO,
+  VolumeResponse,
+} from "../types";
 import CandlestickChart from "./candle-chart";
 
 interface Props {
   stockName: string;
-  initialData: ChartResponse;
+  initialChartData: ChartResponse;
+  initialVolumeData: VolumeResponse;
 }
 
 export default function CandlestickChartContainer({
   stockName,
-  initialData,
+  initialChartData,
+  initialVolumeData,
 }: Props) {
   const [period, setPeriod] = useState<PeriodType>("day");
-  const [chartData, setChartData] = useState<ChartDTO[]>(initialData.chartDTOS);
+  const [chartData, setChartData] = useState<ChartDTO[]>(
+    initialChartData.chartDTOS,
+  );
+  const [volumeData, setVolumeData] = useState<VolumeDTO[]>(
+    initialVolumeData.dtoList,
+  );
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchData = async (currentPeriod: PeriodType) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/search/chart/${currentPeriod}?stockName=${stockName}`,
-      );
-      const data: ChartResponse = await response.json();
-      setChartData(data.chartDTOS);
-    } catch (error) {
-      console.error("Error fetching chart data:", error); //eslint-disable-line
-    }
-    setIsLoading(false);
-  };
-
   useEffect(() => {
-    if (period !== "day") {
-      fetchData(period);
-    } else if (period === "day" && chartData !== initialData.chartDTOS) {
-      // day로 돌아올 때 데이터가 초기 데이터와 다르면 새로 fetch
-      fetchData(period);
+    // day인 경우에는 초기 데이터를 그대로 사용
+    if (period === "day") {
+      setChartData(initialChartData.chartDTOS);
+      setVolumeData(initialVolumeData.dtoList);
+      return;
     }
-  }, [period, stockName, initialData.chartDTOS]);
 
-  if (isLoading) return <div>Loading...</div>;
+    // day가 아닌 경우에만 새로운 데이터를 가져옴
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const [chartResponse, volumeResponse] = await Promise.all([
+          fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/search/chart/${period}?stockName=${stockName}`,
+          ),
+          fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/search/chart/tradingVolume/${period}?stockName=${stockName}`,
+          ),
+        ]);
+
+        if (!chartResponse.ok || !volumeResponse.ok) {
+          throw new Error("Failed to fetch data");
+        }
+
+        const [newChartData, newVolumeData] = await Promise.all([
+          chartResponse.json() as Promise<ChartResponse>,
+          volumeResponse.json() as Promise<VolumeResponse>,
+        ]);
+
+        setChartData(newChartData.chartDTOS);
+        setVolumeData(newVolumeData.dtoList);
+      } catch (error) {
+        console.error("Error fetching data:", error); //eslint-disable-line
+      }
+      setIsLoading(false);
+    };
+
+    fetchData();
+  }, [period, stockName]);
 
   return (
     <div className="p-4">
@@ -78,7 +107,11 @@ export default function CandlestickChartContainer({
       </div>
 
       <div className="overflow-x-auto">
-        <CandlestickChart data={chartData} />
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          <CandlestickChart data={chartData} volumeData={volumeData} />
+        )}
       </div>
     </div>
   );
