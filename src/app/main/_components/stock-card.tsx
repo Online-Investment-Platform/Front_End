@@ -1,5 +1,6 @@
 "use client";
 
+import clsx from "clsx";
 import { memo } from "react";
 
 import ArrowDownIcon from "@/icons/arrow-down.svg";
@@ -20,8 +21,13 @@ function MarketIndexCard({ endpoint, data }: MarketIndexCardProps) {
 
   return (
     <div
-      className={`h-116 w-308 shrink-0 flex-col items-start gap-12 rounded-10 p-20
-          ${isNegative ? "bg-[#EFF6FB]" : "bg-[#FDEDED]"}`}
+      className={clsx(
+        "h-116 w-308 shrink-0 flex-col items-start gap-12 rounded-10 p-20",
+        {
+          "bg-[#EFF6FB]": isNegative,
+          "bg-[#FDEDED]": !isNegative,
+        },
+      )}
       aria-label={`${endpoint} market index`}
     >
       <div className="space-y-2">
@@ -31,9 +37,10 @@ function MarketIndexCard({ endpoint, data }: MarketIndexCardProps) {
             {parseFloat(data.indexValue).toLocaleString("ko-KR")}
           </span>
           <div
-            className={`flex items-center ${
-              isNegative ? "text-[#1A00DF]" : "text-[#F12E35]"
-            }`}
+            className={clsx("flex items-center", {
+              "text-[#1A00DF]": isNegative,
+              "text-[#F12E35]": !isNegative,
+            })}
           >
             {isNegative ? <ArrowDownIcon /> : <ArrowUpIcon />}
             <span className="ml-3 text-14-600">
