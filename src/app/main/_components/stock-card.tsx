@@ -51,7 +51,7 @@ function MarketIndexCard({ endpoint, data }: MarketIndexCardProps) {
           </div>
         </div>
       </div>
-      <div className="absolute right-30 top-35 h-42 w-81">
+      <div className="absolute right-30 top-35 h-43 w-82">
         {isNegative ? <DownGraphIcon /> : <HighGraphIcon />}
       </div>
     </div>
