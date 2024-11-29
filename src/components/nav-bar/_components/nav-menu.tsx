@@ -98,6 +98,11 @@ NavItem.displayName = "NavItem";
 export default function NavMenu() {
   const pathname = usePathname();
 
+  const isActiveRoute = (href: string) => {
+    if (href === "/") return pathname === href;
+    return pathname.startsWith(href);
+  };
+
   return (
     <menu className="fixed left-0 top-0 flex h-screen w-82 flex-col items-center border-r bg-white py-4">
       <div className="mb-40 text-16-600">로고</div>
@@ -109,7 +114,7 @@ export default function NavMenu() {
             name={item.name}
             icon={item.icon}
             activeIcon={item.activeIcon}
-            isActive={pathname === item.href}
+            isActive={isActiveRoute(item.href)}
           />
         ))}
       </ul>
