@@ -76,39 +76,39 @@ export default function CandlestickChartContainer({
 
   return (
     <div className="p-4">
-      <div className="mb-4 space-x-2">
+      <div className="mb-4 space-x-8">
         <button
           type="button"
           onClick={() => setPeriod("day")}
-          className={`text-sm rounded-md px-4 py-2 font-medium transition-colors ${
+          className={`rounded-md px-4 py-2 text-16-400 transition-colors ${
             period === "day"
               ? "bg-blue-500 text-white hover:bg-blue-600"
               : "bg-gray-100 hover:bg-gray-200"
           }`}
         >
-          일간
+          일
         </button>
         <button
           type="button"
           onClick={() => setPeriod("week")}
-          className={`text-sm rounded-md px-4 py-2 font-medium transition-colors ${
+          className={`rounded-md px-4 py-2 text-16-400 transition-colors ${
             period === "week"
               ? "bg-blue-500 text-white hover:bg-blue-600"
               : "bg-gray-100 hover:bg-gray-200"
           }`}
         >
-          주간
+          주
         </button>
         <button
           type="button"
           onClick={() => setPeriod("month")}
-          className={`text-sm rounded-md px-4 py-2 font-medium transition-colors ${
+          className={`rounded-md px-4 py-2 text-16-400 transition-colors ${
             period === "month"
               ? "bg-blue-500 text-white hover:bg-blue-600"
               : "bg-gray-100 hover:bg-gray-200"
           }`}
         >
-          월간
+          월
         </button>
       </div>
 
