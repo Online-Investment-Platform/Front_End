@@ -10,6 +10,7 @@ import ContentIcon from "@/public/icons/contents.svg";
 import ContentActiveIcon from "@/public/icons/contents-active.svg";
 import HomeIcon from "@/public/icons/home.svg";
 import HomeActiveIcon from "@/public/icons/home-active.svg";
+import LogoIcon from "@/public/icons/logo.svg";
 import AccountIcon from "@/public/icons/mypage.svg";
 import AccountActiveIcon from "@/public/icons/mypage-active.svg";
 
@@ -104,9 +105,9 @@ export default function NavMenu() {
   };
 
   return (
-    <menu className="fixed left-0 top-0 flex h-screen w-82 flex-col items-center border-r bg-white py-4">
-      <div className="mb-40 text-16-600">로고</div>
-      <ul className="flex flex-col items-center space-y-45">
+    <menu className="fixed left-0 top-0 flex h-screen w-82 flex-col items-center border-r bg-white py-20">
+      <LogoIcon />
+      <div className="mt-30 flex flex-col items-center space-y-45">
         {NAV_ITEMS.map((item) => (
           <NavItem
             key={item.href}
@@ -117,7 +118,7 @@ export default function NavMenu() {
             isActive={isActiveRoute(item.href)}
           />
         ))}
-      </ul>
+      </div>
     </menu>
   );
 }
