@@ -9,11 +9,13 @@ import {
 import { useEffect, useRef, useState } from "react";
 
 import { ChartDTO, VolumeDTO } from "../types";
+import LoadingSpinner from "./loading-spiner";
 import PriceTooltip from "./price-tooltip";
 
 interface Props {
   data: ChartDTO[];
   volumeData: VolumeDTO[];
+  isLoading?: boolean;
 }
 
 interface CandleData {
@@ -31,7 +33,7 @@ interface TooltipData {
   volume: number;
 }
 
-function CandlestickChart({ data, volumeData }: Props) {
+function CandlestickChart({ data, volumeData, isLoading }: Props) {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [tooltipData, setTooltipData] = useState<TooltipData>({
@@ -43,6 +45,8 @@ function CandlestickChart({ data, volumeData }: Props) {
   });
 
   useEffect(() => {
+    if (!data?.length || !volumeData?.length || isLoading) return undefined;
+
     const chartContainer = chartContainerRef.current;
     if (!chartContainer) return undefined;
 
@@ -65,7 +69,6 @@ function CandlestickChart({ data, volumeData }: Props) {
       },
     });
 
-    // 캔들스틱 차트 (메인 차트)
     const candlestickSeries = chart.addCandlestickSeries({
       upColor: "#FF3B30",
       downColor: "#007AFF",
@@ -75,22 +78,20 @@ function CandlestickChart({ data, volumeData }: Props) {
       priceScaleId: "right",
     });
 
-    // 거래량 차트 (하단에 표시)
     const volumeSeries = chart.addHistogramSeries({
       color: "#26a69a",
       priceFormat: {
         type: "volume",
       },
-      priceScaleId: "volume", // 별도의 스케일 ID 지정
+      priceScaleId: "volume",
     });
 
-    // 거래량 차트의 스케일 설정
     volumeSeries.priceScale().applyOptions({
       scaleMargins: {
-        top: 0.8, // 상단 여백 (캔들차트 영역)
-        bottom: 0, // 하단 여백
+        top: 0.8,
+        bottom: 0,
       },
-      visible: false, // 거래량 차트의 가격 스케일 숨김
+      visible: false,
     });
 
     const transformedCandleData = data
@@ -122,7 +123,6 @@ function CandlestickChart({ data, volumeData }: Props) {
     candlestickSeries.setData(transformedCandleData);
     volumeSeries.setData(transformedVolumeData);
 
-    // 툴팁 설정
     chart.subscribeCrosshairMove((param) => {
       if (param.time) {
         const crosshairCandleData = param.seriesData.get(
@@ -153,7 +153,15 @@ function CandlestickChart({ data, volumeData }: Props) {
       chart.remove();
       return undefined;
     };
-  }, [data, volumeData]);
+  }, [data, volumeData, isLoading]);
+
+  if (isLoading || !data?.length || !volumeData?.length) {
+    return (
+      <div className="flex h-476 w-615 items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="relative">

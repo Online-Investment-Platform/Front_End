@@ -1,5 +1,3 @@
-// candle-chart-container.tsx
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -31,19 +29,15 @@ export default function CandlestickChartContainer({
   const [volumeData, setVolumeData] = useState<VolumeDTO[]>(
     initialVolumeData.dtoList,
   );
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // day인 경우에는 초기 데이터를 그대로 사용
     if (period === "day") {
       setChartData(initialChartData.chartDTOS);
       setVolumeData(initialVolumeData.dtoList);
       return;
     }
 
-    // day가 아닌 경우에만 새로운 데이터를 가져옴
     const fetchData = async () => {
-      setIsLoading(true);
       try {
         const [chartResponse, volumeResponse] = await Promise.all([
           fetch(
@@ -68,7 +62,6 @@ export default function CandlestickChartContainer({
       } catch (error) {
         console.error("Error fetching data:", error); //eslint-disable-line
       }
-      setIsLoading(false);
     };
 
     fetchData();
@@ -106,13 +99,7 @@ export default function CandlestickChartContainer({
         </button>
       </div>
 
-      <div className="overflow-x-auto">
-        {isLoading ? (
-          <div>Loading...</div>
-        ) : (
-          <CandlestickChart data={chartData} volumeData={volumeData} />
-        )}
-      </div>
+      <CandlestickChart data={chartData} volumeData={volumeData} />
     </div>
   );
 }
