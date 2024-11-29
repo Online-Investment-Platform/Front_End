@@ -80,8 +80,10 @@ export default function CandlestickChartContainer({
         <button
           type="button"
           onClick={() => setPeriod("day")}
-          className={`px-4 py-2 ${
-            period === "day" ? "bg-blue-500 text-white" : "bg-gray-200"
+          className={`text-sm rounded-md px-4 py-2 font-medium transition-colors ${
+            period === "day"
+              ? "bg-blue-500 text-white hover:bg-blue-600"
+              : "bg-gray-100 hover:bg-gray-200"
           }`}
         >
           일간
@@ -89,8 +91,10 @@ export default function CandlestickChartContainer({
         <button
           type="button"
           onClick={() => setPeriod("week")}
-          className={`px-4 py-2 ${
-            period === "week" ? "bg-blue-500 text-white" : "bg-gray-200"
+          className={`text-sm rounded-md px-4 py-2 font-medium transition-colors ${
+            period === "week"
+              ? "bg-blue-500 text-white hover:bg-blue-600"
+              : "bg-gray-100 hover:bg-gray-200"
           }`}
         >
           주간
@@ -98,8 +102,10 @@ export default function CandlestickChartContainer({
         <button
           type="button"
           onClick={() => setPeriod("month")}
-          className={`px-4 py-2 ${
-            period === "month" ? "bg-blue-500 text-white" : "bg-gray-200"
+          className={`text-sm rounded-md px-4 py-2 font-medium transition-colors ${
+            period === "month"
+              ? "bg-blue-500 text-white hover:bg-blue-600"
+              : "bg-gray-100 hover:bg-gray-200"
           }`}
         >
           월간

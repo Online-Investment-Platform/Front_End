@@ -33,9 +33,33 @@ interface TooltipData {
   volume: number;
 }
 
+interface MAData {
+  time: Time;
+  value: number;
+}
+
+function calculateMA(
+  data: { close: number; time: Time }[],
+  period: number,
+): MAData[] {
+  const result: MAData[] = [];
+  for (let i = period - 1; i < data.length; i += 1) {
+    let sum = 0;
+    for (let j = 0; j < period; j += 1) {
+      sum += data[i - j].close;
+    }
+    result.push({
+      time: data[i].time,
+      value: sum / period,
+    });
+  }
+  return result;
+}
+
 function CandlestickChart({ data, volumeData, isLoading }: Props) {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [showMA, setShowMA] = useState(false);
   const [tooltipData, setTooltipData] = useState<TooltipData>({
     open: 0,
     high: 0,
@@ -80,9 +104,7 @@ function CandlestickChart({ data, volumeData, isLoading }: Props) {
 
     const volumeSeries = chart.addHistogramSeries({
       color: "#26a69a",
-      priceFormat: {
-        type: "volume",
-      },
+      priceFormat: { type: "volume" },
       priceScaleId: "volume",
     });
 
@@ -112,7 +134,7 @@ function CandlestickChart({ data, volumeData, isLoading }: Props) {
       .map((item) => ({
         time: item.date.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3") as Time,
         value: Number(item.cumulativeVolume),
-        color: item.changeDirection === "increase" ? "#FF3B30" : "#007AFF",
+        color: item.changeDirection === "increase" ? "#F05650" : "#00CFFA",
       }))
       .sort(
         (a, b) =>
@@ -122,6 +144,34 @@ function CandlestickChart({ data, volumeData, isLoading }: Props) {
 
     candlestickSeries.setData(transformedCandleData);
     volumeSeries.setData(transformedVolumeData);
+
+    if (showMA) {
+      const ma5Series = chart.addLineSeries({
+        color: "#FF9800",
+        lineWidth: 2,
+        priceScaleId: "right",
+      });
+
+      const ma20Series = chart.addLineSeries({
+        color: "#7B1FA2",
+        lineWidth: 2,
+        priceScaleId: "right",
+      });
+
+      const ma60Series = chart.addLineSeries({
+        color: "#2FF221",
+        lineWidth: 2,
+        priceScaleId: "right",
+      });
+
+      const ma5Data = calculateMA(transformedCandleData, 5);
+      const ma20Data = calculateMA(transformedCandleData, 20);
+      const ma60Data = calculateMA(transformedCandleData, 60);
+
+      ma5Series.setData(ma5Data);
+      ma20Series.setData(ma20Data);
+      ma60Series.setData(ma60Data);
+    }
 
     chart.subscribeCrosshairMove((param) => {
       if (param.time) {
@@ -153,7 +203,7 @@ function CandlestickChart({ data, volumeData, isLoading }: Props) {
       chart.remove();
       return undefined;
     };
-  }, [data, volumeData, isLoading]);
+  }, [data, volumeData, isLoading, showMA]);
 
   if (isLoading || !data?.length || !volumeData?.length) {
     return (
@@ -165,6 +215,17 @@ function CandlestickChart({ data, volumeData, isLoading }: Props) {
 
   return (
     <div className="relative">
+      <button
+        type="button"
+        onClick={() => setShowMA(!showMA)}
+        className={`rounded-md px-3 py-1 text-14-400 font-medium transition-colors ${
+          showMA
+            ? "bg-blue-500 text-white hover:bg-blue-600"
+            : "bg-gray-100 hover:bg-gray-200"
+        }`}
+      >
+        이평선
+      </button>
       <div ref={chartContainerRef} style={{ overflowX: "auto" }} />
       <div className="pointer-events-none absolute left-0 top-0 z-50">
         <PriceTooltip {...tooltipData} visible={tooltipVisible} />
