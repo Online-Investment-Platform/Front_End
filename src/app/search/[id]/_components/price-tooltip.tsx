@@ -1,3 +1,5 @@
+import React from "react";
+
 interface PriceTooltipProps {
   close: number;
   open: number;
@@ -6,21 +8,29 @@ interface PriceTooltipProps {
   visible: boolean;
 }
 
-export default function PriceTooltip({
-  close,
-  open,
-  low,
-  high,
-  visible,
-}: PriceTooltipProps) {
+function PriceTooltip({ close, open, low, high, visible }: PriceTooltipProps) {
   if (!visible) return null;
 
   return (
-    <div className="text-sm rounded border border-gray-200 bg-white p-2 shadow-lg">
-      <div>종가: {close.toLocaleString()}</div>
-      <div>시가: {open.toLocaleString()}</div>
-      <div className="text-[#007AFF]">최저가: {low.toLocaleString()}</div>
-      <div className="text-[#FF3B30]">최고가: {high.toLocaleString()}</div>
+    <div className="max-w-300 rounded-md border border-gray-200 bg-white p-2 text-12-400 shadow-md">
+      <div className="flex justify-between">
+        <div>종가:</div>
+        <div>{close.toLocaleString()}</div>
+      </div>
+      <div className="flex justify-between">
+        <div>시가:</div>
+        <div>{open.toLocaleString()}</div>
+      </div>
+      <div className="flex justify-between text-blue-500">
+        <div>최저가:</div>
+        <div>{low.toLocaleString()}</div>
+      </div>
+      <div className="flex justify-between text-red-500">
+        <div>최고가:</div>
+        <div>{high.toLocaleString()}</div>
+      </div>
     </div>
   );
 }
+
+export default PriceTooltip;
