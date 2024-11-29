@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
   ChartDTO,
@@ -29,15 +29,21 @@ export default function CandlestickChartContainer({
   const [volumeData, setVolumeData] = useState<VolumeDTO[]>(
     initialVolumeData.dtoList,
   );
+  const [isLoading, setIsLoading] = useState(false);
+
+  const resetToInitialData = useCallback(() => {
+    setChartData(initialChartData.chartDTOS);
+    setVolumeData(initialVolumeData.dtoList);
+  }, [initialChartData.chartDTOS, initialVolumeData.dtoList]);
 
   useEffect(() => {
     if (period === "day") {
-      setChartData(initialChartData.chartDTOS);
-      setVolumeData(initialVolumeData.dtoList);
+      resetToInitialData();
       return;
     }
 
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const [chartResponse, volumeResponse] = await Promise.all([
           fetch(
@@ -62,10 +68,11 @@ export default function CandlestickChartContainer({
       } catch (error) {
         console.error("Error fetching data:", error); //eslint-disable-line
       }
+      setIsLoading(false);
     };
 
     fetchData();
-  }, [period, stockName]);
+  }, [period, stockName, resetToInitialData]);
 
   return (
     <div className="p-4">
@@ -99,7 +106,13 @@ export default function CandlestickChartContainer({
         </button>
       </div>
 
-      <CandlestickChart data={chartData} volumeData={volumeData} />
+      <div className="overflow-x-auto">
+        <CandlestickChart
+          data={chartData}
+          volumeData={volumeData}
+          isLoading={isLoading}
+        />
+      </div>
     </div>
   );
 }
