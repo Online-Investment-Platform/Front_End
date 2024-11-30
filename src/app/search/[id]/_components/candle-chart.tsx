@@ -79,7 +79,7 @@ function CandlestickChart({ data, volumeData, isLoading }: Props) {
         background: { type: ColorType.Solid, color: "#ffffff" },
         textColor: "#333",
       },
-      width: 615,
+      width: 700,
       height: 426,
       grid: {
         vertLines: { color: "#E6E6E6" },

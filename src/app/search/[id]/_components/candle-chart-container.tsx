@@ -75,7 +75,7 @@ export default function CandlestickChartContainer({
   }, [period, stockName, resetToInitialData]);
 
   return (
-    <div className="w-650 rounded-lg bg-white p-10 pl-20 shadow-sm">
+    <div className="w-739 rounded-lg bg-white p-10 pl-20 shadow-sm">
       <div className="mb-4 space-x-8">
         <button
           type="button"
