@@ -12,7 +12,7 @@ function PriceTooltip({ close, open, low, high, visible }: PriceTooltipProps) {
   if (!visible) return null;
 
   return (
-    <div className="max-w-300 rounded-md border border-gray-200 bg-white p-2 text-12-400 shadow-md">
+    <div className="max-w-300 rounded-md border border-gray-200 bg-white p-4 text-12-400 shadow-md">
       <div className="flex justify-between">
         <div>종가:</div>
         <div>{close.toLocaleString()}</div>

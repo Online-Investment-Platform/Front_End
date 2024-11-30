@@ -80,7 +80,7 @@ function CandlestickChart({ data, volumeData, isLoading }: Props) {
         textColor: "#333",
       },
       width: 615,
-      height: 476,
+      height: 426,
       grid: {
         vertLines: { color: "#E6E6E6" },
         horzLines: { color: "#E6E6E6" },
@@ -218,9 +218,9 @@ function CandlestickChart({ data, volumeData, isLoading }: Props) {
       <button
         type="button"
         onClick={() => setShowMA(!showMA)}
-        className={`rounded-md px-3 py-1 text-14-400 font-medium transition-colors ${
+        className={`rounded-md p-3 text-14-400 font-medium transition-colors ${
           showMA
-            ? "bg-blue-500 text-white hover:bg-blue-600"
+            ? "bg-blue-300 text-white hover:bg-blue-400"
             : "bg-gray-100 hover:bg-gray-200"
         }`}
       >
