@@ -1,4 +1,3 @@
-// page.tsx
 import CandlestickChartContainer from "./_components/candle-chart-container";
 import StockHeader from "./_components/stock-header";
 import { ChartResponse, StockInfo, VolumeResponse } from "./types";
@@ -55,7 +54,7 @@ export default async function StockPage({
   try {
     const initialData = await getInitialData(params.id);
     return (
-      <div className="flex flex-col gap-20 pl-30 pt-30">
+      <div className="flex flex-col gap-20 pl-40 pt-30">
         <StockHeader
           stockName={params.id}
           initialStockInfo={initialData.stockData}

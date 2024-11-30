@@ -1,6 +1,9 @@
 "use client";
 
 import clsx from "clsx";
+import { useRouter } from "next/navigation";
+
+import BackIcon from "@/icons/arrow-left.svg";
 
 import { StockInfo } from "../types";
 
@@ -10,6 +13,7 @@ interface StockHeaderProps {
 }
 
 function StockHeader({ stockName, initialStockInfo }: StockHeaderProps) {
+  const router = useRouter();
   const isPositive = parseFloat(initialStockInfo.contrastRatio) > 0;
   const isNegative = parseFloat(initialStockInfo.contrastRatio) < 0;
 
@@ -19,8 +23,17 @@ function StockHeader({ stockName, initialStockInfo }: StockHeaderProps) {
   return (
     <div className="flex w-full items-center justify-between gap-6">
       <div className="flex flex-col gap-8">
-        <div className="mr-20 text-24-700">{decodeURIComponent(stockName)}</div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-15">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="flex size-13 items-center justify-center rounded-full hover:bg-gray-100"
+          >
+            <BackIcon className="size-16" />
+          </button>
+          <div className="text-24-700">{decodeURIComponent(stockName)}</div>
+        </div>
+        <div className="ml-30 flex items-center gap-4">
           <div className="text-16-700">
             현재가 {formatPrice(initialStockInfo.stockPrice)}원
           </div>
