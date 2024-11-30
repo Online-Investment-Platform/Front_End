@@ -14,10 +14,10 @@ export default async function SearchPage() {
 
   return (
     <div className="lg:max-w-2000 container mx-auto flex h-screen flex-col p-4 py-8 pt-30 md:px-12 lg:px-32">
-      <h1 className="mb-60 text-24-700">투자 상품 검색하기</h1>
-      <div className="mb-4 text-16-500 text-black">
+      <h1 className="mb-60 text-24-700">TOP10 주식 조회하기</h1>
+      {/* <div className="mb-4 text-16-500 text-black">
         검색된 투자 상품: {data.length}개
-      </div>
+      </div> */}
       <StockTable initialData={data} />
     </div>
   );
