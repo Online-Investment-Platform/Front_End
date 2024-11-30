@@ -16,6 +16,7 @@ interface Props {
   data: ChartDTO[];
   volumeData: VolumeDTO[];
   isLoading?: boolean;
+  showMA: boolean;
 }
 
 interface CandleData {
@@ -56,10 +57,9 @@ function calculateMA(
   return result;
 }
 
-function CandlestickChart({ data, volumeData, isLoading }: Props) {
+function CandlestickChart({ data, volumeData, isLoading, showMA }: Props) {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const [tooltipVisible, setTooltipVisible] = useState(false);
-  const [showMA, setShowMA] = useState(false);
   const [tooltipData, setTooltipData] = useState<TooltipData>({
     open: 0,
     high: 0,
@@ -215,17 +215,6 @@ function CandlestickChart({ data, volumeData, isLoading }: Props) {
 
   return (
     <div className="relative">
-      <button
-        type="button"
-        onClick={() => setShowMA(!showMA)}
-        className={`rounded-md p-3 text-14-400 font-medium transition-colors ${
-          showMA
-            ? "bg-blue-300 text-white hover:bg-blue-400"
-            : "bg-gray-100 hover:bg-gray-200"
-        }`}
-      >
-        이평선
-      </button>
       <div ref={chartContainerRef} style={{ overflowX: "auto" }} />
       <div className="pointer-events-none absolute left-0 top-0 z-50">
         <PriceTooltip {...tooltipData} visible={tooltipVisible} />
