@@ -32,7 +32,7 @@ function StockHeader({ stockName, initialStockInfo }: StockHeaderProps) {
             })}
           >
             {isPositive ? "+" : ""}
-            {formatPrice(initialStockInfo.contrastRatio)}원 (
+            {formatPrice(initialStockInfo.previousStockPrice)}원 (
             {initialStockInfo.contrastRatio}
             %)
           </div>
