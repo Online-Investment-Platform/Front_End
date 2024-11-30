@@ -35,7 +35,11 @@ function MarketIndexCard({ endpoint, data }: MarketIndexCardProps) {
               isNegative ? "text-[#1A00DF]" : "text-[#F12E35]"
             }`}
           >
-            {isNegative ? <ArrowDownIcon /> : <ArrowUpIcon />}
+            {isNegative ? (
+              <ArrowDownIcon className="fill-[#1A00DF]" />
+            ) : (
+              <ArrowUpIcon />
+            )}
             <span className="ml-3 text-14-600">
               {Math.abs(fluctuationValue)}%
             </span>

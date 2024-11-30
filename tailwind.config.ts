@@ -76,6 +76,9 @@ const config: Config = {
       "12-500": ["12px", { lineHeight: "14px", fontWeight: "500" }],
       "12-400": ["12px", { lineHeight: "14px", fontWeight: "400" }],
     },
+    boxShadow: {
+      custom: "0 2px 4px 0 rgba(51, 50, 54, 0.06)", // X: 0, Y: 2, Blur: 4, Spread: 0, 색상: #333236/6
+    },
   },
   plugins: [],
 };
