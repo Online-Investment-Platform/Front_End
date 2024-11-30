@@ -48,14 +48,14 @@ export default async function StockPage({
     const initialData = await getInitialData(params.id);
     const stockName = decodeURIComponent(params.id);
     return (
-      <>
-        <div className="mb-40 text-24-700">{stockName}</div>
+      <div className="pl-30 pt-30">
+        <div className="mb-30 text-24-700">{stockName}</div>
         <CandlestickChartContainer
           stockName={params.id}
           initialChartData={initialData.chartData}
           initialVolumeData={initialData.volumeData}
         />
-      </>
+      </div>
     );
   } catch (error) {
     const errorMessage =
