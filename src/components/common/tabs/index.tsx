@@ -54,7 +54,7 @@ function Tabs({
  * @returns {JSX.Element} 자식 요소들을 포함한 div 요소입니다.
  */
 function TabsList({ children }: { children: ReactNode }) {
-  return <div className="flex">{children}</div>;
+  return <div className="flex gap-6">{children}</div>;
 }
 
 /**
@@ -95,7 +95,7 @@ function TabsTrigger({
     <button
       type="button"
       className={cn(
-        "px-4 py-2 rounded-2",
+        "px-13 py-8 rounded-2",
         isActive ? backgroundColors[buttonColor] : "text-[#B6B6B6]",
         rounded === "md" && "rounded-4",
         padding === "md" && "px-16 py-4",
