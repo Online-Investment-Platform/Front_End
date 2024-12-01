@@ -43,24 +43,22 @@ function CustomToggleDropdown() {
   const [selectedValue, setSelectedValue] = useState("");
 
   return (
-    <div className="w-64">
-      <Dropdown
-        selectedValue={selectedValue}
-        onSelect={(value) => setSelectedValue(value as string)}
-        className="w-200"
-      >
-        <Dropdown.Toggle>
-          <div className="flex items-center">
-            🌈 현재 선택: {selectedValue || "없음"}
-          </div>
-        </Dropdown.Toggle>
-        <Dropdown.Wrapper>
-          <Dropdown.Item value="red">🔴 레드</Dropdown.Item>
-          <Dropdown.Item value="blue">🔵 블루</Dropdown.Item>
-          <Dropdown.Item value="green">🟢 그린</Dropdown.Item>
-        </Dropdown.Wrapper>
-      </Dropdown>
-    </div>
+    <Dropdown
+      selectedValue={selectedValue}
+      onSelect={(value) => setSelectedValue(value as string)}
+      className="w-200"
+    >
+      <Dropdown.Toggle>
+        <div className="flex items-center">
+          🌈 현재 선택: {selectedValue || "없음"}
+        </div>
+      </Dropdown.Toggle>
+      <Dropdown.Wrapper>
+        <Dropdown.Item value="red">🔴 레드</Dropdown.Item>
+        <Dropdown.Item value="blue">🔵 블루</Dropdown.Item>
+        <Dropdown.Item value="green">🟢 그린</Dropdown.Item>
+      </Dropdown.Wrapper>
+    </Dropdown>
   );
 }
 
@@ -72,19 +70,17 @@ function PreSelectedDropdown() {
   const [selectedValue, setSelectedValue] = useState("option2");
 
   return (
-    <div className="w-64">
-      <Dropdown
-        selectedValue={selectedValue}
-        onSelect={(value) => setSelectedValue(value as string)}
-      >
-        <Dropdown.Toggle />
-        <Dropdown.Wrapper>
-          <Dropdown.Item value="option1">옵션 1</Dropdown.Item>
-          <Dropdown.Item value="option2">옵션 2 (기본 선택)</Dropdown.Item>
-          <Dropdown.Item value="option3">옵션 3</Dropdown.Item>
-        </Dropdown.Wrapper>
-      </Dropdown>
-    </div>
+    <Dropdown
+      selectedValue={selectedValue}
+      onSelect={(value) => setSelectedValue(value as string)}
+    >
+      <Dropdown.Toggle />
+      <Dropdown.Wrapper>
+        <Dropdown.Item value="option1">옵션 1</Dropdown.Item>
+        <Dropdown.Item value="option2">옵션 2 (기본 선택)</Dropdown.Item>
+        <Dropdown.Item value="option3">옵션 3</Dropdown.Item>
+      </Dropdown.Wrapper>
+    </Dropdown>
   );
 }
 
@@ -96,21 +92,19 @@ function LongListDropdown() {
   const [selectedValue, setSelectedValue] = useState("");
 
   return (
-    <div className="w-64">
-      <Dropdown
-        selectedValue={selectedValue}
-        onSelect={(value) => setSelectedValue(value as string)}
-      >
-        <Dropdown.Toggle />
-        <Dropdown.Wrapper className="max-h-48 overflow-y-auto">
-          {Array.from({ length: 10 }, (_, i) => (
-            <Dropdown.Item key={i} value={`option${i + 1}`}>
-              긴 목록 옵션 {i + 1}
-            </Dropdown.Item>
-          ))}
-        </Dropdown.Wrapper>
-      </Dropdown>
-    </div>
+    <Dropdown
+      selectedValue={selectedValue}
+      onSelect={(value) => setSelectedValue(value as string)}
+    >
+      <Dropdown.Toggle />
+      <Dropdown.Wrapper className="max-h-48 overflow-y-auto">
+        {Array.from({ length: 10 }, (_, i) => (
+          <Dropdown.Item key={i} value={`option${i + 1}`}>
+            긴 목록 옵션 {i + 1}
+          </Dropdown.Item>
+        ))}
+      </Dropdown.Wrapper>
+    </Dropdown>
   );
 }
 
