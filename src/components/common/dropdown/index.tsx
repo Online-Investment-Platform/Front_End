@@ -80,13 +80,24 @@ export default function Dropdown({
   );
 }
 
-function Toggle({ children }: { children?: ReactNode }): JSX.Element {
+function Toggle({
+  children,
+  border = true,
+}: {
+  children?: ReactNode;
+  border?: boolean;
+}): JSX.Element {
   const { toggleDropdown, selectedValue, isOpen } = useContext(DropdownContext);
 
   return (
     <button
       type="button"
-      className="mb-4 flex w-full items-center justify-between rounded-2 border border-solid border-[#B6B6B6] p-13 text-left"
+      className={cn(
+        "mb-4 flex w-full items-center justify-between rounded-2 text-left",
+        {
+          "border border-solid border-[#B6B6B6] p-13": border === true,
+        },
+      )}
       onClick={toggleDropdown}
       aria-expanded={isOpen}
     >
@@ -115,7 +126,7 @@ function Wrapper({
       {isOpen && (
         <motion.div
           className={cn(
-            "rounded-2 shadow-custom absolute z-50 border-[#B6B6B6] border border-solid bg-white p-8",
+            "rounded-2 w-full shadow-custom absolute z-50 border-[#B6B6B6] border border-solid bg-white p-8",
             className,
           )}
           initial={{ opacity: 0, y: -10 }}
