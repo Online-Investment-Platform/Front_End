@@ -8,6 +8,8 @@ import { TableBody } from "@/components/common/table";
 import { useAuth } from "@/hooks/use-auth";
 import magnifierIcon from "@/images/stockInfo.png";
 
+import { MyStockInfoSkeleton } from "./skeleton";
+
 interface StockHolding {
   stockName: string;
   currentPrice: number;
@@ -87,7 +89,7 @@ function StockTable({ data }: { data: StockHolding[] }) {
 }
 
 export default function MyStockInfo() {
-  const { isAuthenticated, token } = useAuth();
+  const { isAuthenticated, token, isInitialized } = useAuth();
   const [stockCount, setStockCount] = useState<string | null>(null);
   const [stockHoldings, setStockHoldings] = useState<StockHolding[]>([]);
 
@@ -152,6 +154,10 @@ export default function MyStockInfo() {
         <p className="absolute bottom-21 text-16-600">나의 보유 주식</p>
       </div>
     );
+  }
+
+  if (!isInitialized) {
+    return <MyStockInfoSkeleton />;
   }
 
   return (

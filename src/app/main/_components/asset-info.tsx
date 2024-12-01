@@ -8,6 +8,8 @@ import { useAuth } from "@/hooks/use-auth";
 import coinsIcon from "@/images/coin.png";
 import shieldIcon from "@/images/shield.png";
 
+import { AssetInfoSkeleton } from "./skeleton";
+
 interface AssetResponse {
   asset: string;
 }
@@ -33,7 +35,8 @@ const formatKoreanCurrency = (amount: number) => {
 const INITIAL_ASSET = 100_000_000;
 
 export default function AssetInfo() {
-  const { isAuthenticated, memberNickName, token, clearAuth } = useAuth();
+  const { isAuthenticated, memberNickName, token, clearAuth, isInitialized } =
+    useAuth();
   const [assetInfo, setAssetInfo] = useState<AssetResponse | null>(null);
 
   useEffect(() => {
@@ -127,6 +130,10 @@ export default function AssetInfo() {
         </div>
       </div>
     );
+  }
+
+  if (!isInitialized) {
+    return <AssetInfoSkeleton />;
   }
 
   return (

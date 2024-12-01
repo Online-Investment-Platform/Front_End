@@ -17,6 +17,7 @@ interface AuthStore {
   memberName: string | null;
   memberNickName: string | null;
   isAuthenticated: boolean;
+  isInitialized: boolean; // 추가
   setAuth: (response: LoginResponse) => Promise<void>;
   clearAuth: () => Promise<void>;
   initAuth: () => Promise<void>;
@@ -30,12 +31,12 @@ interface AuthStore {
  * import { useAuth } from '@/hooks/useAuth';
  *
  * function LoginComponent() {
- *   const { setToken } = useAuth();
+ *   const { setAuth } = useAuth();
  *
  *   const handleLogin = async () => {
  *     const response = await fetch('/api/login');
- *     const { token } = await response.json();
- *     await setToken(token); // 로그인 후 토큰 저장
+ *     const data = await response.json();
+ *     await setAuth(data); // 로그인 후 인증 정보 저장
  *   };
  * }
  *
@@ -54,22 +55,22 @@ interface AuthStore {
  * }
  *
  * @example
- * // 3. 컴포넌트 마운트시 토큰 초기화
+ * // 3. 컴포넌트 마운트시 인증 상태 초기화
  * function App() {
- *   const { initToken } = useAuth();
+ *   const { initAuth } = useAuth();
  *
  *   useEffect(() => {
- *     initToken(); // 페이지 로드시 쿠키에서 토큰 복원
+ *     initAuth(); // 페이지 로드시 쿠키에서 인증 정보 복원
  *   }, []);
  * }
  *
  * @example
- * // 4. 로그아웃시 토큰 제거
+ * // 4. 로그아웃시 인증 정보 제거
  * function LogoutButton() {
- *   const { clearToken } = useAuth();
+ *   const { clearAuth } = useAuth();
  *
  *   const handleLogout = async () => {
- *     await clearToken(); // 로그아웃시 토큰 삭제
+ *     await clearAuth(); // 로그아웃시 인증 정보 삭제
  *   };
  * }
  */
@@ -79,6 +80,7 @@ export const useAuth = create<AuthStore>((set) => ({
   memberName: null,
   memberNickName: null,
   isAuthenticated: false,
+  isInitialized: false,
 
   setAuth: async (response: LoginResponse) => {
     const { token, memberName, memberNickName } = response;
@@ -91,6 +93,7 @@ export const useAuth = create<AuthStore>((set) => ({
       memberName,
       memberNickName,
       isAuthenticated: true,
+      isInitialized: true,
     });
   },
 
@@ -104,6 +107,7 @@ export const useAuth = create<AuthStore>((set) => ({
       memberName: null,
       memberNickName: null,
       isAuthenticated: false,
+      isInitialized: true,
     });
   },
 
@@ -117,6 +121,7 @@ export const useAuth = create<AuthStore>((set) => ({
       memberName,
       memberNickName,
       isAuthenticated: !!token,
+      isInitialized: true,
     });
   },
 }));
