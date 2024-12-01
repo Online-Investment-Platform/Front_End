@@ -132,6 +132,10 @@ export default function MyStockInfo() {
     }
   }, [isAuthenticated, token]);
 
+  if (!isInitialized) {
+    return <MyStockInfoSkeleton />;
+  }
+
   if (!isAuthenticated || stockCount === "0") {
     return (
       <div className="relative h-308 w-300 rounded-10 bg-[#F5F5F5] p-21">
@@ -154,10 +158,6 @@ export default function MyStockInfo() {
         <p className="absolute bottom-21 text-16-600">나의 보유 주식</p>
       </div>
     );
-  }
-
-  if (!isInitialized) {
-    return <MyStockInfoSkeleton />;
   }
 
   return (

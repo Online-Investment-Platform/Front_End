@@ -98,6 +98,10 @@ export default function AssetInfo() {
     await clearAuth();
   };
 
+  if (!isInitialized) {
+    return <AssetInfoSkeleton />;
+  }
+
   if (!isAuthenticated) {
     return (
       <div className="relative h-308 w-300 rounded-10 bg-[#D9FFE5] p-21">
@@ -130,10 +134,6 @@ export default function AssetInfo() {
         </div>
       </div>
     );
-  }
-
-  if (!isInitialized) {
-    return <AssetInfoSkeleton />;
   }
 
   return (

@@ -17,7 +17,7 @@ interface AuthStore {
   memberName: string | null;
   memberNickName: string | null;
   isAuthenticated: boolean;
-  isInitialized: boolean; // 추가
+  isInitialized: boolean;
   setAuth: (response: LoginResponse) => Promise<void>;
   clearAuth: () => Promise<void>;
   initAuth: () => Promise<void>;
@@ -80,7 +80,7 @@ export const useAuth = create<AuthStore>((set) => ({
   memberName: null,
   memberNickName: null,
   isAuthenticated: false,
-  isInitialized: false,
+  isInitialized: false, // 초기값은 초기화 중
 
   setAuth: async (response: LoginResponse) => {
     const { token, memberName, memberNickName } = response;
@@ -93,7 +93,7 @@ export const useAuth = create<AuthStore>((set) => ({
       memberName,
       memberNickName,
       isAuthenticated: true,
-      isInitialized: true,
+      isInitialized: true, // 로그인 시 초기화 완료
     });
   },
 
@@ -107,21 +107,30 @@ export const useAuth = create<AuthStore>((set) => ({
       memberName: null,
       memberNickName: null,
       isAuthenticated: false,
-      isInitialized: true,
+      isInitialized: true, // 로그아웃 시 초기화 완료
     });
   },
 
   initAuth: async () => {
-    const token = await getCookie("token");
-    const memberName = await getCookie("memberName");
-    const memberNickName = await getCookie("memberNickName");
+    try {
+      // 초기화 시작할 때는 false로 설정
+      set({ isInitialized: false });
 
-    set({
-      token,
-      memberName,
-      memberNickName,
-      isAuthenticated: !!token,
-      isInitialized: true,
-    });
+      const token = await getCookie("token");
+      const memberName = await getCookie("memberName");
+      const memberNickName = await getCookie("memberNickName");
+
+      set({
+        token,
+        memberName,
+        memberNickName,
+        isAuthenticated: !!token,
+        isInitialized: true, // 초기화 완료
+      });
+    } catch (error) {
+      // 에러가 나도 초기화는 완료 처리
+      set({ isInitialized: true });
+      throw error;
+    }
   },
 }));
