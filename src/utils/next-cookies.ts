@@ -102,7 +102,7 @@ export async function setCookie(
 ): Promise<void> {
   const defaultOptions: CookieOptions = {
     path: "/",
-    maxAge: 24 * 60 * 60, // 1일
+    maxAge: 30 * 60, //30분
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",

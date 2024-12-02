@@ -1,6 +1,7 @@
 "use client";
 
 import clsx from "clsx";
+import { useEffect } from "react";
 
 import BaseModal from "@/components/common/modal";
 
@@ -19,14 +20,20 @@ export default function RefreshModal({
   onAccept,
   onDecline,
 }: RefreshModalProps) {
+  useEffect(() => {
+    if (!isOpen) {
+      onClose();
+    }
+  }, [isOpen, onClose]);
+
   const handleRefresh = () => {
     onAccept();
     onClose();
   };
 
   const handleLogout = () => {
-    onDecline();
     onClose();
+    onDecline();
   };
 
   return (
