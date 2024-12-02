@@ -12,7 +12,14 @@ import StockIndexCarousel from "@/app/main/_components/stock-carousel";
 import MyStockInfo from "@/app/main/_components/stock-info";
 
 export default async function Home() {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 0,
+        retry: 1,
+      },
+    },
+  });
 
   const initialStockData = await getInitialStockData();
   await queryClient.prefetchQuery({
@@ -52,7 +59,6 @@ export default async function Home() {
           <NewsCarousel initialData={initialNews} />
         </div>
       </div>
-
       {/* 우측 사이드바 */}
       <div className="w-330 shrink-0">
         <div className="sticky top-24 flex flex-col gap-16">
