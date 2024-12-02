@@ -5,6 +5,8 @@ import { memo } from "react";
 
 import ArrowDownIcon from "@/icons/arrow-down.svg";
 import ArrowUpIcon from "@/icons/arrow-up.svg";
+import DownGraphIcon from "@/icons/down-graph.svg";
+import HighGraphIcon from "@/icons/high-graph.svg";
 
 import type { StockIndexResponse } from "../types";
 
@@ -22,7 +24,7 @@ function MarketIndexCard({ endpoint, data }: MarketIndexCardProps) {
   return (
     <div
       className={clsx(
-        "h-116 w-308 shrink-0 flex-col items-start gap-12 rounded-10 p-20",
+        "relative h-116 w-308 shrink-0 flex-col items-start gap-12 rounded-10 p-20",
         {
           "bg-[#EFF6FB]": isNegative,
           "bg-[#FDEDED]": !isNegative,
@@ -48,6 +50,9 @@ function MarketIndexCard({ endpoint, data }: MarketIndexCardProps) {
             </span>
           </div>
         </div>
+      </div>
+      <div className="absolute right-30 top-35 h-43 w-82">
+        {isNegative ? <DownGraphIcon /> : <HighGraphIcon />}
       </div>
     </div>
   );
