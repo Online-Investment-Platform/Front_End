@@ -25,6 +25,7 @@ export default function TransactionForm() {
           <TabsTrigger value="history">체결내역</TabsTrigger>
           <TabsTrigger value="edit-cancel">정정 / 취소</TabsTrigger>
         </TabsList>
+
         <TabsContent value="buy">
           <Buy />
         </TabsContent>
