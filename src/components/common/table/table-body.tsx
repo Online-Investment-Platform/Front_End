@@ -1,5 +1,7 @@
 "use client";
 
+"use client";
+
 import clsx from "clsx";
 import { memo } from "react";
 
@@ -60,4 +62,6 @@ function TableBody<T>({
   );
 }
 
-export default memo(TableBody);
+export default memo(TableBody) as <T>(
+  props: TableBodyProps<T>,
+) => React.ReactElement;

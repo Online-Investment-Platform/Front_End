@@ -6,12 +6,23 @@ import { create } from "zustand";
 
 import { deleteCookie, getCookie, setCookie } from "@/utils/next-cookies";
 
+interface LoginResponse {
+  memberName: string;
+  memberNickName: string;
+  token: string;
+}
+
 interface AuthStore {
   token: string | null;
-  setToken: (token: string) => Promise<void>;
-  clearToken: () => Promise<void>;
-  initToken: () => Promise<void>;
+  memberName: string | null;
+  memberNickName: string | null;
+  isAuthenticated: boolean;
+  isInitialized: boolean;
+  setAuth: (response: LoginResponse) => Promise<void>;
+  clearAuth: () => Promise<void>;
+  initAuth: () => Promise<void>;
 }
+
 /**
  * 인증 토큰을 관리하는 Zustand 스토어 훅
  *
@@ -20,12 +31,12 @@ interface AuthStore {
  * import { useAuth } from '@/hooks/useAuth';
  *
  * function LoginComponent() {
- *   const { setToken } = useAuth();
+ *   const { setAuth } = useAuth();
  *
  *   const handleLogin = async () => {
  *     const response = await fetch('/api/login');
- *     const { token } = await response.json();
- *     await setToken(token); // 로그인 후 토큰 저장
+ *     const data = await response.json();
+ *     await setAuth(data); // 로그인 후 인증 정보 저장
  *   };
  * }
  *
@@ -44,41 +55,82 @@ interface AuthStore {
  * }
  *
  * @example
- * // 3. 컴포넌트 마운트시 토큰 초기화
+ * // 3. 컴포넌트 마운트시 인증 상태 초기화
  * function App() {
- *   const { initToken } = useAuth();
+ *   const { initAuth } = useAuth();
  *
  *   useEffect(() => {
- *     initToken(); // 페이지 로드시 쿠키에서 토큰 복원
+ *     initAuth(); // 페이지 로드시 쿠키에서 인증 정보 복원
  *   }, []);
  * }
  *
  * @example
- * // 4. 로그아웃시 토큰 제거
+ * // 4. 로그아웃시 인증 정보 제거
  * function LogoutButton() {
- *   const { clearToken } = useAuth();
+ *   const { clearAuth } = useAuth();
  *
  *   const handleLogout = async () => {
- *     await clearToken(); // 로그아웃시 토큰 삭제
+ *     await clearAuth(); // 로그아웃시 인증 정보 삭제
  *   };
  * }
  */
 
 export const useAuth = create<AuthStore>((set) => ({
   token: null,
+  memberName: null,
+  memberNickName: null,
+  isAuthenticated: false,
+  isInitialized: false, // 초기값은 초기화 중
 
-  setToken: async (token: string) => {
+  setAuth: async (response: LoginResponse) => {
+    const { token, memberName, memberNickName } = response;
     await setCookie("token", token);
-    set({ token });
+    await setCookie("memberName", memberName);
+    await setCookie("memberNickName", memberNickName);
+
+    set({
+      token,
+      memberName,
+      memberNickName,
+      isAuthenticated: true,
+      isInitialized: true, // 로그인 시 초기화 완료
+    });
   },
 
-  clearToken: async () => {
+  clearAuth: async () => {
     await deleteCookie("token");
-    set({ token: null });
+    await deleteCookie("memberName");
+    await deleteCookie("memberNickName");
+
+    set({
+      token: null,
+      memberName: null,
+      memberNickName: null,
+      isAuthenticated: false,
+      isInitialized: true, // 로그아웃 시 초기화 완료
+    });
   },
 
-  initToken: async () => {
-    const token = await getCookie("token");
-    if (token) set({ token });
+  initAuth: async () => {
+    try {
+      // 초기화 시작할 때는 false로 설정
+      set({ isInitialized: false });
+
+      const token = await getCookie("token");
+      const memberName = await getCookie("memberName");
+      const memberNickName = await getCookie("memberNickName");
+
+      set({
+        token,
+        memberName,
+        memberNickName,
+        isAuthenticated: !!token,
+        isInitialized: true, // 초기화 완료
+      });
+    } catch (error) {
+      // 에러가 나도 초기화는 완료 처리
+      set({ isInitialized: true });
+      throw error;
+    }
   },
 }));

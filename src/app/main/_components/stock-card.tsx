@@ -1,9 +1,12 @@
 "use client";
 
+import clsx from "clsx";
 import { memo } from "react";
 
 import ArrowDownIcon from "@/icons/arrow-down.svg";
 import ArrowUpIcon from "@/icons/arrow-up.svg";
+import DownGraphIcon from "@/icons/down-graph.svg";
+import HighGraphIcon from "@/icons/high-graph.svg";
 
 import type { StockIndexResponse } from "../types";
 
@@ -20,8 +23,13 @@ function MarketIndexCard({ endpoint, data }: MarketIndexCardProps) {
 
   return (
     <div
-      className={`h-116 w-308 shrink-0 flex-col items-start gap-12 rounded-10 p-20
-          ${isNegative ? "bg-[#EFF6FB]" : "bg-[#FDEDED]"}`}
+      className={clsx(
+        "relative h-116 w-308 shrink-0 flex-col items-start gap-12 rounded-10 p-20",
+        {
+          "bg-[#EFF6FB]": isNegative,
+          "bg-[#FDEDED]": !isNegative,
+        },
+      )}
       aria-label={`${endpoint} market index`}
     >
       <div className="space-y-2">
@@ -31,9 +39,10 @@ function MarketIndexCard({ endpoint, data }: MarketIndexCardProps) {
             {parseFloat(data.indexValue).toLocaleString("ko-KR")}
           </span>
           <div
-            className={`flex items-center ${
-              isNegative ? "text-[#1A00DF]" : "text-[#F12E35]"
-            }`}
+            className={clsx("flex items-center", {
+              "text-[#1A00DF]": isNegative,
+              "text-[#F12E35]": !isNegative,
+            })}
           >
             {isNegative ? (
               <ArrowDownIcon className="fill-[#1A00DF]" />
@@ -45,6 +54,9 @@ function MarketIndexCard({ endpoint, data }: MarketIndexCardProps) {
             </span>
           </div>
         </div>
+      </div>
+      <div className="absolute right-30 top-35 h-43 w-82">
+        {isNegative ? <DownGraphIcon /> : <HighGraphIcon />}
       </div>
     </div>
   );

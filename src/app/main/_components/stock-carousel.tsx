@@ -22,6 +22,7 @@ function StockIndexCarousel({ initialData }: StockIndexCarouselProps) {
     initialData,
     refetchInterval: 300000,
     refetchOnWindowFocus: false,
+    retry: 1,
   });
 
   return (
