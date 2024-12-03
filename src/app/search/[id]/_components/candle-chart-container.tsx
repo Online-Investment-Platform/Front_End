@@ -1,5 +1,6 @@
 "use client";
 
+import clsx from "clsx";
 import { useCallback, useEffect, useState } from "react";
 
 import {
@@ -23,6 +24,7 @@ export default function CandlestickChartContainer({
   initialVolumeData,
 }: Props) {
   const [period, setPeriod] = useState<PeriodType>("day");
+  const [showMA, setShowMA] = useState(false);
   const [chartData, setChartData] = useState<ChartDTO[]>(
     initialChartData.chartDTOS,
   );
@@ -74,42 +76,50 @@ export default function CandlestickChartContainer({
     fetchData();
   }, [period, stockName, resetToInitialData]);
 
+  const getButtonClasses = (isActive: boolean) =>
+    clsx(
+      "rounded-md px-4 py-2 text-16-700 transition-colors",
+      isActive
+        ? "bg-blue-500 text-white hover:bg-blue-600"
+        : "bg-gray-100 hover:bg-gray-200",
+    );
+
   return (
-    <div className="w-650 rounded-lg bg-white p-10 pl-20 shadow-sm">
-      <div className="mb-4 space-x-8">
-        <button
-          type="button"
-          onClick={() => setPeriod("day")}
-          className={`rounded-md px-4 py-2 text-16-400 transition-colors ${
-            period === "day"
-              ? "bg-blue-500 text-white hover:bg-blue-600"
-              : "bg-gray-100 hover:bg-gray-200"
-          }`}
-        >
-          일
-        </button>
-        <button
-          type="button"
-          onClick={() => setPeriod("week")}
-          className={`rounded-md px-4 py-2 text-16-400 transition-colors ${
-            period === "week"
-              ? "bg-blue-500 text-white hover:bg-blue-600"
-              : "bg-gray-100 hover:bg-gray-200"
-          }`}
-        >
-          주
-        </button>
-        <button
-          type="button"
-          onClick={() => setPeriod("month")}
-          className={`rounded-md px-4 py-2 text-16-400 transition-colors ${
-            period === "month"
-              ? "bg-blue-500 text-white hover:bg-blue-600"
-              : "bg-gray-100 hover:bg-gray-200"
-          }`}
-        >
-          월
-        </button>
+    <div className="w-739 rounded-lg bg-white p-10 pl-20 shadow-sm">
+      <div className="mb-30 flex justify-between">
+        <div>
+          <span className="text-18-700">차트</span>
+        </div>
+        <div className="flex gap-8">
+          <button
+            type="button"
+            onClick={() => setPeriod("day")}
+            className={getButtonClasses(period === "day")}
+          >
+            일
+          </button>
+          <button
+            type="button"
+            onClick={() => setPeriod("week")}
+            className={getButtonClasses(period === "week")}
+          >
+            주
+          </button>
+          <button
+            type="button"
+            onClick={() => setPeriod("month")}
+            className={getButtonClasses(period === "month")}
+          >
+            월
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowMA(!showMA)}
+            className={getButtonClasses(showMA)}
+          >
+            MA
+          </button>
+        </div>
       </div>
 
       <div className="overflow-x-auto">
@@ -117,6 +127,7 @@ export default function CandlestickChartContainer({
           data={chartData}
           volumeData={volumeData}
           isLoading={isLoading}
+          showMA={showMA}
         />
       </div>
     </div>

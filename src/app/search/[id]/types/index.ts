@@ -21,3 +21,12 @@ export interface VolumeResponse {
 }
 
 export type PeriodType = "day" | "week" | "month";
+
+export interface StockInfo {
+  stockName: string;
+  stockPrice: string;
+  previousStockPrice: string;
+  contrastRatio: string;
+  highStockPrice: string;
+  lowStockPrice: string;
+}

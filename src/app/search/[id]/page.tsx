@@ -1,9 +1,10 @@
 import CandlestickChartContainer from "./_components/candle-chart-container";
-import { ChartResponse, VolumeResponse } from "./types/index";
+import StockHeader from "./_components/stock-header";
+import { ChartResponse, StockInfo, VolumeResponse } from "./types";
 
 async function getInitialData(id: string) {
   try {
-    const [chartResponse, volumeResponse] = await Promise.all([
+    const [chartResponse, volumeResponse, stockResponse] = await Promise.all([
       fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/search/chart/day?stockName=${id}`,
         {
@@ -18,20 +19,26 @@ async function getInitialData(id: string) {
           headers: { "Content-Type": "application/json" },
         },
       ),
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/search/stock?stockName=${id}`, {
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+      }),
     ]);
 
-    if (!chartResponse.ok || !volumeResponse.ok) {
+    if (!chartResponse.ok || !volumeResponse.ok || !stockResponse.ok) {
       throw new Error(`HTTP error! status: ${chartResponse.status}`);
     }
 
-    const [chartData, volumeData] = await Promise.all([
+    const [chartData, volumeData, stockData] = await Promise.all([
       chartResponse.json() as Promise<ChartResponse>,
       volumeResponse.json() as Promise<VolumeResponse>,
+      stockResponse.json() as Promise<StockInfo>,
     ]);
 
     return {
       chartData,
       volumeData,
+      stockData,
     };
   } catch (error) {
     console.error("Error fetching data:", error); //eslint-disable-line
@@ -46,10 +53,12 @@ export default async function StockPage({
 }) {
   try {
     const initialData = await getInitialData(params.id);
-    const stockName = decodeURIComponent(params.id);
     return (
-      <div className="pl-30 pt-30">
-        <div className="mb-30 text-24-700">{stockName}</div>
+      <div className="flex flex-col gap-20 pl-40 pt-30">
+        <StockHeader
+          stockName={params.id}
+          initialStockInfo={initialData.stockData}
+        />
         <CandlestickChartContainer
           stockName={params.id}
           initialChartData={initialData.chartData}
