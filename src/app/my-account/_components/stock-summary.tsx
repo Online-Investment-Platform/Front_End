@@ -21,37 +21,53 @@ export default function StockSummary({ totalStocks }: StockSummaryProps) {
       <table className="mt-20 w-full border-collapse">
         <tbody>
           <tr>
-            <td className="w-1/3 border border-gray-200 bg-green-50 p-4">
+            <td className="w-1/3 border border-gray-200 bg-green-50 p-4 text-16-600">
               총 손익
             </td>
-            <td className="w-1/3 border border-gray-200 p-4 text-right">
+            <td className="w-1/3 border border-gray-200 p-4 text-right text-18-400">
               {totalStocks?.totalEvaluationProfit?.toLocaleString() ?? 0}원
             </td>
-            <td className="w-1/3 border border-gray-200 p-4 text-right text-green-500">
+            <td className="w-1/3 border border-gray-200 p-4 text-right text-18-400 text-green-500">
               {totalStocks?.totalProfit?.toFixed(1) ?? 0}%
             </td>
           </tr>
           <tr>
-            <td className="border border-gray-200 p-4">총 매입</td>
-            <td colSpan={2} className="border border-gray-200 p-4 text-right">
+            <td className="border border-gray-200 p-4 text-16-600">총 매입</td>
+            <td
+              colSpan={2}
+              className="border border-gray-200 p-4 text-right text-18-400"
+            >
               {totalStocks?.totalPurchaseAmount?.toLocaleString() ?? 0}원
             </td>
           </tr>
           <tr>
-            <td className="border border-gray-200 p-4">총 평가</td>
-            <td colSpan={2} className="border border-gray-200 p-4 text-right">
+            <td className="border border-gray-200 p-4 text-16-600">총 평가</td>
+            <td
+              colSpan={2}
+              className="border border-gray-200 p-4 text-right text-18-400"
+            >
               {totalStocks?.totalEvaluationAmount?.toLocaleString() ?? 0}원
             </td>
           </tr>
           <tr>
-            <td className="border border-gray-200 p-4">실현 손익</td>
-            <td colSpan={2} className="border border-gray-200 p-4 text-right">
+            <td className="border border-gray-200 p-4 text-16-600">
+              실현 손익
+            </td>
+            <td
+              colSpan={2}
+              className="border border-gray-200 p-4 text-right text-18-400"
+            >
               {totalStocks?.totalEvaluationProfit?.toLocaleString() ?? 0}원
             </td>
           </tr>
           <tr>
-            <td className="border border-gray-200 p-4">추정 자산</td>
-            <td colSpan={2} className="border border-gray-200 p-4 text-right">
+            <td className="border border-gray-200 p-4 text-16-600">
+              추정 자산
+            </td>
+            <td
+              colSpan={2}
+              className="border border-gray-200 p-4 text-right text-18-400"
+            >
               {totalStocks?.totalEvaluationAmount?.toLocaleString() ?? 0}원
             </td>
           </tr>
