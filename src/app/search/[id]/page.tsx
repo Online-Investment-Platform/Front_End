@@ -1,5 +1,6 @@
 import CandlestickChartContainer from "./_components/candle-chart-container";
 import StockHeader from "./_components/stock-header";
+import TransactionForm from "./_components/transaction-form";
 import { ChartResponse, StockInfo, VolumeResponse } from "./types";
 
 async function getInitialData(id: string) {
@@ -54,16 +55,19 @@ export default async function StockPage({
   try {
     const initialData = await getInitialData(params.id);
     return (
-      <div className="flex flex-col gap-20 pl-40 pt-30">
+      <div className="px-40 py-30">
         <StockHeader
           stockName={params.id}
           initialStockInfo={initialData.stockData}
         />
-        <CandlestickChartContainer
-          stockName={params.id}
-          initialChartData={initialData.chartData}
-          initialVolumeData={initialData.volumeData}
-        />
+        <div className="flex justify-around">
+          <CandlestickChartContainer
+            stockName={params.id}
+            initialChartData={initialData.chartData}
+            initialVolumeData={initialData.volumeData}
+          />
+          <TransactionForm />
+        </div>
       </div>
     );
   } catch (error) {
