@@ -144,9 +144,10 @@ function Wrapper({
 interface ItemProps {
   children: ReactNode;
   value: string | number;
+  className?: string;
 }
 
-function Item({ children, value }: ItemProps): JSX.Element {
+function Item({ children, value, className }: ItemProps): JSX.Element {
   const { selectedItem, selectedValue } = useContext(DropdownContext);
   const isSelected = selectedValue === value;
 
@@ -158,6 +159,7 @@ function Item({ children, value }: ItemProps): JSX.Element {
         {
           "bg-green-500/10 !text-green-900": isSelected,
         },
+        className,
       )}
       onClick={() => selectedItem(value)}
       tabIndex={0}
