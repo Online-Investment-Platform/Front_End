@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 
 import NavBar from "@/components/nav-bar";
 import AuthInitializer from "@/provider/AuthInitializer";
+import AuthRefreshHandler from "@/utils/auth-handler";
 
 import Providers from "./provider";
 
@@ -26,6 +27,7 @@ export default async function RootLayout({
       <body className="flex">
         <Providers dehydratedState={dehydratedState}>
           <AuthInitializer />
+          <AuthRefreshHandler />
           <NavBar />
           <main className="ml-82 flex-1">{children}</main>
         </Providers>

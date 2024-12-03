@@ -10,7 +10,7 @@ import ContentIcon from "@/public/icons/contents.svg";
 import ContentActiveIcon from "@/public/icons/contents-active.svg";
 import HomeIcon from "@/public/icons/home.svg";
 import HomeActiveIcon from "@/public/icons/home-active.svg";
-import LogoIcon from "@/public/icons/logo.svg";
+import LogoIcon from "@/public/icons/Logo.svg";
 import AccountIcon from "@/public/icons/mypage.svg";
 import AccountActiveIcon from "@/public/icons/mypage-active.svg";
 

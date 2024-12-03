@@ -12,8 +12,12 @@ interface StockData {
 async function getInitialStockData(): Promise<StockData> {
   try {
     const [kospiRes, kosdaqRes] = await Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/home/index/kospi`),
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/home/index/kosdaq`),
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/home/index/kospi`, {
+        cache: "no-store",
+      }),
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/home/index/kosdaq`, {
+        cache: "no-store",
+      }),
     ]);
 
     if (!kospiRes.ok || !kosdaqRes.ok) {
@@ -37,4 +41,5 @@ async function getInitialStockData(): Promise<StockData> {
     };
   }
 }
+
 export default getInitialStockData;
