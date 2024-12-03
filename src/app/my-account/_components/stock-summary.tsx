@@ -14,8 +14,7 @@ export default function StockSummary({ totalStocks }: StockSummaryProps) {
   return (
     <div>
       <div className="mb-4">
-        <div className="text-gray-600">성명</div>
-        <div>{memberNickName}</div>
+        <div className="mb-10 text-24-400">닉네임: {memberNickName}</div>
       </div>
 
       <table className="mt-20 w-full border-collapse">
