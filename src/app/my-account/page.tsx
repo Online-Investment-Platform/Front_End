@@ -6,11 +6,14 @@ import StockTable from "./_components/stock-table";
 async function getStocks() {
   try {
     const token = await getCookie("token");
-    const response = await fetch(`your-api-url/account/stocks`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/account/stocks`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
     return await response.json();
   } catch (error) {
     console.error("주식 데이터 조회 실패:", error); //eslint-disable-line
@@ -21,11 +24,14 @@ async function getStocks() {
 async function getTotalStocks() {
   try {
     const token = await getCookie("token");
-    const response = await fetch(`your-api-url/account/all-stocks`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/account/all-stocks`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
     return await response.json();
   } catch (error) {
     console.error("총 주식 데이터 조회 실패:", error); //eslint-disable-line

@@ -14,4 +14,5 @@ export interface TotalStocks {
   totalPurchaseAmount: number;
   totalProfit: number;
   totalEvaluationAmount: number;
+  rank: number;
 }

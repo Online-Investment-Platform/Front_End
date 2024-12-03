@@ -58,9 +58,9 @@ export default function StockSummary({ totalStocks }: StockSummaryProps) {
           <tr>
             <td
               colSpan={3}
-              className="border border-gray-200 p-4 text-14-600 text-gray-600"
+              className="border border-gray-200 p-10 text-18-600 text-gray-600"
             >
-              내 순위: 월 손익률 순위 조회 (모두 전체)
+              총 순위 {totalStocks?.rank.toLocaleString() ?? 0}위
             </td>
           </tr>
         </tbody>
