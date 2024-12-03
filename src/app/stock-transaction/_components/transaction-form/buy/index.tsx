@@ -3,11 +3,15 @@
 import { useState } from "react";
 
 import Button from "@/components/common/button";
-import Dropdown from "@/components/common/dropdown";
+import Input from "@/components/common/input";
+
+import CountDropdown from "./count-dropdown";
+import PriceTypeDropdown from "./price-type-dropdown";
 
 export default function Buy() {
-  const [price, setPrice] = useState("지정가");
-  const [count, setCount] = useState("수량 입력");
+  const [priceType, setPriceType] = useState("지정가");
+  const [count, setCount] = useState<number | null>(null);
+  const [bidding, setBidding] = useState<number | null>(null);
 
   return (
     <div className="flex">
@@ -22,75 +26,58 @@ export default function Buy() {
         <div className="w-127 bg-[#FDEBEB] py-11 text-center">35,850</div>
         <div className="w-127 bg-[#FDEBEB] py-11 text-center">35,850</div>
       </div>
-      <form className="flex w-270 flex-col gap-16 pl-11">
+
+      <div className="flex w-270 flex-col gap-16 pl-11">
         <div className="flex gap-8">
-          <Dropdown
-            selectedValue={price}
-            onSelect={(value) => setPrice(value as string)}
-            className="flex-1"
-          >
-            <Dropdown.Toggle>{price}</Dropdown.Toggle>
-            <Dropdown.Wrapper>
-              <Dropdown.Item value="지정가">지정가</Dropdown.Item>
-              <Dropdown.Item value="현재가">현재가</Dropdown.Item>
-            </Dropdown.Wrapper>
-          </Dropdown>
+          <PriceTypeDropdown
+            priceType={priceType}
+            setPriceType={setPriceType}
+          />
           <div className="mb-4 w-100 rounded-2 border border-solid border-[#B6B6B6] p-13">
             시장가
           </div>
         </div>
 
         <div className="relative flex justify-between gap-6">
-          <Dropdown
-            selectedValue={count}
-            onSelect={(value) => setCount(value as string)}
-          >
-            <Dropdown.Toggle border={false}>
-              <span className="pr-10">수량</span>
-            </Dropdown.Toggle>
-            <Dropdown.Wrapper>
-              <Dropdown.Item value="1">1</Dropdown.Item>
-            </Dropdown.Wrapper>
-          </Dropdown>
-          <input
-            type="text"
-            placeholder="수량입력"
-            className="flex-1 border-b border-solid border-[#505050] placeholder:absolute placeholder:bottom-6 placeholder:right-20 focus:outline-none"
+          <CountDropdown
+            title="수량"
+            state={count ?? ""}
+            setState={(value) => setCount(value ? Number(value) : null)}
+            number={10}
           />
-          <span className="absolute bottom-6 right-0">주</span>
+          <Input
+            isForm
+            placeholder="수량입력"
+            inputSuffix="원"
+            value={count ?? ""}
+          />
         </div>
 
         <div className="relative flex justify-between gap-6">
           <label htmlFor="possible-stock" className="w-150">
             매수 가능 주식
           </label>
-          <input
-            id="possible-stock"
-            type="text"
+          <Input
+            isForm
             placeholder="300"
-            className="w-full border-b border-solid border-[#505050] placeholder:absolute placeholder:bottom-8 placeholder:right-20 focus:outline-none"
+            inputSuffix="주"
+            className="w-full placeholder:!bottom-8"
           />
-          <span className="absolute bottom-6 right-0">주</span>
         </div>
 
         <div className="relative flex justify-between gap-6">
-          <Dropdown
-            selectedValue={count}
-            onSelect={(value) => setCount(value as string)}
-          >
-            <Dropdown.Toggle border={false}>
-              <span className="pr-10">호가</span>
-            </Dropdown.Toggle>
-            <Dropdown.Wrapper>
-              <Dropdown.Item value="1">1</Dropdown.Item>
-            </Dropdown.Wrapper>
-          </Dropdown>
-          <input
-            type="text"
-            placeholder="호가 입력"
-            className="flex-1 border-b border-solid border-[#505050] placeholder:absolute placeholder:bottom-6 placeholder:right-20 focus:outline-none"
+          <CountDropdown
+            title="호가"
+            state={bidding ?? ""}
+            setState={(value) => setBidding(value ? Number(value) : null)}
+            number={10}
           />
-          <span className="absolute bottom-6 right-0">원</span>
+          <Input
+            isForm
+            placeholder="호가 입력"
+            inputSuffix="원"
+            value={bidding ?? ""}
+          />
         </div>
 
         <div className="flex items-center gap-14">
@@ -107,7 +94,7 @@ export default function Buy() {
             매수
           </Button>
         </div>
-      </form>
+      </div>
     </div>
   );
 }
