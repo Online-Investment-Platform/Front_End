@@ -11,7 +11,7 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="lg:max-w-2000 flex h-screen w-full flex-col items-center justify-center px-4 py-8 md:px-12 lg:px-16">
+    <div className="lg:max-w-2000 flex h-screen w-full min-w-400 shrink-0 flex-col items-center justify-center bg-gradient-to-b from-green-100 via-green-50 to-white px-4 py-8 md:px-12 lg:px-16">
       {children}
     </div>
   );

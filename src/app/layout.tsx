@@ -3,6 +3,7 @@ import "./globals.css";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import type { Metadata } from "next";
 
+import MainContent from "@/components/main-content";
 import NavBar from "@/components/nav-bar";
 import AuthInitializer from "@/provider/AuthInitializer";
 import AuthRefreshHandler from "@/utils/auth-handler";
@@ -29,7 +30,7 @@ export default async function RootLayout({
           <AuthInitializer />
           <AuthRefreshHandler />
           <NavBar />
-          <main className="ml-82 flex-1">{children}</main>
+          <MainContent>{children}</MainContent>
         </Providers>
       </body>
     </html>
