@@ -1,5 +1,6 @@
 "use client";
 
+import clsx from "clsx";
 import { useId, useMemo } from "react";
 
 import { Stock } from "../types";
@@ -19,10 +20,10 @@ export default function StockTable({ stocks }: StockTableProps) {
     }));
   }, [stocks, tableId]);
 
-  const getPriceColorClass = (value: number) => {
-    if (value > 0) return "text-red-500";
-    if (value < 0) return "text-blue-500";
-    return "";
+  // 수익률의 부호에 따라 평가손익의 부호를 보정
+  const getEvaluationProfitWithSign = (profit: number, rate: number) => {
+    const absProfit = Math.abs(profit);
+    return rate < 0 ? -absProfit : absProfit;
   };
 
   return (
@@ -56,13 +57,13 @@ export default function StockTable({ stocks }: StockTableProps) {
             </th>
           </tr>
           <tr className="bg-green-50">
-            <th className="border-r border-gray-200 p-8 text-center text-16-600 ">
+            <th className="border-r border-gray-200 p-8 text-center text-16-600">
               금액
             </th>
-            <th className="border-r border-gray-200 p-8 text-center text-16-600 ">
+            <th className="border-r border-gray-200 p-8 text-center text-16-600">
               수익률
             </th>
-            <th className="border-r border-gray-200 p-8 text-center text-16-600 ">
+            <th className="border-r border-gray-200 p-8 text-center text-16-600">
               매입가
             </th>
             <th className="p-8 text-center text-16-600">현재가</th>
@@ -75,13 +76,31 @@ export default function StockTable({ stocks }: StockTableProps) {
                 {stock.stockName}
               </td>
               <td
-                className={`border-r border-gray-200 p-8 text-right text-16-600 ${getPriceColorClass(stock.EvaluationProfit)}`}
+                className={clsx(
+                  "border-r border-gray-200 p-8 text-right text-16-600",
+                  {
+                    "text-red-500": stock.ProfitRate > 0,
+                    "text-blue-500": stock.ProfitRate < 0,
+                  },
+                )}
               >
-                {stock.EvaluationProfit > 0 && "+"}
-                {stock.EvaluationProfit?.toLocaleString() ?? 0}
+                {getEvaluationProfitWithSign(
+                  stock.EvaluationProfit,
+                  stock.ProfitRate,
+                ) > 0 && "+"}
+                {getEvaluationProfitWithSign(
+                  stock.EvaluationProfit,
+                  stock.ProfitRate,
+                ).toLocaleString()}
               </td>
               <td
-                className={`border-r border-gray-200 p-8 text-right text-16-600 ${getPriceColorClass(stock.ProfitRate)}`}
+                className={clsx(
+                  "border-r border-gray-200 p-8 text-right text-16-600",
+                  {
+                    "text-red-500": stock.ProfitRate > 0,
+                    "text-blue-500": stock.ProfitRate < 0,
+                  },
+                )}
               >
                 {stock.ProfitRate > 0 && "+"}
                 {stock.ProfitRate?.toFixed(2) ?? 0} %
@@ -90,15 +109,17 @@ export default function StockTable({ stocks }: StockTableProps) {
                 {stock.stockCount ?? 0}
               </td>
               <td className="border-r border-gray-200 p-8 text-right text-16-600">
-                {(stock.purchaseAmount / stock.stockCount)?.toLocaleString() ??
-                  0}
+                {stock.purchaseAmount?.toLocaleString() ?? 0}
               </td>
               <td className="p-4">
-                <div className="mb-5 text-right text-16-400">
+                <div className="mb-5 text-right text-16-600">
                   {stock.currentPrice?.toLocaleString() ?? 0}
                 </div>
                 <div
-                  className={`text-right text-14-600 ${getPriceColorClass(stock.prevChangeRate)}`}
+                  className={clsx("text-right text-14-600", {
+                    "text-red-500": stock.prevChangeRate > 0,
+                    "text-blue-500": stock.prevChangeRate < 0,
+                  })}
                 >
                   <span className="text-14-600 text-gray-500">어제보다 </span>
                   {stock.prevChangeRate > 0 && "+"}

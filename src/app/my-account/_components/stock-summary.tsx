@@ -1,3 +1,7 @@
+"use client";
+
+import { clsx } from "clsx";
+
 import { TotalStocks } from "../types";
 
 interface StockSummaryProps {
@@ -5,26 +9,10 @@ interface StockSummaryProps {
 }
 
 export default function StockSummary({ totalStocks }: StockSummaryProps) {
-  const getValueWithColor = (value: number | null | undefined) => {
-    if (!value) {
-      return { text: "0", className: "" };
-    }
-
-    let className = "";
-    if (value > 0) {
-      className = "text-red-500";
-    } else if (value < 0) {
-      className = "text-blue-500";
-    }
-
-    const text = `${value > 0 ? "+" : ""}${value.toLocaleString()}`;
-
-    return { text, className };
+  const getValueWithSign = (value: number | null | undefined) => {
+    if (!value) return "0";
+    return `${value > 0 ? "+" : ""}${value.toLocaleString()}`;
   };
-
-  const evaluationProfit = getValueWithColor(
-    totalStocks?.totalEvaluationProfit,
-  );
 
   return (
     <div className="w-full">
@@ -49,7 +37,6 @@ export default function StockSummary({ totalStocks }: StockSummaryProps) {
 
       <table className="w-full border-collapse">
         <tbody>
-          {/* 총 평가 손익 */}
           <tr>
             <td
               colSpan={2}
@@ -59,13 +46,19 @@ export default function StockSummary({ totalStocks }: StockSummaryProps) {
             </td>
             <td
               colSpan={2}
-              className={`border border-gray-200 p-20 text-center text-20-700 ${evaluationProfit.className}`}
+              className={clsx(
+                "border border-gray-200 p-20 text-center text-20-700",
+                {
+                  "text-red-500": (totalStocks?.totalEvaluationProfit ?? 0) > 0,
+                  "text-blue-500":
+                    (totalStocks?.totalEvaluationProfit ?? 0) < 0,
+                },
+              )}
             >
-              {evaluationProfit.text}
+              {getValueWithSign(totalStocks?.totalEvaluationProfit)}
             </td>
           </tr>
 
-          {/* 총 평가 금액과 매입/자산 정보 */}
           <tr>
             <td
               rowSpan={2}
@@ -95,7 +88,6 @@ export default function StockSummary({ totalStocks }: StockSummaryProps) {
             </td>
           </tr>
 
-          {/* 랭킹 */}
           <tr>
             <td className="border border-gray-200 p-10 text-center text-16-500">
               랭킹

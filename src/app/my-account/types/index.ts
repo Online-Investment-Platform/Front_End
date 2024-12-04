@@ -1,12 +1,11 @@
 export interface Stock {
-  stockName: string;
-  currentPrice: number;
-  stockCount: number;
-  prevChangeRate: number;
-  EvaluationProfit: number;
-  ProfitRate: number;
-  purchaseAmount: number;
-  EvalutionAmount: number;
+  stockName: string; // 종목명
+  currentPrice: number; // 현재가
+  stockCount: number; // 보유수량
+  prevChangeRate: number; // 전일 대비 등락률
+  EvaluationProfit: number; // 평가손익
+  ProfitRate: number; // 수익률
+  purchaseAmount: number; // 매입단가
 }
 
 export interface TotalStocks {
