@@ -10,9 +10,11 @@ export interface Stock {
 }
 
 export interface TotalStocks {
-  totalEvaluationProfit: number;
-  totalPurchaseAmount: number;
-  totalProfit: number;
-  totalEvaluationAmount: number;
-  rank: number;
+  memberNickname: string;
+  deposit: number; // 예수금
+  totalEvaluationProfit: number; // 총 평가손익
+  totalPurchaseAmount: number; // 총 매입금액
+  totalEvaluationAmount: number; // 총 평가금액
+  estimatedAsset: number; // 추정자산
+  rank: number; // 순위
 }
