@@ -1,5 +1,3 @@
-// app/providers.tsx
-
 "use client";
 
 import type { DehydratedState } from "@tanstack/react-query";
