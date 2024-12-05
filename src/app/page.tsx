@@ -41,9 +41,9 @@ export default async function Home() {
   ]);
 
   return (
-    <div className="flex">
+    <div className="flex xl:px-230">
       {/* 메인 컨텐츠 */}
-      <div className="flex flex-1 flex-col p-10 pt-30 md:px-25 lg:max-w-[calc(100%-320px)] lg:px-32">
+      <div className="flex flex-1 flex-col p-10 pt-30 md:px-32 lg:max-w-[calc(100%-320px)]">
         <SearchStock />
         <StockIndexCarousel initialData={initialStockData} />
         <div className="flex flex-col gap-20">

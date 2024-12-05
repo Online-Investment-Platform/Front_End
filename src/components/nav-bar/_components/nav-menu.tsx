@@ -30,7 +30,7 @@ const NAV_ITEMS = [
     activeIcon: ChartActiveIcon,
   },
   {
-    href: "/mypage",
+    href: "/my-account",
     name: "내 계좌",
     icon: AccountIcon,
     activeIcon: AccountActiveIcon,
