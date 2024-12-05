@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { useId, useMemo } from "react";
+import { useMemo } from "react";
 
 import { Stock } from "../types";
 
@@ -10,15 +10,13 @@ interface StockTableProps {
 }
 
 export default function StockTable({ stocks }: StockTableProps) {
-  const tableId = useId();
-
   const stockRows = useMemo(() => {
     if (!stocks || !Array.isArray(stocks)) return [];
     return stocks.map((stock) => ({
       ...stock,
-      id: `${tableId}-${stock.stockName}`,
+      id: stock.stockName,
     }));
-  }, [stocks, tableId]);
+  }, [stocks]);
 
   // 수익률의 부호에 따라 평가손익의 부호를 보정
   const getEvaluationProfitWithSign = (profit: number, rate: number) => {

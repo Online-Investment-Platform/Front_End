@@ -41,7 +41,7 @@ export default async function Home() {
   ]);
 
   return (
-    <div className="flex xl:px-230">
+    <div className="flex xxl:px-230">
       {/* 메인 컨텐츠 */}
       <div className="flex flex-1 flex-col p-10 pt-30 md:px-32 lg:max-w-[calc(100%-320px)]">
         <SearchStock />
