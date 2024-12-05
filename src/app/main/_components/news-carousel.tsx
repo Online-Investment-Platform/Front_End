@@ -21,6 +21,8 @@ function NewsCarousel({ initialData }: NewsCarouselProps) {
     queryFn: getNews,
     refetchInterval: 300000, // 5분
     initialData,
+    refetchOnWindowFocus: false,
+    retry: 1,
   });
 
   return (
