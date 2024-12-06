@@ -1,16 +1,15 @@
-/* eslint-disable no-console */
-
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { memo, useState } from "react";
+import { memo } from "react";
 import { useForm } from "react-hook-form";
 
 import { EmailInput, PasswordInput } from "@/components/auth-input/index";
 import Button from "@/components/common/button/index";
 import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/store/use-toast-store";
 import { AuthFormData } from "@/types/auth";
 import { LoginResponse, loginSchema } from "@/validation/schema/auth/index";
 
@@ -28,9 +27,9 @@ const FormLinks = memo(() => (
 FormLinks.displayName = "FormLinks";
 
 export default function LoginForm() {
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { setAuth } = useAuth();
+  const { showToast } = useToast();
 
   const {
     control,
@@ -42,11 +41,9 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (data: AuthFormData) => {
-    setIsLoading(true);
+    showToast("로그인 시도 중...", "pending");
 
     try {
-      console.log("Sending login data:", data);
-
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/login`,
         {
@@ -58,31 +55,25 @@ export default function LoginForm() {
         },
       );
 
-      console.log("Response status:", response.status);
-
       if (response.ok) {
         const responseData: LoginResponse = await response.json();
-        console.log("로그인 성공:", responseData);
 
-        // useAuth 스토어 업데이트 및 쿠키 저장
         await setAuth(responseData);
+        showToast("로그인에 성공했습니다.", "success");
 
         router.push("/");
         router.refresh();
       } else {
         const errorData = await response.json();
-        console.error("Error data:", errorData);
+        showToast(errorData.message || "로그인에 실패했습니다.", "error");
         throw new Error(errorData.message || "로그인에 실패했습니다.");
       }
     } catch (error) {
-      console.error("Error details:", error);
       if (error instanceof Error) {
-        console.log("Error message:", error.message);
+        showToast(error.message, "error");
       } else {
-        console.error("로그인 오류:", error);
+        showToast("로그인 중 오류가 발생했습니다.", "error");
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -92,10 +83,10 @@ export default function LoginForm() {
       <PasswordInput control={control} error={errors.memberPassword?.message} />
       <Button
         className="mb-20 mt-15 h-66 w-full rounded-10 text-20-700"
-        isDisabled={!isValid || isLoading}
+        isDisabled={!isValid}
         type="submit"
       >
-        {isLoading ? "로그인 중..." : "로그인"}
+        로그인
       </Button>
       <FormLinks />
     </form>
