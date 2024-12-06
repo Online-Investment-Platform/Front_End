@@ -27,6 +27,9 @@ export interface LoginResponse {
   memberName: string;
   memberNickName: string;
   token: string;
+  memberId: number;
+  annualIncome: number;
+  deposit: number;
 }
 
 export interface SignUpResponse {

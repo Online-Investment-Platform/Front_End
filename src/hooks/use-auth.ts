@@ -7,15 +7,21 @@ import { create } from "zustand";
 import { deleteCookie, getCookie, setCookie } from "@/utils/next-cookies";
 
 interface LoginResponse {
+  token: string;
+  memberId: number;
   memberName: string;
   memberNickName: string;
-  token: string;
+  annualIncome: number;
+  deposit: number;
 }
 
 interface AuthStore {
   token: string | null;
+  memberId: number | null;
   memberName: string | null;
   memberNickName: string | null;
+  annualIncome: number | null;
+  deposit: number | null;
   isAuthenticated: boolean;
   isInitialized: boolean;
   setAuth: (response: LoginResponse) => Promise<void>;
@@ -77,58 +83,94 @@ interface AuthStore {
 
 export const useAuth = create<AuthStore>((set) => ({
   token: null,
+  memberId: null,
   memberName: null,
   memberNickName: null,
+  annualIncome: null,
+  deposit: null,
   isAuthenticated: false,
-  isInitialized: false, // 초기값은 초기화 중
+  isInitialized: false,
 
   setAuth: async (response: LoginResponse) => {
-    const { token, memberName, memberNickName } = response;
+    const {
+      token,
+      memberId,
+      memberName,
+      memberNickName,
+      annualIncome,
+      deposit,
+    } = response;
+
+    // Store all relevant data in cookies
     await setCookie("token", token);
+    await setCookie("memberId", memberId.toString());
     await setCookie("memberName", memberName);
     await setCookie("memberNickName", memberNickName);
+    await setCookie("annualIncome", annualIncome.toString());
+    await setCookie("deposit", deposit.toString());
 
     set({
       token,
+      memberId,
       memberName,
       memberNickName,
+      annualIncome,
+      deposit,
       isAuthenticated: true,
-      isInitialized: true, // 로그인 시 초기화 완료
+      isInitialized: true,
     });
   },
 
   clearAuth: async () => {
+    // Clear all cookies
     await deleteCookie("token");
+    await deleteCookie("memberId");
     await deleteCookie("memberName");
     await deleteCookie("memberNickName");
+    await deleteCookie("annualIncome");
+    await deleteCookie("deposit");
 
     set({
       token: null,
+      memberId: null,
       memberName: null,
       memberNickName: null,
+      annualIncome: null,
+      deposit: null,
       isAuthenticated: false,
-      isInitialized: true, // 로그아웃 시 초기화 완료
+      isInitialized: true,
     });
   },
 
   initAuth: async () => {
     try {
-      // 초기화 시작할 때는 false로 설정
       set({ isInitialized: false });
 
       const token = await getCookie("token");
+      const memberIdStr = await getCookie("memberId");
       const memberName = await getCookie("memberName");
       const memberNickName = await getCookie("memberNickName");
+      const annualIncomeStr = await getCookie("annualIncome");
+      const depositStr = await getCookie("deposit");
+
+      // Convert string values back to numbers
+      const memberId = memberIdStr ? parseInt(memberIdStr, 10) : null;
+      const annualIncome = annualIncomeStr
+        ? parseInt(annualIncomeStr, 10)
+        : null;
+      const deposit = depositStr ? parseInt(depositStr, 10) : null;
 
       set({
         token,
+        memberId,
         memberName,
         memberNickName,
+        annualIncome,
+        deposit,
         isAuthenticated: !!token,
-        isInitialized: true, // 초기화 완료
+        isInitialized: true,
       });
     } catch (error) {
-      // 에러가 나도 초기화는 완료 처리
       set({ isInitialized: true });
       throw error;
     }
