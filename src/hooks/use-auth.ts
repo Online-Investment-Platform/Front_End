@@ -80,7 +80,6 @@ interface AuthStore {
  *   };
  * }
  */
-
 export const useAuth = create<AuthStore>((set) => ({
   token: null,
   memberId: null,
@@ -101,59 +100,79 @@ export const useAuth = create<AuthStore>((set) => ({
       deposit,
     } = response;
 
-    // Store all relevant data in cookies
-    await setCookie("token", token);
-    await setCookie("memberId", memberId.toString());
-    await setCookie("memberName", memberName);
-    await setCookie("memberNickName", memberNickName);
-    await setCookie("annualIncome", annualIncome.toString());
-    await setCookie("deposit", deposit.toString());
+    try {
+      await Promise.all([
+        setCookie("token", token),
+        setCookie("memberId", memberId.toString()),
+        setCookie("memberName", memberName),
+        setCookie("memberNickName", memberNickName),
+        setCookie("annualIncome", annualIncome.toString()),
+        setCookie("deposit", deposit.toString()),
+      ]);
 
-    set({
-      token,
-      memberId,
-      memberName,
-      memberNickName,
-      annualIncome,
-      deposit,
-      isAuthenticated: true,
-      isInitialized: true,
-    });
+      set({
+        token,
+        memberId,
+        memberName,
+        memberNickName,
+        annualIncome,
+        deposit,
+        isAuthenticated: true,
+        isInitialized: true,
+      });
+    } catch (error) {
+      console.error("쿠키 설정 중 오류 발생:", error);
+      throw new Error("인증 정보 저장에 실패했습니다.");
+    }
   },
 
   clearAuth: async () => {
-    // Clear all cookies
-    await deleteCookie("token");
-    await deleteCookie("memberId");
-    await deleteCookie("memberName");
-    await deleteCookie("memberNickName");
-    await deleteCookie("annualIncome");
-    await deleteCookie("deposit");
+    try {
+      await Promise.all([
+        deleteCookie("token"),
+        deleteCookie("memberId"),
+        deleteCookie("memberName"),
+        deleteCookie("memberNickName"),
+        deleteCookie("annualIncome"),
+        deleteCookie("deposit"),
+      ]);
 
-    set({
-      token: null,
-      memberId: null,
-      memberName: null,
-      memberNickName: null,
-      annualIncome: null,
-      deposit: null,
-      isAuthenticated: false,
-      isInitialized: true,
-    });
+      set({
+        token: null,
+        memberId: null,
+        memberName: null,
+        memberNickName: null,
+        annualIncome: null,
+        deposit: null,
+        isAuthenticated: false,
+        isInitialized: true,
+      });
+    } catch (error) {
+      console.error("쿠키 삭제 중 오류 발생:", error);
+      throw new Error("인증 정보 삭제에 실패했습니다.");
+    }
   },
 
   initAuth: async () => {
     try {
       set({ isInitialized: false });
 
-      const token = await getCookie("token");
-      const memberIdStr = await getCookie("memberId");
-      const memberName = await getCookie("memberName");
-      const memberNickName = await getCookie("memberNickName");
-      const annualIncomeStr = await getCookie("annualIncome");
-      const depositStr = await getCookie("deposit");
+      const [
+        token,
+        memberIdStr,
+        memberName,
+        memberNickName,
+        annualIncomeStr,
+        depositStr,
+      ] = await Promise.all([
+        getCookie("token"),
+        getCookie("memberId"),
+        getCookie("memberName"),
+        getCookie("memberNickName"),
+        getCookie("annualIncome"),
+        getCookie("deposit"),
+      ]);
 
-      // Convert string values back to numbers
       const memberId = memberIdStr ? parseInt(memberIdStr, 10) : null;
       const annualIncome = annualIncomeStr
         ? parseInt(annualIncomeStr, 10)
@@ -171,8 +190,18 @@ export const useAuth = create<AuthStore>((set) => ({
         isInitialized: true,
       });
     } catch (error) {
-      set({ isInitialized: true });
-      throw error;
+      console.error("인증 초기화 중 오류 발생:", error);
+      set({
+        token: null,
+        memberId: null,
+        memberName: null,
+        memberNickName: null,
+        annualIncome: null,
+        deposit: null,
+        isAuthenticated: false,
+        isInitialized: true,
+      });
+      throw new Error("인증 상태 초기화에 실패했습니다.");
     }
   },
 }));
