@@ -83,9 +83,11 @@ export default function Dropdown({
 function Toggle({
   children,
   border = true,
+  className,
 }: {
   children?: ReactNode;
   border?: boolean;
+  className?: string;
 }): JSX.Element {
   const { toggleDropdown, selectedValue, isOpen } = useContext(DropdownContext);
 
@@ -97,6 +99,7 @@ function Toggle({
         {
           "border border-solid border-[#B6B6B6] p-13": border === true,
         },
+        className,
       )}
       onClick={toggleDropdown}
       aria-expanded={isOpen}

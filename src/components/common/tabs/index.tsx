@@ -132,4 +132,4 @@ function TabsContent({
   return <div className={cn("mt-20", className)}>{children}</div>;
 }
 
-export { Tabs, TabsList, TabsTrigger, TabsContent };
+export { Tabs, TabsList, TabsTrigger, TabsContent, useTabsContext };

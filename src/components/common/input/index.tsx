@@ -47,7 +47,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <input
           className={cn(
             isForm
-              ? "flex-1 border-b border-solid border-[#505050] placeholder:absolute placeholder:bottom-4 placeholder:right-20 focus:outline-none"
+              ? "pb-2 flex-1 border-b border-solid border-[#505050] placeholder:text-right focus:outline-none text-right pr-18"
               : "w-full rounded-lg py-2 pl-13 pr-10 leading-tight text-gray-700 border border-gray-300 bg-white focus:border-green-500 focus:outline-none",
             error
               ? "border-red-500 focus:border-red-500"
@@ -77,9 +77,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           </button>
         )}
         {error && <p className="mt-1 text-14-400 text-red-400">{error}</p>}
-        {isForm && (
-          <span className="absolute bottom-6 right-0">{inputSuffix}</span>
-        )}
+        {isForm && <span className="absolute right-0">{inputSuffix}</span>}
       </div>
     );
   },
