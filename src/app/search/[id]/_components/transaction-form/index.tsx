@@ -5,12 +5,21 @@ import {
   TabsTrigger,
 } from "@/components/common/tabs";
 
+import { StockInfo } from "../../types";
 import Buy from "./buy";
 import EditCancel from "./edit-cancel";
 import History from "./history";
 import Sell from "./sell";
 
-export default function TransactionForm() {
+interface TransactionFormProps {
+  stockName: string;
+  initialStockInfo: StockInfo;
+}
+
+export default function TransactionForm({
+  stockName,
+  initialStockInfo,
+}: TransactionFormProps) {
   return (
     <div className="ml-17 h-657 w-443 rounded-10 bg-white px-22 py-30">
       <h3 className="mb-16 text-20-700">거래하기</h3>
@@ -27,7 +36,7 @@ export default function TransactionForm() {
         </TabsList>
 
         <TabsContent value="buy">
-          <Buy />
+          <Buy stockName={stockName} initialStockInfo={initialStockInfo} />
         </TabsContent>
         <TabsContent value="sell">
           <Sell />

@@ -54,6 +54,7 @@ export default async function StockPage({
 }) {
   try {
     const initialData = await getInitialData(params.id);
+    const stockName = decodeURIComponent(params.id);
     return (
       <div className="px-40 py-30">
         <StockHeader
@@ -66,7 +67,10 @@ export default async function StockPage({
             initialChartData={initialData.chartData}
             initialVolumeData={initialData.volumeData}
           />
-          <TransactionForm />
+          <TransactionForm
+            stockName={stockName}
+            initialStockInfo={initialData.stockData}
+          />
         </div>
       </div>
     );

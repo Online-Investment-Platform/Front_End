@@ -1,12 +1,15 @@
+import clsx from "clsx";
 import { Dispatch, memo, SetStateAction } from "react";
 
 import Dropdown from "@/components/common/dropdown";
+import { getKoreanPrice } from "@/utils/price";
 
 interface CountDropdownProps<T> {
   state: T;
   setState: Dispatch<SetStateAction<T>>;
-  number: number;
   title: string;
+  number?: number;
+  stockPrice?: string;
 }
 
 function CountDropdown<T extends string | number>({
@@ -14,6 +17,7 @@ function CountDropdown<T extends string | number>({
   setState,
   number,
   title,
+  stockPrice,
 }: CountDropdownProps<T>) {
   return (
     <Dropdown
@@ -21,15 +25,34 @@ function CountDropdown<T extends string | number>({
       selectedValue={state}
       onSelect={(value) => setState(value as T)}
     >
-      <Dropdown.Toggle border={false}>
+      <Dropdown.Toggle border={false} className={clsx(stockPrice && "mb-2")}>
         <span className="pr-10">{title}</span>
       </Dropdown.Toggle>
-      <Dropdown.Wrapper>
-        {Array.from({ length: number }, (_, index) => (
-          <Dropdown.Item className="text-center" key={index} value={index + 1}>
-            {index + 1}
-          </Dropdown.Item>
-        ))}
+      <Dropdown.Wrapper
+        className={clsx(
+          "h-300 overflow-scroll",
+          stockPrice && "w-120 break-keep",
+        )}
+      >
+        {number &&
+          Array.from({ length: number }, (_, index) => (
+            <Dropdown.Item
+              className="text-center"
+              key={index}
+              value={index + 1}
+            >
+              {index + 1}
+            </Dropdown.Item>
+          ))}
+        {stockPrice &&
+          Array.from(
+            { length: 21 },
+            (_, index) => Number(stockPrice) - 10000 + index * 1000,
+          ).map((price) => (
+            <Dropdown.Item className="text-center" key={price} value={price}>
+              {getKoreanPrice(price)} 원
+            </Dropdown.Item>
+          ))}
       </Dropdown.Wrapper>
     </Dropdown>
   );
