@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import coinsIcon from "@/images/coin.png";
 import shieldIcon from "@/images/shield.png";
+import { useToast } from "@/store/use-toast-store";
 
 import { AssetInfoSkeleton } from "./skeleton";
 
@@ -37,6 +38,7 @@ const INITIAL_ASSET = 100_000_000;
 export default function AssetInfo() {
   const { isAuthenticated, memberNickName, token, clearAuth, isInitialized } =
     useAuth();
+  const { showToast } = useToast();
   const [assetInfo, setAssetInfo] = useState<AssetResponse | null>(null);
 
   useEffect(() => {
@@ -95,7 +97,9 @@ export default function AssetInfo() {
 
   // 로그아웃 처리
   const handleLogout = async () => {
+    showToast("로그아웃 중...", "pending");
     await clearAuth();
+    showToast("로그아웃되었습니다.", "success");
   };
 
   if (!isInitialized) {
