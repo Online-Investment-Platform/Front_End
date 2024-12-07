@@ -1,6 +1,6 @@
 [build]
   command = "yarn build"
-  publish = "out"    # 앱 라우터는 out 디렉토리에 빌드됨
+  publish = ".next"   
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
