@@ -16,8 +16,7 @@ const nextConfig = {
         headers: [
           {
             key: "Content-Security-Policy",
-            value:
-              "default-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; upgrade-insecure-requests;",
+            value: `default-src 'self' ${process.env.NEXT_PUBLIC_API_URL} 'unsafe-inline' 'unsafe-eval'; connect-src 'self' ${process.env.NEXT_PUBLIC_API_URL} ws: wss: 'unsafe-inline';`,
           },
         ],
       },
