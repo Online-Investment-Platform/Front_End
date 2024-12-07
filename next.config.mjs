@@ -9,19 +9,6 @@ const nextConfig = {
   //     },
   //   ];
   // },
-  async headers() {
-    return [
-      {
-        source: "/:path*",
-        headers: [
-          {
-            key: "Content-Security-Policy",
-            value: `default-src 'self' ${process.env.NEXT_PUBLIC_API_URL} 'unsafe-inline' 'unsafe-eval'; connect-src 'self' ${process.env.NEXT_PUBLIC_API_URL} ws: wss: 'unsafe-inline';`,
-          },
-        ],
-      },
-    ];
-  },
   webpack: (config) => {
     const fileLoaderRule = config.module.rules.find((rule) =>
       rule.test?.test?.(".svg"),
