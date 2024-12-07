@@ -1,6 +1,6 @@
 [build]
   command = "yarn build"
-  publish = ".next"
+  publish = "out"    # 앱 라우터는 out 디렉토리에 빌드됨
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
@@ -9,3 +9,9 @@
   for = "/*"
   [headers.values]
     Content-Security-Policy = "upgrade-insecure-requests"
+
+[[redirects]]
+  from = "/api/*"
+  to = "http://13.125.177.110:8080/api/:splat"
+  status = 200
+  force = true
