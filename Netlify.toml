@@ -12,6 +12,12 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "http://13.125.177.110:8080/api/:splat"
+  to = "http://your-backend-url.com/api/:splat"
   status = 200
   force = true
+  methods = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]  
+  headers = {
+    Access-Control-Allow-Origin = "*",
+    Access-Control-Allow-Methods = "*",
+    Access-Control-Allow-Headers = "*"
+  }
