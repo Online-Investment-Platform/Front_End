@@ -21,7 +21,7 @@ function StockHeader({ stockName, initialStockInfo }: StockHeaderProps) {
     parseInt(price, 10).toLocaleString("ko-KR");
 
   return (
-    <div className="flex w-full items-center justify-between gap-6">
+    <div className="mb-20 flex w-full items-center justify-between gap-6">
       <div className="flex flex-col gap-8">
         <div className="flex items-center gap-15">
           <button

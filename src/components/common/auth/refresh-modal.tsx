@@ -31,7 +31,7 @@ const ModalContent = memo(
     };
 
     return (
-      <div className="h-210 overflow-hidden rounded-2xl bg-white p-20 shadow-xl">
+      <div className="shadow-xl h-210 overflow-hidden rounded-2xl bg-white p-20">
         <div className="flex items-center gap-3 text-yellow-600">
           <h2 className="text-24-700 text-gray-900">세션 연장</h2>
         </div>

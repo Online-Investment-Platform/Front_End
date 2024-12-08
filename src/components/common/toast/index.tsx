@@ -69,7 +69,7 @@ function Toast() {
           className="fixed inset-x-0 top-10 z-[9999] mx-auto w-fit"
         >
           <div
-            className={`${bgColor} flex items-center gap-4 rounded-lg px-15 py-20 text-white shadow-lg`}
+            className={`${bgColor} shadow-lg flex items-center gap-4 rounded-lg px-15 py-20 text-white`}
             role="alert"
           >
             <ToastIcon

@@ -204,7 +204,7 @@ function Carousel({
             aria-label="Next slide"
             disabled={isTransitioning}
           >
-            <Arrowright />
+            <Arrowright className="stroke-[#B6B6B6]" />
           </button>
         </div>
       </div>
