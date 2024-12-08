@@ -1,8 +1,11 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
+import type { StockHolding } from "@/api/side-Info/index";
+import { fetchMyStocks, fetchStockCount } from "@/api/side-Info/index";
 import type { CommonTableColumn } from "@/components/common/table";
 import { TableBody } from "@/components/common/table";
 import { useAuth } from "@/hooks/use-auth";
@@ -10,28 +13,10 @@ import magnifierIcon from "@/images/stockInfo.png";
 
 import { MyStockInfoSkeleton } from "./skeleton";
 
-interface StockHolding {
-  stockName: string;
-  currentPrice: number;
-  prevChangeRate: number;
-}
-
-interface StockCountResponse {
-  count: string;
-}
-
-type MyStockResponse = StockHolding[];
-
 function StockTable({ data }: { data: StockHolding[] }) {
   if (!Array.isArray(data) || data.length === 0) {
     return null;
   }
-
-  const getTextColorByRate = (rate: number) => {
-    if (rate > 0) return "text-red-500";
-    if (rate < 0) return "text-blue-500";
-    return "text-gray-500";
-  };
 
   const columns: CommonTableColumn<StockHolding>[] = [
     {
@@ -45,31 +30,21 @@ function StockTable({ data }: { data: StockHolding[] }) {
           </div>
           <div>
             <div className="text-14-600">{row.stockName}</div>
-            <div className="text-12-400 text-gray-500">5주</div>
+            <div className="text-12-400 text-gray-500">{row.stockCount}주</div>
           </div>
         </div>
       ),
     },
     {
-      key: "currentPrice",
+      key: "buyPrice",
       header: "",
       align: "right",
       width: "50%",
-      render: (value, row) => {
+      render: (value) => {
         const currentPrice = Number(value);
-        const rateColor = getTextColorByRate(row.prevChangeRate);
-        const priceChange = Math.round(
-          (row.prevChangeRate * currentPrice) / 100,
-        );
-
         return (
           <div className="text-right">
             <div className="text-14-600">{currentPrice.toLocaleString()}원</div>
-            <div className={`text-12-400 ${rateColor}`}>
-              {row.prevChangeRate > 0 ? "+" : ""}
-              {priceChange.toLocaleString()}원 ({row.prevChangeRate.toFixed(1)}
-              %)
-            </div>
           </div>
         );
       },
@@ -91,44 +66,25 @@ function StockTable({ data }: { data: StockHolding[] }) {
 export default function MyStockInfo() {
   const { isAuthenticated, token, isInitialized } = useAuth();
   const [stockCount, setStockCount] = useState<string | null>(null);
-  const [stockHoldings, setStockHoldings] = useState<StockHolding[]>([]);
+
+  const { data: stockHoldings } = useQuery({
+    queryKey: ["myStocks"],
+    queryFn: () => fetchMyStocks(token!),
+    enabled: !!isAuthenticated && !!token,
+  });
 
   useEffect(() => {
-    const fetchStockInfo = async () => {
+    const getStockCount = async () => {
       try {
-        const [countResponse, stockResponse] = await Promise.all([
-          fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/home/sidebar/myStockCount`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            },
-          ),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/home/sidebar/myStock`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }),
-        ]);
-
-        if (countResponse.ok && stockResponse.ok) {
-          const countData: StockCountResponse = await countResponse.json();
-          const stockData: MyStockResponse = await stockResponse.json();
-
-          console.log("API Response:", stockData); //eslint-disable-line
-
-          setStockCount(countData.count);
-          setStockHoldings(stockData);
-        }
+        const countData = await fetchStockCount(token!);
+        setStockCount(countData.count);
       } catch (error) {
-        console.error("보유 주식 정보 조회 실패:", error); //eslint-disable-line
-        setStockHoldings([]);
+        console.error("보유 주식 수 조회 실패:", error); //eslint-disable-line
       }
     };
 
     if (isAuthenticated && token) {
-      fetchStockInfo();
+      getStockCount();
     }
   }, [isAuthenticated, token]);
 

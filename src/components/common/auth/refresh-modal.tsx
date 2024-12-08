@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { useEffect } from "react";
+import { memo } from "react";
 
 import BaseModal from "@/components/common/modal";
 
@@ -13,32 +13,25 @@ interface RefreshModalProps {
   onDecline: () => void;
 }
 
-export default function RefreshModal({
-  isOpen,
-  onClose,
-  remainingRefreshes,
-  onAccept,
-  onDecline,
-}: RefreshModalProps) {
-  useEffect(() => {
-    if (!isOpen) {
+const ModalContent = memo(
+  ({
+    remainingRefreshes,
+    onAccept,
+    onDecline,
+    onClose,
+  }: Omit<RefreshModalProps, "isOpen">) => {
+    const handleRefresh = () => {
+      onAccept();
       onClose();
-    }
-  }, [isOpen, onClose]);
+    };
 
-  const handleRefresh = () => {
-    onAccept();
-    onClose();
-  };
+    const handleLogout = () => {
+      onClose();
+      onDecline();
+    };
 
-  const handleLogout = () => {
-    onClose();
-    onDecline();
-  };
-
-  return (
-    <BaseModal isOpen={isOpen} onClose={onClose}>
-      <div className="shadow-xl h-210 overflow-hidden rounded-2xl bg-white p-20">
+    return (
+      <div className="h-210 overflow-hidden rounded-2xl bg-white p-20 shadow-xl">
         <div className="flex items-center gap-3 text-yellow-600">
           <h2 className="text-24-700 text-gray-900">세션 연장</h2>
         </div>
@@ -89,6 +82,31 @@ export default function RefreshModal({
           </button>
         </div>
       </div>
+    );
+  },
+);
+
+ModalContent.displayName = "RefreshModalContent";
+
+function RefreshModal({
+  isOpen,
+  onClose,
+  remainingRefreshes,
+  onAccept,
+  onDecline,
+}: RefreshModalProps) {
+  return (
+    <BaseModal isOpen={isOpen} onClose={onClose}>
+      <ModalContent
+        remainingRefreshes={remainingRefreshes}
+        onAccept={onAccept}
+        onDecline={onDecline}
+        onClose={onClose}
+      />
     </BaseModal>
   );
 }
+
+RefreshModal.displayName = "RefreshModal";
+
+export default RefreshModal;
