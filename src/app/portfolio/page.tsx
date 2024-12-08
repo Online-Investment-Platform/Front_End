@@ -6,15 +6,14 @@ import { getCookie } from "@/utils/next-cookies";
 import PortfolioRecommend from "./_components/portfoilo-card";
 
 export default async function PortfolioPage() {
+  const token = await getCookie("token");
+
+  if (!token) {
+    redirect("/login");
+  }
+
   try {
-    const token = await getCookie("token");
-
-    if (!token) {
-      redirect("/login");
-    }
-
     const portfolios = await fetchPortfolios(token);
-
     return <PortfolioRecommend portfolios={portfolios} />;
   } catch (error) {
     throw new Error(
