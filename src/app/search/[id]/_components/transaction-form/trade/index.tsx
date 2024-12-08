@@ -5,7 +5,12 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { buyAtLimitPrice, buyAtMarketPrice } from "@/api/transaction";
+import {
+  buyAtLimitPrice,
+  buyAtMarketPrice,
+  sellAtLimitPrice,
+  sellAtMarketPrice,
+} from "@/api/transaction";
 import { useTabsContext } from "@/components/common/tabs";
 import { useStockInfoContext } from "@/context/stock-info-context";
 import { useAuth } from "@/hooks/use-auth";
@@ -86,7 +91,21 @@ export default function Trade({ type }: TradeProps) {
     },
   });
 
-  const handlePurchase = () => {
+  const { mutate: sellAtMarketPriceMutate } = useMutation({
+    mutationFn: sellAtMarketPrice,
+    onSuccess: () => {
+      setActiveTab("history");
+    },
+  });
+
+  const { mutate: sellAtLimitPriceMutate } = useMutation({
+    mutationFn: sellAtLimitPrice,
+    onSuccess: () => {
+      setActiveTab("history");
+    },
+  });
+
+  const handleBuy = () => {
     if (priceType === "현재가") {
       buyAtMarketPriceMutate({
         token,
@@ -100,10 +119,24 @@ export default function Trade({ type }: TradeProps) {
     }
   };
 
+  const handleSell = () => {
+    if (priceType === "현재가") {
+      sellAtMarketPriceMutate({
+        token,
+        data: { stockName, quantity: watchedCount },
+      });
+    } else {
+      sellAtLimitPriceMutate({
+        token,
+        data: { stockName, limitPrice: watchedBidding, quantity: watchedCount },
+      });
+    }
+  };
+
   if (isConfirmationPage) {
     return (
       <TransactionTable
-        color="red"
+        color={type === "buy" ? "red" : "blue"}
         submittedData={{
           stockName,
           count: watchedCount,
@@ -111,7 +144,7 @@ export default function Trade({ type }: TradeProps) {
           totalAmount: calculateTotalOrderAmount(watchedCount, watchedBidding),
         }}
         onClickGoBack={() => setIsConfirmationPage(false)}
-        onClickConfirm={handlePurchase}
+        onClickConfirm={type === "buy" ? handleBuy : handleSell}
       />
     );
   }
@@ -150,6 +183,7 @@ export default function Trade({ type }: TradeProps) {
         />
         <TotalAmount count={watchedCount} bidding={watchedBidding} />
         <BuyFormButtons
+          orderType={type}
           handleReset={handleReset}
           handleSubmit={() => handleSubmit(handleConfirmPurchase)()}
         />
