@@ -133,6 +133,7 @@ export default function Trade({ type }: TradeProps) {
           setState={setValue}
           control={control}
           errors={errors.count}
+          quantity={10}
         />
 
         <BuyableQuantity bidding={watchedBidding} type={type} />
