@@ -14,7 +14,6 @@ import CountDropdown from "./count-dropdown";
 
 interface OrderFieldProps {
   title: string;
-  // orderType?: "buy" | "sell";
   type: "count" | "bidding";
   placeholder: string;
   inputSuffix: string;
@@ -27,7 +26,6 @@ interface OrderFieldProps {
 
 export default function OrderField({
   title,
-  // orderType,
   type,
   placeholder,
   inputSuffix,
