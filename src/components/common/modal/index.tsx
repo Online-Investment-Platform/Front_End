@@ -1,7 +1,8 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 interface BaseModalProps {
   isOpen: boolean;
@@ -40,60 +41,99 @@ const modalVariants = {
     transition: { duration: 0.2 },
   },
 };
+const ModalContent = memo(
+  ({
+    onClose,
+    children,
+  }: {
+    onClose: () => void;
+    children: React.ReactNode;
+  }) => (
+    <>
+      <motion.div
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        variants={overlayVariants}
+        initial="hidden"
+        animate="visible"
+        exit="hidden"
+        onClick={onClose}
+      />
+      <motion.div
+        className="relative z-10 w-full max-w-md"
+        variants={modalVariants}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+      >
+        {children}
+      </motion.div>
+    </>
+  ),
+);
 
-export default function BaseModal({
-  isOpen,
-  onClose,
-  children,
-}: BaseModalProps) {
+ModalContent.displayName = "ModalContent";
+
+const ModalPortal = memo(({ children }: { children: React.ReactNode }) => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  if (!mounted) return null;
+
+  return createPortal(children, document.body);
+});
+
+ModalPortal.displayName = "ModalPortal";
+
+function BaseModal({ isOpen, onClose, children }: BaseModalProps) {
+  const lastActiveElement = useRef<HTMLElement | null>(null);
+
+  const handleEscape = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    },
+    [onClose],
+  );
+
   useEffect(() => {
     if (!isOpen) {
       return undefined;
     }
 
-    function handleEscape(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        onClose();
-      }
-    }
-
+    lastActiveElement.current = document.activeElement as HTMLElement;
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", handleEscape);
 
-    return function cleanupModalEffect() {
-      window.removeEventListener("keydown", handleEscape);
+    return () => {
       document.body.style.overflow = "unset";
+      window.removeEventListener("keydown", handleEscape);
+      lastActiveElement.current?.focus();
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, handleEscape]);
 
   return (
     <AnimatePresence mode="wait">
       {isOpen && (
-        <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          initial="hidden"
-          animate="visible"
-          exit="hidden"
-        >
+        <ModalPortal>
           <motion.div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            variants={overlayVariants}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
             initial="hidden"
             animate="visible"
             exit="hidden"
-            onClick={onClose}
-          />
-          <motion.div
-            className="relative z-10 w-full max-w-md"
-            variants={modalVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
           >
-            {children}
+            <ModalContent onClose={onClose}>{children}</ModalContent>
           </motion.div>
-        </motion.div>
+        </ModalPortal>
       )}
     </AnimatePresence>
   );
 }
+
+BaseModal.displayName = "BaseModal";
+
+export default BaseModal;

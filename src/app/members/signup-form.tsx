@@ -1,11 +1,9 @@
-/* eslint-disable no-console */
-
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { memo, useState } from "react";
+import { memo } from "react";
 import { Path, useForm, useWatch } from "react-hook-form";
 
 import {
@@ -17,6 +15,7 @@ import {
   PasswordInput,
 } from "@/components/auth-input/index";
 import Button from "@/components/common/button";
+import { useToast } from "@/store/use-toast-store";
 import { AuthFormData } from "@/types/auth";
 import { signupSchema } from "@/validation/schema/auth";
 
@@ -31,8 +30,8 @@ const FormLinks = memo(() => (
 FormLinks.displayName = "FormLinks";
 
 export default function SignupForm() {
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { showToast } = useToast();
 
   const {
     control,
@@ -56,10 +55,11 @@ export default function SignupForm() {
   const passwordMatchError = confirmPassword && password !== confirmPassword;
 
   const onSubmit = async (data: AuthFormData) => {
-    setIsLoading(true);
     const { confirmPassword: _, ...signupData } = data;
 
     try {
+      showToast("회원가입 진행 중...", "pending");
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/members`,
         {
@@ -73,15 +73,14 @@ export default function SignupForm() {
       );
 
       if (response.ok) {
+        showToast("회원가입이 완료되었습니다", "success");
         router.push("/login");
       } else {
         const errorData = await response.json();
-        console.error("회원가입 실패:", errorData.message);
+        showToast(errorData.message || "회원가입에 실패했습니다", "error");
       }
-    } catch (error) {
-      console.error("회원가입 오류:", error);
-    } finally {
-      setIsLoading(false);
+    } catch {
+      showToast("회원가입 중 오류가 발생했습니다", "error");
     }
   };
 
@@ -101,10 +100,10 @@ export default function SignupForm() {
       />
       <Button
         className="mb-20 mt-15 h-66 w-full rounded-10 text-18-700"
-        isDisabled={!isValid || isLoading || passwordMatchError}
+        isDisabled={!isValid || passwordMatchError}
         type="submit"
       >
-        {isLoading ? "가입 중..." : "회원가입"}
+        회원가입
       </Button>
       <FormLinks />
     </form>
