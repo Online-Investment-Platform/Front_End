@@ -21,6 +21,7 @@ interface OrderFieldProps {
   setState: UseFormSetValue<BuyFormData>;
   control: Control<BuyFormData>;
   errors: FieldErrors<BuyFormData>["count"];
+  quantity?: number;
 }
 
 export default function OrderField({
@@ -32,6 +33,7 @@ export default function OrderField({
   setState,
   control,
   errors,
+  quantity,
 }: OrderFieldProps) {
   const { stockInfo } = useStockInfoContext();
 
@@ -39,9 +41,10 @@ export default function OrderField({
     <div className="relative flex justify-between gap-6">
       <CountDropdown
         title={title}
+        number={type === "count" && quantity}
         state={state ?? ""}
         setState={(value) => setState(type, value ? Number(value) : 0)}
-        stockPrice={stockInfo.stockPrice}
+        stockPrice={type === "bidding" && stockInfo.stockPrice}
       />
       <Controller
         name={type}

@@ -8,8 +8,8 @@ interface CountDropdownProps<T> {
   state: T;
   setState: Dispatch<SetStateAction<T>>;
   title: string;
-  number?: number;
-  stockPrice?: string;
+  number?: number | boolean;
+  stockPrice?: string | boolean;
 }
 
 function CountDropdown<T extends string | number>({
@@ -34,7 +34,8 @@ function CountDropdown<T extends string | number>({
           stockPrice && "w-120 break-keep",
         )}
       >
-        {number &&
+        {typeof number === "number" &&
+          number > 0 &&
           Array.from({ length: number }, (_, index) => (
             <Dropdown.Item
               className="text-center"
