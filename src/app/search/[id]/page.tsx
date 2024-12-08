@@ -67,9 +67,10 @@ export default async function StockPage({
             initialChartData={initialData.chartData}
             initialVolumeData={initialData.volumeData}
           />
+
           <TransactionForm
             stockName={stockName}
-            initialStockInfo={initialData.stockData}
+            stockInfo={initialData.stockData}
           />
         </div>
       </div>

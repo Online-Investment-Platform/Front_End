@@ -13,3 +13,13 @@ export const calculateTotalOrderAmount = (
   }
   return 0;
 };
+
+export const calculateBuyableQuantity = (
+  deposit: string | number | null,
+  bidding: number,
+) => {
+  if (deposit && bidding) {
+    return Math.floor(Number(deposit) / bidding);
+  }
+  return 0;
+};
