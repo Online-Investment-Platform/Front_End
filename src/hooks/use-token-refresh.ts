@@ -19,7 +19,16 @@ interface UseTokenRefreshReturn {
 }
 
 export default function useTokenRefresh(): UseTokenRefreshReturn {
-  const { token, memberName, memberNickName, clearAuth } = useAuth();
+  const {
+    token,
+    memberId,
+    memberName,
+    memberNickName,
+    annualIncome,
+    deposit,
+    clearAuth,
+  } = useAuth();
+
   const router = useRouter();
   const refreshCountRef = useRef(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -66,10 +75,15 @@ export default function useTokenRefresh(): UseTokenRefreshReturn {
       return;
     }
 
+    // Refresh all auth information
     if (token) {
       await setCookie("token", token);
+      if (memberId) await setCookie("memberId", memberId.toString());
       if (memberName) await setCookie("memberName", memberName);
       if (memberNickName) await setCookie("memberNickName", memberNickName);
+      if (annualIncome)
+        await setCookie("annualIncome", annualIncome.toString());
+      if (deposit) await setCookie("deposit", deposit.toString());
     }
 
     setIsWaitingForResponse(false);
@@ -78,7 +92,16 @@ export default function useTokenRefresh(): UseTokenRefreshReturn {
     refreshCountRef.current += 1;
     setIsModalOpen(false);
     startSessionTimer();
-  }, [handleLogout, startSessionTimer, token, memberName, memberNickName]);
+  }, [
+    handleLogout,
+    startSessionTimer,
+    token,
+    memberId,
+    memberName,
+    memberNickName,
+    annualIncome,
+    deposit,
+  ]);
 
   const handleRefreshDecline = useCallback(() => {
     handleLogout();
