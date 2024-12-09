@@ -13,6 +13,23 @@ import Providers from "./provider";
 
 export const metadata: Metadata = {
   title: "GrowFoilo | 온라인 투자플랫폼",
+  description: "당신의 투자 포트폴리오를 관리하세요",
+  openGraph: {
+    title: "GrowFoilo | 온라인 투자플랫폼",
+    description: "당신의 투자 포트폴리오를 관리하세요",
+    url: "https://growfolio-nu.vercel.app/",
+    siteName: "GrowFoilo",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "GrowFoilo Preview",
+      },
+    ],
+    locale: "ko_KR",
+    type: "website",
+  },
   icons: {
     icon: "/logo.ico",
     shortcut: "/logo.ico",
