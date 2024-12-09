@@ -129,7 +129,7 @@ function Wrapper({
       {isOpen && (
         <motion.div
           className={cn(
-            "rounded-2 w-full shadow-custom absolute z-50 border-[#B6B6B6] border border-solid bg-white p-8",
+            "rounded-2 w-full shadow-custom absolute z-50 border-[#B6B6B6] border border-solid bg-white py-10 px-10",
             className,
           )}
           initial={{ opacity: 0, y: -10 }}
@@ -158,7 +158,7 @@ function Item({ children, value, className }: ItemProps): JSX.Element {
     <button
       type="button"
       className={cn(
-        "transition-linear text-black/80 rounded-2 relative w-full px-12 py-6 text-left hover:bg-gray-100 focus:bg-green-700/5 focus:!text-green-900",
+        "transition-linear text-black/80 rounded-2 relative w-full py-10 text-left hover:bg-gray-100 focus:bg-green-700/5 focus:!text-green-900",
         {
           "bg-green-500/10 !text-green-900": isSelected,
         },
