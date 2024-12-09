@@ -80,7 +80,7 @@ function CandlestickChart({ data, volumeData, isLoading, showMA }: Props) {
         textColor: "#333",
       },
       width: chartContainer.clientWidth,
-      height: 426,
+      height: 486,
       grid: {
         vertLines: { color: "#E6E6E6" },
         horzLines: { color: "#E6E6E6" },

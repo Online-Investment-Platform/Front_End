@@ -85,12 +85,12 @@ export default function CandlestickChartContainer({
     );
 
   return (
-    <div className="shadow-s w-full max-w-1700 rounded-lg bg-white p-10 pl-20">
-      <div className="mb-30 flex justify-between">
+    <div className="shadow-s w-full max-w-1700 rounded-lg bg-white px-30 pt-20">
+      <div className="mb-40 flex justify-between">
         <div>
           <span className="text-18-700">차트</span>
         </div>
-        <div className="flex gap-8">
+        <div className="flex gap-10">
           <button
             type="button"
             onClick={() => setPeriod("day")}
