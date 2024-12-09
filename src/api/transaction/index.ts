@@ -157,36 +157,6 @@ export async function getHistory(
   }
 }
 
-// // 지정가 정정/취소 가능한 거래내역
-// export async function getTrade(
-//   token: string | null,
-//   stockName: string,
-// ): Promise<string> {
-//   if (token === null) {
-//     throw new Error();
-//   }
-//   try {
-//     const res = await fetch(
-//       `${process.env.NEXT_PUBLIC_API_URL}/api/account/orders/${stockName}`,
-//       {
-//         method: "GET",
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${token}`,
-//         },
-//       },
-//     );
-
-//     if (!res.ok) {
-//       throw new Error(`Failed to post transaction data: ${res.status}`);
-//     }
-
-//     return await res.json();
-//   } catch {
-//     throw new Error();
-//   }
-// }
-
 export interface OrderHistory {
   OrderId: number;
   buyPrice: number;
@@ -195,6 +165,7 @@ export interface OrderHistory {
   stockName: string;
 }
 
+// 지정가 매수/매도 내역
 export async function getTrade(
   token: string | null,
   stockName: string,
@@ -246,11 +217,15 @@ export async function modifyTrade({
   }
 }
 
+interface CancelData {
+  token: string | null;
+  orderId: string;
+}
 // 지정가 취소
-export async function cancelTrade(
-  token: string,
-  orderId: string,
-): Promise<string> {
+export async function cancelTrade({
+  token,
+  orderId,
+}: CancelData): Promise<string> {
   if (token === null) {
     throw new Error();
   }
@@ -270,7 +245,7 @@ export async function cancelTrade(
       throw new Error(`Failed to post transaction data: ${res.status}`);
     }
 
-    return await res.json();
+    return await res.text();
   } catch {
     throw new Error();
   }

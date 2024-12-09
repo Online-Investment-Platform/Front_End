@@ -1,16 +1,18 @@
-import { useState } from "react";
-
 import { OrderHistory } from "@/api/transaction";
 import CheckButton from "@/components/common/check-button";
 import { getKoreanPrice } from "@/utils/price";
 
 interface EditTableBodyProps {
   data: OrderHistory;
+  isChecked: boolean;
+  toggleSelection: (orderId: string) => void;
 }
 
-export default function EditTableBody({ data }: EditTableBodyProps) {
-  const [checked, setIsChecked] = useState(false);
-
+export default function EditTableBody({
+  data,
+  isChecked,
+  toggleSelection,
+}: EditTableBodyProps) {
   return (
     <tr
       className="border-b border-solid text-center text-14-500"
@@ -18,8 +20,8 @@ export default function EditTableBody({ data }: EditTableBodyProps) {
     >
       <td className="py-12 pl-10">
         <CheckButton
-          isChecked={checked}
-          onChange={() => setIsChecked((prev) => !prev)}
+          isChecked={isChecked}
+          onChange={() => toggleSelection(data.OrderId.toString())}
         />
       </td>
       <td className=" py-10 pl-20 text-left">

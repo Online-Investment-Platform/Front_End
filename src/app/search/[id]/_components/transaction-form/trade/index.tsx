@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -38,6 +38,7 @@ export default function Trade({ type }: TradeProps) {
   const { setActiveTab } = useTabsContext();
   const { stockName, stockInfo } = useStockInfoContext();
   const { token } = useAuth();
+  const queryClient = useQueryClient();
 
   const {
     control,
@@ -88,6 +89,7 @@ export default function Trade({ type }: TradeProps) {
     mutationFn: buyAtLimitPrice,
     onSuccess: () => {
       setActiveTab("history");
+      queryClient.invalidateQueries({ queryKey: ["limitOrder"] });
     },
   });
 
@@ -102,6 +104,7 @@ export default function Trade({ type }: TradeProps) {
     mutationFn: sellAtLimitPrice,
     onSuccess: () => {
       setActiveTab("history");
+      queryClient.invalidateQueries({ queryKey: ["limitOrder"] });
     },
   });
 
