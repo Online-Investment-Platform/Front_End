@@ -85,7 +85,7 @@ export default function CandlestickChartContainer({
     );
 
   return (
-    <div className="shadow-sm w-739 rounded-lg bg-white p-10 pl-20">
+    <div className="shadow-s w-full max-w-1700 rounded-lg bg-white p-10 pl-20">
       <div className="mb-30 flex justify-between">
         <div>
           <span className="text-18-700">차트</span>

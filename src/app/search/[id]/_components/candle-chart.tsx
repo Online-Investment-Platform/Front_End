@@ -79,7 +79,7 @@ function CandlestickChart({ data, volumeData, isLoading, showMA }: Props) {
         background: { type: ColorType.Solid, color: "#ffffff" },
         textColor: "#333",
       },
-      width: 700,
+      width: chartContainer.clientWidth,
       height: 426,
       grid: {
         vertLines: { color: "#E6E6E6" },
@@ -92,6 +92,13 @@ function CandlestickChart({ data, volumeData, isLoading, showMA }: Props) {
         },
       },
     });
+
+    const handleResize = () => {
+      const { width } = chartContainer.getBoundingClientRect();
+      chart.applyOptions({ width });
+    };
+
+    window.addEventListener("resize", handleResize);
 
     const candlestickSeries = chart.addCandlestickSeries({
       upColor: "#FF3B30",
@@ -201,21 +208,26 @@ function CandlestickChart({ data, volumeData, isLoading, showMA }: Props) {
 
     return () => {
       chart.remove();
+      window.removeEventListener("resize", handleResize);
       return undefined;
     };
   }, [data, volumeData, isLoading, showMA]);
 
   if (isLoading || !data?.length || !volumeData?.length) {
     return (
-      <div className="flex h-476 w-615 items-center justify-center">
+      <div className="flex h-476 w-full items-center justify-center">
         <LoadingSpinner />
       </div>
     );
   }
 
   return (
-    <div className="relative">
-      <div ref={chartContainerRef} style={{ overflowX: "auto" }} />
+    <div className="relative w-full">
+      <div
+        ref={chartContainerRef}
+        className="w-full"
+        style={{ overflowX: "auto" }}
+      />
       <div className="pointer-events-none absolute left-0 top-0 z-50">
         <PriceTooltip {...tooltipData} visible={tooltipVisible} />
       </div>
