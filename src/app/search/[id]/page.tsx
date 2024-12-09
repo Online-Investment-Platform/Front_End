@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import CandlestickChartContainer from "./_components/candle-chart-container";
 import StockHeader from "./_components/stock-header";
 import TransactionForm from "./_components/transaction-form";
@@ -76,15 +78,26 @@ export default async function StockPage({
       </div>
     );
   } catch (error) {
-    const errorMessage =
-      error instanceof Error
-        ? error.message
-        : "알 수 없는 오류가 발생했습니다.";
+    console.error("Error in StockPage:", error); //eslint-disable-line
     return (
-      <div className="p-4 text-center">
-        <h2 className="text-xl mb-2 font-bold">데이터 로딩 실패</h2>
-        <p>{errorMessage}</p>
-        <p className="mt-2">잠시 후 다시 시도해주세요.</p>
+      <div className="lg:max-w-2000 flex h-screen w-full min-w-400 flex-col items-center justify-center bg-gradient-to-b from-green-100 via-green-50 to-white px-4 py-8 md:px-12 lg:px-16">
+        <div className="shadow-lg w-full max-w-md rounded-20">
+          <div className="flex w-full flex-col items-center justify-center p-8">
+            <h2 className="mb-4 text-24-700 text-gray-800">검색 결과 없음</h2>
+            <p className="mb-2 text-20-700 text-gray-600">
+              {decodeURIComponent(params.id)} 종목을 찾을 수 없습니다
+            </p>
+            <p className="text-16-500 text-gray-500">
+              정확한 종목명 또는 종목코드를 입력해주세요
+            </p>
+            <Link
+              href="/"
+              className="mt-8 rounded-lg bg-green-400 px-15 py-10 text-14-600 text-white transition-colors hover:bg-green-700"
+            >
+              메인으로 돌아가기
+            </Link>
+          </div>
+        </div>
       </div>
     );
   }

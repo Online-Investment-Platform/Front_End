@@ -129,9 +129,14 @@ function Wrapper({
       {isOpen && (
         <motion.div
           className={cn(
-            "rounded-2 w-full shadow-custom absolute z-50 border-[#B6B6B6] border border-solid bg-white py-10 px-10",
+            "absolute z-50 w-full border border-solid border-[#B6B6B6] bg-white py-10 rounded-2 shadow-custom custom-scrollbar",
             className,
           )}
+          style={{
+            maxHeight: "300px",
+            overflowY: "auto",
+            overflowX: "hidden",
+          }}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}

@@ -17,7 +17,12 @@ export const signupSchema = z.object({
     ),
   confirmPassword: z.string(),
   memberNickName: z.string().min(2, "닉네임은 최소 2자 이상이어야 합니다."),
-  annualIncome: z.number().int().positive("연간 소득은 양의 정수여야 합니다."),
+  annualIncome: z
+    .union([
+      z.string().regex(/^\d+$/, "숫자만 입력해 주세요."),
+      z.number().int().positive("연간 소득은 양의 정수여야 합니다."),
+    ])
+    .transform((val) => (typeof val === "string" ? parseInt(val, 10) : val)),
 });
 
 export type LoginFormData = z.infer<typeof loginSchema>;
