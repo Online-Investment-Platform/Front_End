@@ -14,14 +14,12 @@ export async function fetchChartData(
   stockName: string,
   period: PeriodType,
 ): Promise<ChartDataResponse> {
-  const encodedStockName = encodeURIComponent(stockName);
-
   const [chartResponse, volumeResponse] = await Promise.all([
     fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/search/chart/${period}?stockName=${encodedStockName}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/search/chart/${period}?stockName=${stockName}`,
     ),
     fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/search/chart/tradingVolume/${period}?stockName=${encodedStockName}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/search/chart/tradingVolume/${period}?stockName=${stockName}`,
     ),
   ]);
 
@@ -38,10 +36,8 @@ export async function fetchChartData(
 }
 
 export async function fetchStockInfo(stockName: string): Promise<StockInfo> {
-  const encodedStockName = encodeURIComponent(stockName);
-
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/search/stock?stockName=${encodedStockName}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/search/stock?stockName=${stockName}`,
   );
 
   if (!response.ok) {
