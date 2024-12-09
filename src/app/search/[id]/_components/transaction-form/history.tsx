@@ -5,8 +5,8 @@ import { getTradeHistory } from "@/api/transaction";
 import { useStockInfoContext } from "@/context/stock-info-context";
 import { useAuth } from "@/hooks/use-auth";
 
-import TransactionTable from "./transaction-table";
 import LoadingSpinner from "../loading-spiner";
+import TransactionTable from "./transaction-table";
 
 export default function History() {
   const { token, isAuthenticated } = useAuth();
@@ -25,6 +25,7 @@ export default function History() {
   if (isLoading || isPending) {
     return <LoadingSpinner className="mt-230" />;
   }
+  console.log(tradeHistoryData);
 
   return (
     <div className="flex h-470 flex-col gap-20 overflow-auto">
@@ -32,14 +33,14 @@ export default function History() {
         tradeHistoryData.map((history) => (
           <TransactionTable
             key={history.OrderId}
-            color="green"
+            color={history.buyOrder === "매수" ? "red" : "blue"}
             isSubmit={false}
             submittedData={{
               stockName: history.stockName,
               count: history.stockCount,
               bidding: history.buyPrice,
               totalAmount: history.buyPrice * history.stockCount,
-              buyOrder: history.type,
+              buyOrder: history.buyOrder,
             }}
           />
         ))

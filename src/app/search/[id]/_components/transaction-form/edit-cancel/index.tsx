@@ -10,11 +10,11 @@ import { useStockInfoContext } from "@/context/stock-info-context";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/store/use-toast-store";
 
+import LoadingSpinner from "../../loading-spiner";
 import Trade from "../trade";
 import TransactionTable from "../transaction-table";
 import EditTableBody from "./edit-table-body";
 import EditTableHeader from "./edit-table-header";
-import LoadingSpinner from "../../loading-spiner";
 
 export default function EditCancel() {
   const { stockName } = useStockInfoContext();
