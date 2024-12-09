@@ -1,5 +1,8 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
+
 import {
   Tabs,
   TabsContent,
@@ -7,14 +10,12 @@ import {
   TabsTrigger,
 } from "@/components/common/tabs";
 import { StockInfoProvider } from "@/context/stock-info-context";
+import { useAuth } from "@/hooks/use-auth";
 
 import { StockInfo } from "../../types";
 import EditCancel from "./edit-cancel";
 import History from "./history";
 import Trade from "./trade";
-import { useAuth } from "@/hooks/use-auth";
-import Image from "next/image";
-import Link from "next/link";
 
 interface TransactionFormProps {
   stockName: string;
@@ -70,9 +71,9 @@ export default function TransactionForm({
             alt="보안 아이콘"
             width={300}
             height={300}
-            className="absolute translate-x-1/2 right-1/2 top-40"
+            className="absolute right-1/2 top-40 translate-x-1/2"
           />
-          <div className="w-full text-center relative top-250 leading-8">
+          <div className="relative top-250 w-full text-center leading-8">
             <span className="text-20-700">로그인이 필요해요!</span>
             <br />
             <span className="text-16-500 text-gray-500">
@@ -80,7 +81,7 @@ export default function TransactionForm({
             </span>
             <Link
               href="/login"
-              className="m-auto block w-150 rounded-4 bg-[#11E977] py-16 text-center text-16-700 mt-40"
+              className="m-auto mt-40 block w-150 rounded-4 bg-[#11E977] py-16 text-center text-16-700"
             >
               로그인 하기
             </Link>

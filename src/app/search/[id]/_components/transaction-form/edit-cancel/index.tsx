@@ -65,6 +65,9 @@ export default function EditCancel() {
     onSettled: () => {
       setIsCancelTable(false);
     },
+    onError: (error) => {
+      showToast(error.message, "error");
+    },
   });
 
   const { mutate: modifyTradeMutate } = useMutation({
@@ -76,6 +79,9 @@ export default function EditCancel() {
     onSettled: () => {
       setIsEditForm(false);
       setSelectedOrders([]);
+    },
+    onError: (error) => {
+      showToast(error.message, "error");
     },
   });
 
@@ -135,7 +141,7 @@ export default function EditCancel() {
             ))
           ) : (
             <tr>
-              <td colSpan={5} className="py-20 text-16-500 text-center">
+              <td colSpan={5} className="py-20 text-center text-16-500">
                 <Image
                   src="/images/green-wallet.png"
                   width={150}
