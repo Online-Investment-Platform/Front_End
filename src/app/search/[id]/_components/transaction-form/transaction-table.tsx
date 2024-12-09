@@ -3,7 +3,7 @@ import cn from "@/utils/cn";
 import { getKoreanPrice } from "@/utils/price";
 
 interface TransactionTableProps {
-  color: "red" | "green" | "blue";
+  color?: "red" | "green" | "blue";
   isSubmit?: boolean;
   submittedData: {
     stockName: string;
@@ -15,14 +15,16 @@ interface TransactionTableProps {
   onClickConfirm?: () => void;
 }
 export default function TransactionTable({
-  color,
+  color = "red",
   isSubmit = true,
   submittedData,
   onClickGoBack,
   onClickConfirm,
 }: TransactionTableProps) {
   const getBackgroundColor = () => {
-    const colorMap: { [key in TransactionTableProps["color"]]: string } = {
+    const colorMap: {
+      [key in Exclude<TransactionTableProps["color"], undefined>]: string;
+    } = {
       red: "bg-[#FDEBEB]",
       green: "bg-[#E9FFF0]",
       blue: "bg-[#EDF1FC]",

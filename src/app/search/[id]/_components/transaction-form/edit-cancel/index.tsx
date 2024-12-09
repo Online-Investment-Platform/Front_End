@@ -3,12 +3,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
-import { cancelTrade, getTrade } from "@/api/transaction";
+import { cancelTrade, getTrade, modifyTrade } from "@/api/transaction";
 import Button from "@/components/common/button";
 import { useStockInfoContext } from "@/context/stock-info-context";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/store/use-toast-store";
 
+import Trade from "../trade";
 import TransactionTable from "../transaction-table";
 import EditTableBody from "./edit-table-body";
 import EditTableHeader from "./edit-table-header";
@@ -29,6 +30,9 @@ export default function EditCancel() {
   const [isEditForm, setIsEditForm] = useState(false);
   const [isCancelTable, setIsCancelTable] = useState(false);
 
+  const findOrder = (orderId: string) =>
+    limitOrderData?.find((data) => data.OrderId.toString() === orderId);
+
   const toggleOrderSelection = (orderId: string) => {
     setSelectedOrders((prev) =>
       prev.includes(orderId) ? prev.filter((id) => id !== orderId) : [orderId],
@@ -36,7 +40,11 @@ export default function EditCancel() {
   };
 
   const handleEdit = () => {
-    setIsEditForm(true);
+    if (selectedOrders.length > 0) {
+      setIsEditForm(true);
+    } else {
+      showToast("정정할 데이터를 선택해주세요.", "error");
+    }
   };
 
   const handleCancel = () => {
@@ -58,21 +66,34 @@ export default function EditCancel() {
     },
   });
 
+  const { mutate: modifyTradeMutate } = useMutation({
+    mutationFn: modifyTrade,
+    onSuccess: () => {
+      showToast("주문을 수정했습니다.", "success");
+      queryClient.invalidateQueries({ queryKey: ["limitOrder"] });
+    },
+    onSettled: () => {
+      setIsEditForm(false);
+      setSelectedOrders([]);
+    },
+  });
+
   const handleCancelConfirm = (orderId: string) => {
     cancelTradeMutate({ token, orderId });
   };
 
   if (isEditForm) {
-    return <div>수정</div>;
+    const order = findOrder(selectedOrders[0]);
+    return (
+      <Trade type="edit" defaultData={order} handleMutate={modifyTradeMutate} />
+    );
   }
 
   if (isCancelTable) {
     return (
       <>
         {selectedOrders.map((orderId) => {
-          const order = limitOrderData?.find(
-            (data) => data.OrderId.toString() === orderId,
-          );
+          const order = findOrder(orderId);
           return order ? (
             <TransactionTable
               key={orderId}

@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import {
   buyAtLimitPrice,
   buyAtMarketPrice,
+  OrderHistory,
   sellAtLimitPrice,
   sellAtMarketPrice,
 } from "@/api/transaction";
@@ -20,6 +21,7 @@ import {
   BuyFormSchema,
 } from "@/validation/schema/transaction-form";
 
+import { ModifyTradeFormData } from "../../../types";
 import TransactionTable from "../transaction-table";
 import BuyFormButtons from "./buy-form-buttons";
 import BuyableQuantity from "./buyable-quantity";
@@ -29,10 +31,12 @@ import PriceTypeDropdown from "./price-type-dropdown";
 import TotalAmount from "./total-amount";
 
 interface TradeProps {
-  type: "buy" | "sell";
+  type: "buy" | "sell" | "edit";
+  defaultData?: OrderHistory;
+  handleMutate?: (data: ModifyTradeFormData) => void;
 }
 
-export default function Trade({ type }: TradeProps) {
+export default function Trade({ type, defaultData, handleMutate }: TradeProps) {
   const [priceType, setPriceType] = useState("지정가");
   const [isConfirmationPage, setIsConfirmationPage] = useState(false);
   const { setActiveTab } = useTabsContext();
@@ -49,10 +53,16 @@ export default function Trade({ type }: TradeProps) {
     formState: { errors },
   } = useForm<BuyFormData>({
     resolver: zodResolver(BuyFormSchema),
-    defaultValues: {
-      count: undefined,
-      bidding: undefined,
-    },
+    defaultValues:
+      type === "edit" && defaultData
+        ? {
+            count: defaultData.stockCount,
+            bidding: defaultData.buyPrice,
+          }
+        : {
+            count: undefined,
+            bidding: undefined,
+          },
   });
 
   const watchedCount = watch("count");
@@ -136,10 +146,39 @@ export default function Trade({ type }: TradeProps) {
     }
   };
 
+  const handleEdit = () => {
+    if (type !== "edit" || !handleMutate) return;
+
+    handleMutate({
+      token,
+      orderId: defaultData?.OrderId,
+      data: { stockName, limitPrice: watchedBidding, quantity: watchedCount },
+    });
+  };
+
+  let onClickConfirmHandler;
+
+  if (type === "buy") {
+    onClickConfirmHandler = handleBuy;
+  } else if (type === "sell") {
+    onClickConfirmHandler = handleSell;
+  } else if (type === "edit") {
+    onClickConfirmHandler = handleEdit;
+  }
+
+  let color;
+  if (type === "buy") {
+    color = "red" as const;
+  } else if (type === "sell") {
+    color = "blue" as const;
+  } else if (type === "edit") {
+    color = "green" as const;
+  }
+
   if (isConfirmationPage) {
     return (
       <TransactionTable
-        color={type === "buy" ? "red" : "blue"}
+        color={color}
         submittedData={{
           stockName,
           count: watchedCount,
@@ -147,7 +186,7 @@ export default function Trade({ type }: TradeProps) {
           totalAmount: calculateTotalOrderAmount(watchedCount, watchedBidding),
         }}
         onClickGoBack={() => setIsConfirmationPage(false)}
-        onClickConfirm={type === "buy" ? handleBuy : handleSell}
+        onClickConfirm={onClickConfirmHandler}
       />
     );
   }
@@ -157,6 +196,7 @@ export default function Trade({ type }: TradeProps) {
       <CurrentPrice />
       <div className="flex w-270 flex-col gap-16 pl-11">
         <PriceTypeDropdown
+          orderType={type}
           priceType={priceType}
           setPriceType={handlePriceTypeChange}
         />
@@ -172,7 +212,9 @@ export default function Trade({ type }: TradeProps) {
           quantity={10}
         />
 
-        <BuyableQuantity bidding={watchedBidding} type={type} />
+        {type !== "edit" && (
+          <BuyableQuantity bidding={watchedBidding} type={type} />
+        )}
 
         <OrderField
           title="호가"

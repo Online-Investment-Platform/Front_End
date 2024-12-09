@@ -26,7 +26,7 @@ export default function EditTableBody({
       </td>
       <td className=" py-10 pl-20 text-left">
         <div className="pb-6 text-12-400">
-          <span className="pr-3 text-[#F20000]">매수 정정</span>
+          <span className="pr-3 text-[#F20000]">{data.type} 정정</span>
           <span className="text-[#9B9B9B]">{data.OrderId}</span>
         </div>
         {data.stockName}

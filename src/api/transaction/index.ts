@@ -1,4 +1,5 @@
 import {
+  ModifyTradeFormData,
   TradeAtLimitPriceFormDataType,
   TradeAtMarketPriceFormDataType,
 } from "@/app/search/[id]/types";
@@ -163,6 +164,7 @@ export interface OrderHistory {
   remainCount: number;
   stockCount: number;
   stockName: string;
+  type: string;
 }
 
 // 지정가 매수/매도 내역
@@ -189,14 +191,15 @@ export async function getTrade(
 // 지정가 정정
 export async function modifyTrade({
   token,
+  orderId,
   data,
-}: TradeAtLimitPriceFormDataType): Promise<string> {
-  if (token === null) {
+}: ModifyTradeFormData): Promise<string> {
+  if (token === null || orderId === undefined) {
     throw new Error();
   }
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/account/order/modify`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/account/order/${orderId}/modify`,
       {
         method: "PUT",
         headers: {
@@ -211,7 +214,7 @@ export async function modifyTrade({
       throw new Error(`Failed to post transaction data: ${res.status}`);
     }
 
-    return await res.json();
+    return await res.text();
   } catch {
     throw new Error();
   }
