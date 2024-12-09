@@ -25,7 +25,6 @@ export default function History() {
   if (isLoading || isPending) {
     return <LoadingSpinner className="mt-230" />;
   }
-  console.log(tradeHistoryData);
 
   return (
     <div className="flex h-470 flex-col gap-20 overflow-auto">
