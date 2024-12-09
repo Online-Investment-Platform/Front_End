@@ -259,7 +259,7 @@ export async function cancelTrade({
 }
 
 export interface TradeHistory {
-  OrderId: number;
+  id: number;
   buyPrice: number;
   remainCount: number;
   stockCount: number;

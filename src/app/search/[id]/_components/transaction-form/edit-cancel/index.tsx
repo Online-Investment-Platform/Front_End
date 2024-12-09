@@ -140,14 +140,16 @@ export default function EditCancel() {
         <table className="w-full text-center text-14-500">
           <EditTableHeader />
           {limitOrderData && limitOrderData.length > 0 ? (
-            limitOrderData.map((data) => (
-              <EditTableBody
-                key={data.OrderId}
-                data={data}
-                isChecked={selectedOrders.includes(data.OrderId.toString())}
-                toggleSelection={toggleOrderSelection}
-              />
-            ))
+            [...limitOrderData]
+              .sort((a, b) => b.OrderId - a.OrderId)
+              .map((data) => (
+                <EditTableBody
+                  key={data.OrderId}
+                  data={data}
+                  isChecked={selectedOrders.includes(data.OrderId.toString())}
+                  toggleSelection={toggleOrderSelection}
+                />
+              ))
           ) : (
             <tr>
               <td colSpan={5} className="py-20 text-center text-16-500">
