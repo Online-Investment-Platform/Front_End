@@ -7,7 +7,7 @@ import MyStockMap from "@/utils/my-stock-count";
 import { calculateBuyableQuantity, getKoreanPrice } from "@/utils/price";
 
 interface BuyableQuantityProps {
-  type: "buy" | "sell";
+  type: "buy" | "sell" | "edit";
   bidding: number;
 }
 
