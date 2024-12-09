@@ -5,6 +5,7 @@ const fetchPortfolios = async (token: string): Promise<PortfolioData[]> => {
     `${process.env.NEXT_PUBLIC_API_URL}/portfolio/recommend`,
     {
       method: "GET",
+      cache: "no-store",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,

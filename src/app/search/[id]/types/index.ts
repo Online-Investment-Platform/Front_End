@@ -47,3 +47,7 @@ export interface TradeAtLimitPriceFormDataType {
     quantity: number;
   };
 }
+
+export interface ModifyTradeFormData extends TradeAtLimitPriceFormDataType {
+  orderId: string | number | undefined;
+}

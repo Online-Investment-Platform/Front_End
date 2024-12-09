@@ -1,4 +1,5 @@
 import {
+  ModifyTradeFormData,
   TradeAtLimitPriceFormDataType,
   TradeAtMarketPriceFormDataType,
 } from "@/app/search/[id]/types";
@@ -122,6 +123,132 @@ export async function sellAtLimitPrice({
     }
 
     return await res.json();
+  } catch {
+    throw new Error();
+  }
+}
+
+// 체결내역 조회
+export async function getHistory(
+  token: string,
+  stockName: string,
+): Promise<string> {
+  if (token === null) {
+    throw new Error();
+  }
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/account/${stockName}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    if (!res.ok) {
+      throw new Error(`Failed to post transaction data: ${res.status}`);
+    }
+
+    return await res.json();
+  } catch {
+    throw new Error();
+  }
+}
+
+export interface OrderHistory {
+  OrderId: number;
+  buyPrice: number;
+  remainCount: number;
+  stockCount: number;
+  stockName: string;
+  type: string;
+}
+
+// 지정가 매수/매도 내역
+export async function getTrade(
+  token: string | null,
+  stockName: string,
+): Promise<OrderHistory[]> {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/account/orders/${stockName}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch stocks");
+  }
+
+  return response.json();
+}
+
+// 지정가 정정
+export async function modifyTrade({
+  token,
+  orderId,
+  data,
+}: ModifyTradeFormData): Promise<string> {
+  if (token === null || orderId === undefined) {
+    throw new Error();
+  }
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/account/order/${orderId}/modify`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      },
+    );
+
+    if (!res.ok) {
+      throw new Error(`Failed to post transaction data: ${res.status}`);
+    }
+
+    return await res.text();
+  } catch {
+    throw new Error();
+  }
+}
+
+interface CancelData {
+  token: string | null;
+  orderId: string;
+}
+// 지정가 취소
+export async function cancelTrade({
+  token,
+  orderId,
+}: CancelData): Promise<string> {
+  if (token === null) {
+    throw new Error();
+  }
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/account/order/${orderId}/cancel`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    if (!res.ok) {
+      throw new Error(`Failed to post transaction data: ${res.status}`);
+    }
+
+    return await res.text();
   } catch {
     throw new Error();
   }
