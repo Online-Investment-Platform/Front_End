@@ -10,6 +10,7 @@ interface TransactionTableProps {
     count: number;
     bidding: number;
     totalAmount: number;
+    buyOrder?: string;
   };
   onClickGoBack?: () => void;
   onClickConfirm?: () => void;
@@ -54,7 +55,7 @@ export default function TransactionTable({
                 getBackgroundColor(),
               )}
             >
-              매수 수량
+              {submittedData.buyOrder} 수량
             </th>
             <td className="pl-30 text-16-500">
               {getKoreanPrice(submittedData.count)}
@@ -67,7 +68,7 @@ export default function TransactionTable({
                 getBackgroundColor(),
               )}
             >
-              매수 가격
+              {submittedData.buyOrder} 가격
             </th>
             <td className="pl-30 text-16-500">
               {getKoreanPrice(submittedData.bidding)}

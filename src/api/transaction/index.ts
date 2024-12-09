@@ -172,6 +172,10 @@ export async function getTrade(
   token: string | null,
   stockName: string,
 ): Promise<OrderHistory[]> {
+  if (token === null) {
+    throw new Error();
+  }
+
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/account/orders/${stockName}`,
     {
@@ -252,4 +256,29 @@ export async function cancelTrade({
   } catch {
     throw new Error();
   }
+}
+
+// 매수/매도 체결내역
+export async function getTradeHistory(
+  token: string | null,
+  stockName: string,
+): Promise<OrderHistory[]> {
+  if (token === null) {
+    throw new Error();
+  }
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/account/accounts/save/${stockName}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch stocks");
+  }
+
+  return response.json();
 }
