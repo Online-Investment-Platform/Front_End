@@ -13,10 +13,10 @@ import { StockInfoProvider } from "@/context/stock-info-context";
 import { useAuth } from "@/hooks/use-auth";
 
 import { StockInfo } from "../../types";
+import LoadingSpinner from "../loading-spiner";
 import EditCancel from "./edit-cancel";
 import History from "./history";
 import Trade from "./trade";
-import LoadingSpinner from "../loading-spiner";
 
 interface TransactionFormProps {
   stockName: string;
@@ -32,7 +32,7 @@ export default function TransactionForm({
   if (!isInitialized) {
     return (
       <div className="ml-17 h-630 min-w-450 rounded-10 bg-white px-22 py-30">
-        <h3 className="text-20-700 mb-250">거래하기</h3>
+        <h3 className="mb-250 text-20-700">거래하기</h3>
         <LoadingSpinner />
       </div>
     );

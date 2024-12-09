@@ -14,6 +14,7 @@ import Trade from "../trade";
 import TransactionTable from "../transaction-table";
 import EditTableBody from "./edit-table-body";
 import EditTableHeader from "./edit-table-header";
+import LoadingSpinner from "../../loading-spiner";
 
 export default function EditCancel() {
   const { stockName } = useStockInfoContext();
@@ -21,7 +22,11 @@ export default function EditCancel() {
   const { showToast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: limitOrderData } = useQuery({
+  const {
+    data: limitOrderData,
+    isLoading,
+    isPending,
+  } = useQuery({
     queryKey: ["limitOrder"],
     queryFn: () => getTrade(token, stockName),
     enabled: !!isAuthenticated && !!token,
@@ -94,6 +99,10 @@ export default function EditCancel() {
     return (
       <Trade type="edit" defaultData={order} handleMutate={modifyTradeMutate} />
     );
+  }
+
+  if (isLoading || isPending) {
+    return <LoadingSpinner className="mt-230" />;
   }
 
   if (isCancelTable) {

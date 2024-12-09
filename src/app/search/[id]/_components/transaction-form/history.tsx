@@ -6,16 +6,25 @@ import { useStockInfoContext } from "@/context/stock-info-context";
 import { useAuth } from "@/hooks/use-auth";
 
 import TransactionTable from "./transaction-table";
+import LoadingSpinner from "../loading-spiner";
 
 export default function History() {
   const { token, isAuthenticated } = useAuth();
   const { stockName } = useStockInfoContext();
 
-  const { data: tradeHistoryData } = useQuery({
+  const {
+    data: tradeHistoryData,
+    isLoading,
+    isPending,
+  } = useQuery({
     queryKey: ["tradeHistory"],
     queryFn: () => getTradeHistory(token, stockName),
     enabled: !!isAuthenticated && !!token,
   });
+
+  if (isLoading || isPending) {
+    return <LoadingSpinner className="mt-230" />;
+  }
 
   return (
     <div className="flex h-470 flex-col gap-20 overflow-auto">
