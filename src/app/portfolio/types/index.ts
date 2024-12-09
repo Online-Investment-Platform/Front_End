@@ -1,4 +1,4 @@
-export type ChartItemType = "소비" | "금융" | "부동산" | "투자";
+export type ChartItemType = "주식" | "저축" | "부동산" | "채권";
 
 export interface PortfolioData {
   type: "AGGRESSIVE" | "PASSIVE" | "NORMAL";

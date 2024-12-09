@@ -91,7 +91,7 @@ export default function StockTable({ initialData }: Props) {
 
   return (
     <div>
-      <table className="w-full">
+      <table className="w-full min-w-1024">
         <TableHeader
           columns={columns}
           className="h-12"

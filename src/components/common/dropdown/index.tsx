@@ -129,7 +129,7 @@ function Wrapper({
       {isOpen && (
         <motion.div
           className={cn(
-            "rounded-2 w-full shadow-custom absolute z-50 border-[#B6B6B6] border border-solid bg-white py-10 px-12",
+            "rounded-2 w-full shadow-custom absolute z-50 border-[#B6B6B6] border border-solid bg-white py-10 px-10",
             className,
           )}
           initial={{ opacity: 0, y: -10 }}
