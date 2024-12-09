@@ -44,45 +44,50 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div className={cn("relative", !isForm && "relative w-full")}>
-        <input
-          className={cn(
-            isForm
-              ? "pb-2 flex-1 border-b border-solid border-[#505050] placeholder:text-right focus:outline-none text-right pr-18"
-              : "w-full rounded-lg py-2 pl-13 pr-10 leading-tight text-gray-700 border border-gray-300 bg-white focus:border-green-500 focus:outline-none",
-            error
-              ? "border-red-500 focus:border-red-500"
-              : "focus:shadow-outline",
-            props.disabled
-              ? "cursor-not-allowed bg-gray-100 opacity-50"
-              : "hover:border-gray-400",
-            className,
-          )}
-          placeholder={placeholder}
-          type={inputType}
-          ref={ref}
-          {...props}
-        />
-        {type === "password" && (
-          <button
-            className="absolute right-10 top-47 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600 focus:outline-none"
-            onClick={handleClickVisible}
-            aria-label="Toggle password visibility"
-            type="button"
-          >
-            {isVisible ? (
-              <MdOutlineVisibility className="size-25" />
-            ) : (
-              <MdOutlineVisibilityOff className="size-25" />
+        <div className="relative">
+          <input
+            className={cn(
+              isForm
+                ? "pb-2 flex-1 border-b border-solid border-[#505050] placeholder:text-right focus:outline-none text-right pr-18"
+                : "w-full rounded-lg py-2 pl-13 pr-10 leading-tight text-gray-700 border border-gray-300 bg-white focus:border-green-500 focus:outline-none",
+              error
+                ? "border-red-500 focus:border-red-500"
+                : "focus:shadow-outline",
+              props.disabled
+                ? "cursor-not-allowed bg-gray-100 opacity-50"
+                : "hover:border-gray-400",
+              className,
             )}
-          </button>
-        )}
+            placeholder={placeholder}
+            type={inputType}
+            ref={ref}
+            {...props}
+          />
+          {type === "password" && (
+            <button
+              className="absolute right-10 top-47 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600 focus:outline-none"
+              onClick={handleClickVisible}
+              aria-label="Toggle password visibility"
+              type="button"
+            >
+              {isVisible ? (
+                <MdOutlineVisibility className="size-25" />
+              ) : (
+                <MdOutlineVisibilityOff className="size-25" />
+              )}
+            </button>
+          )}
+          {isForm && (
+            <span className="absolute right-0 top-1/2 -translate-y-1/2">
+              {inputSuffix}
+            </span>
+          )}
+        </div>
         {error && <p className="mt-1 text-14-400 text-red-400">{error}</p>}
-        {isForm && <span className="absolute right-0">{inputSuffix}</span>}
       </div>
     );
   },
 );
-
 Input.displayName = "Input";
 
 export default Input;

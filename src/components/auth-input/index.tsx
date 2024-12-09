@@ -165,12 +165,10 @@ export const AnnualIncomeInput = memo(({ control, error }: FormInputProps) => {
 
   const formatDisplayValue = (value: number | undefined | "") => {
     if (!value && value !== 0) return "";
-    // 원 단위를 만원 단위로 변환 (나누기 10000)
     return Math.floor(Number(value) / 10000).toString();
   };
 
   const convertToWon = (manwonValue: string) => {
-    // 만원 단위를 원 단위로 변환 (곱하기 10000)
     const numericValue = manwonValue.replace(/[^0-9]/g, "");
     return numericValue ? Number(numericValue) * 10000 : "";
   };
@@ -190,12 +188,12 @@ export const AnnualIncomeInput = memo(({ control, error }: FormInputProps) => {
                 onChange(wonValue);
               }}
               id="annualIncome"
-              className="h-66 w-full rounded-lg bg-[#F3F4F6] pr-12"
+              className="h-66 w-full rounded-lg bg-[#F3F4F6] pr-24"
               placeholder="연간 소득"
               type="text"
               error={error}
             />
-            <span className="absolute right-27 top-1/2 -translate-y-1/2 text-18-700 text-gray-500">
+            <span className="absolute right-10 top-35 -translate-y-1/2 text-18-700 text-gray-500">
               만원
             </span>
           </div>
