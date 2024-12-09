@@ -5,6 +5,7 @@ import { useStockInfoContext } from "@/context/stock-info-context";
 import { useAuth } from "@/hooks/use-auth";
 
 import TransactionTable from "./transaction-table";
+import Image from "next/image";
 
 export default function History() {
   const { token, isAuthenticated } = useAuth();
@@ -34,7 +35,18 @@ export default function History() {
           />
         ))
       ) : (
-        <div>체결내역이 없습니다. 거래를 시작해보세요!</div>
+        <div className="py-20 font-medium leading-5 text-center">
+          <Image
+            src="/images/green-wallet.png"
+            width={150}
+            height={150}
+            className="mx-auto mt-65 mb-30"
+            alt="지갑 그림"
+          />
+          체결내역이 없습니다.
+          <br />
+          거래를 시작해보세요!
+        </div>
       )}
     </div>
   );

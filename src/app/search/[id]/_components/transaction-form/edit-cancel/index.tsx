@@ -135,7 +135,7 @@ export default function EditCancel() {
             ))
           ) : (
             <tr>
-              <td colSpan={5} className="py-20 text-center text-gray-500">
+              <td colSpan={5} className="py-20 text-16-500 text-center">
                 <Image
                   src="/images/green-wallet.png"
                   width={150}
@@ -149,18 +149,20 @@ export default function EditCancel() {
           )}
         </table>
       </div>
-      <div className="mt-20 text-center">
-        <Button
-          variant="red"
-          className="mr-10 w-120 bg-[#1DA65A] hover:bg-[#1DA65A]/95"
-          onClick={handleEdit}
-        >
-          정정
-        </Button>
-        <Button variant="red" className="w-120" onClick={handleCancel}>
-          취소
-        </Button>
-      </div>
+      {limitOrderData && limitOrderData.length > 0 && (
+        <div className="mt-20 text-center">
+          <Button
+            variant="red"
+            className="mr-10 w-120 bg-[#1DA65A] hover:bg-[#1DA65A]/95"
+            onClick={handleEdit}
+          >
+            정정
+          </Button>
+          <Button variant="red" className="w-120" onClick={handleCancel}>
+            취소
+          </Button>
+        </div>
+      )}
     </>
   );
 }
