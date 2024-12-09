@@ -13,7 +13,7 @@ export default function BuyFormButtons({
   handleSubmit,
 }: BuyFormButtonsProps) {
   return (
-    <div className="relative top-90">
+    <div className="relative top-90 w-300">
       <Button variant="outline-gray" onClick={handleReset}>
         초기화
       </Button>

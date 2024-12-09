@@ -36,8 +36,8 @@ const NAV_ITEMS = [
     activeIcon: AccountActiveIcon,
   },
   {
-    href: "/contents",
-    name: "주식 컨텐트",
+    href: "/portfolio",
+    name: "포트폴리오",
     icon: ContentIcon,
     activeIcon: ContentActiveIcon,
   },

@@ -26,7 +26,9 @@ export default function BuyableQuantity({
   const stockMap = new MyStockMap(stockHoldings);
   return (
     <div className="relative flex justify-between gap-6">
-      <span className="w-94">{type === "buy" ? "매수" : "매도"} 가능 주식</span>
+      <span className="w-110">
+        {type === "buy" ? "매수" : "매도"} 가능 주식
+      </span>
       <div className="flex-1 cursor-not-allowed border-b border-solid border-[#505050] pb-2 text-right">
         <span className="pr-5 text-[#B7B7B7]">
           {type === "buy"
