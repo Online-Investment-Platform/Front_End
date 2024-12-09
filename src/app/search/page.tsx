@@ -4,6 +4,7 @@ import { StockData } from "./types";
 async function getStockData(): Promise<StockData[]> {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/search/stock-data`,
+    { cache: "no-store" },
   );
   if (!res.ok) throw new Error("데이터 로딩 실패");
   return res.json();

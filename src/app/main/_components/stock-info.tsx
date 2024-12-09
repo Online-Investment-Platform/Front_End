@@ -71,6 +71,8 @@ export default function MyStockInfo() {
     queryKey: ["myStocks"],
     queryFn: () => fetchMyStocks(token!),
     enabled: !!isAuthenticated && !!token,
+    refetchOnMount: true,
+    staleTime: 0,
   });
 
   useEffect(() => {

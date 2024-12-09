@@ -1,15 +1,12 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
-import {
-  ChartDTO,
-  ChartResponse,
-  PeriodType,
-  VolumeDTO,
-  VolumeResponse,
-} from "../types";
+import { fetchChartData } from "@/api/candle-chart";
+
+import { ChartResponse, PeriodType, VolumeResponse } from "../types";
 import CandlestickChart from "./candle-chart";
 
 interface Props {
@@ -25,56 +22,19 @@ export default function CandlestickChartContainer({
 }: Props) {
   const [period, setPeriod] = useState<PeriodType>("day");
   const [showMA, setShowMA] = useState(false);
-  const [chartData, setChartData] = useState<ChartDTO[]>(
-    initialChartData.chartDTOS,
-  );
-  const [volumeData, setVolumeData] = useState<VolumeDTO[]>(
-    initialVolumeData.dtoList,
-  );
-  const [isLoading, setIsLoading] = useState(false);
 
-  const resetToInitialData = useCallback(() => {
-    setChartData(initialChartData.chartDTOS);
-    setVolumeData(initialVolumeData.dtoList);
-  }, [initialChartData.chartDTOS, initialVolumeData.dtoList]);
+  const { data, isLoading } = useQuery({
+    queryKey: ["chart", stockName, period],
+    queryFn: () => fetchChartData(stockName, period),
+    initialData:
+      period === "day"
+        ? { chartData: initialChartData, volumeData: initialVolumeData }
+        : undefined,
+    // refetchInterval: 5000,
+  });
 
-  useEffect(() => {
-    if (period === "day") {
-      resetToInitialData();
-      return;
-    }
-
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const [chartResponse, volumeResponse] = await Promise.all([
-          fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/search/chart/${period}?stockName=${stockName}`,
-          ),
-          fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/search/chart/tradingVolume/${period}?stockName=${stockName}`,
-          ),
-        ]);
-
-        if (!chartResponse.ok || !volumeResponse.ok) {
-          throw new Error("Failed to fetch data");
-        }
-
-        const [newChartData, newVolumeData] = await Promise.all([
-          chartResponse.json() as Promise<ChartResponse>,
-          volumeResponse.json() as Promise<VolumeResponse>,
-        ]);
-
-        setChartData(newChartData.chartDTOS);
-        setVolumeData(newVolumeData.dtoList);
-      } catch (error) {
-        console.error("Error fetching data:", error); //eslint-disable-line
-      }
-      setIsLoading(false);
-    };
-
-    fetchData();
-  }, [period, stockName, resetToInitialData]);
+  const chartData = data?.chartData.chartDTOS ?? [];
+  const volumeData = data?.volumeData.dtoList ?? [];
 
   const getButtonClasses = (isActive: boolean) =>
     clsx(
@@ -85,12 +45,12 @@ export default function CandlestickChartContainer({
     );
 
   return (
-    <div className="shadow-sm w-739 rounded-lg bg-white p-10 pl-20">
-      <div className="mb-30 flex justify-between">
+    <div className="shadow-s w-full min-w-765 max-w-1700 rounded-lg bg-white px-30 pt-20">
+      <div className="mb-40 flex justify-between">
         <div>
           <span className="text-18-700">차트</span>
         </div>
-        <div className="flex gap-8">
+        <div className="flex gap-10">
           <button
             type="button"
             onClick={() => setPeriod("day")}

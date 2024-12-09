@@ -22,7 +22,9 @@ export default function BuyFormButtons({
   }
 
   return (
-    <div className={cn("relative top-90", orderType === "edit" && "top-110")}>
+    <div
+      className={cn("relative top-90 w-300", orderType === "edit" && "top-110")}
+    >
       <Button variant="outline-gray" onClick={handleReset}>
         초기화
       </Button>

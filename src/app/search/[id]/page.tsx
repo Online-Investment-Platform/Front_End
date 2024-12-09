@@ -56,7 +56,7 @@ export default async function StockPage({
     const initialData = await getInitialData(params.id);
     const stockName = decodeURIComponent(params.id);
     return (
-      <div className="px-40 py-30">
+      <div className="p-30">
         <StockHeader
           stockName={params.id}
           initialStockInfo={initialData.stockData}
