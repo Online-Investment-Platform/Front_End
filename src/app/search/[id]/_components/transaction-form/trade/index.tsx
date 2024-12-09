@@ -15,6 +15,7 @@ import {
 import { useTabsContext } from "@/components/common/tabs";
 import { useStockInfoContext } from "@/context/stock-info-context";
 import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/store/use-toast-store";
 import { calculateTotalOrderAmount } from "@/utils/price";
 import {
   BuyFormData,
@@ -29,7 +30,6 @@ import CurrentPrice from "./current-price";
 import OrderField from "./order-field";
 import PriceTypeDropdown from "./price-type-dropdown";
 import TotalAmount from "./total-amount";
-import { useToast } from "@/store/use-toast-store";
 
 interface TradeProps {
   type: "buy" | "sell" | "edit";
