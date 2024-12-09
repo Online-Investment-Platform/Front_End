@@ -12,7 +12,7 @@ export default function TotalAmount({ count, bidding }: TotalAmountProps) {
     <>
       <div className="flex items-center gap-14">
         <div>총 주문 금액</div>
-        <div className="max-w-167 flex-1 overflow-scroll rounded-8 bg-[#F5F6F8] p-8 text-right">
+        <div className="max-w-167 flex-1 rounded-8 bg-[#F5F6F8] p-8 text-right">
           {totalAmount}원
         </div>
       </div>
