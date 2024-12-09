@@ -184,6 +184,7 @@ export default function Trade({ type, defaultData, handleMutate }: TradeProps) {
           count: watchedCount,
           bidding: watchedBidding,
           totalAmount: calculateTotalOrderAmount(watchedCount, watchedBidding),
+          buyOrder: type === "buy" ? "매수" : "매도",
         }}
         onClickGoBack={() => setIsConfirmationPage(false)}
         onClickConfirm={onClickConfirmHandler}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
 import { useState } from "react";
 
 import { cancelTrade, getTrade, modifyTrade } from "@/api/transaction";
@@ -103,6 +104,7 @@ export default function EditCancel() {
                 count: order.remainCount,
                 bidding: order.buyPrice,
                 totalAmount: order.remainCount * order.buyPrice,
+                buyOrder: order.type,
               }}
               onClickGoBack={() => setIsCancelTable(false)}
               onClickConfirm={() => {
@@ -119,17 +121,32 @@ export default function EditCancel() {
 
   return (
     <>
-      <div className="h-430 w-full overflow-scroll">
+      <div className="h-400 w-full overflow-scroll">
         <table className="w-full text-center text-14-500">
           <EditTableHeader />
-          {limitOrderData?.map((data) => (
-            <EditTableBody
-              key={data.OrderId}
-              data={data}
-              isChecked={selectedOrders.includes(data.OrderId.toString())}
-              toggleSelection={toggleOrderSelection}
-            />
-          ))}
+          {limitOrderData && limitOrderData.length > 0 ? (
+            limitOrderData.map((data) => (
+              <EditTableBody
+                key={data.OrderId}
+                data={data}
+                isChecked={selectedOrders.includes(data.OrderId.toString())}
+                toggleSelection={toggleOrderSelection}
+              />
+            ))
+          ) : (
+            <tr>
+              <td colSpan={5} className="py-20 text-center text-gray-500">
+                <Image
+                  src="/images/green-wallet.png"
+                  width={150}
+                  height={150}
+                  className="mx-auto my-30"
+                  alt="지갑 그림"
+                />
+                지정가 거래 내역이 없습니다!
+              </td>
+            </tr>
+          )}
         </table>
       </div>
       <div className="mt-20 text-center">
