@@ -43,7 +43,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     };
 
     return (
-      <div className={cn(!isForm && "relative w-full")}>
+      <div className={cn("relative", !isForm && "relative w-full")}>
         <input
           className={cn(
             isForm

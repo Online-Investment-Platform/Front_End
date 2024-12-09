@@ -36,6 +36,39 @@ export default function OrderField({
   quantity,
 }: OrderFieldProps) {
   const { stockInfo } = useStockInfoContext();
+  const numberRegex = /^[0-9,]*$/;
+
+  const handleInputChange = (
+    value: string,
+    field: {
+      onChange: (value: number | undefined) => void;
+      value: number | undefined;
+    },
+  ) => {
+    if (value === "") {
+      field.onChange(undefined);
+      return;
+    }
+
+    if (!numberRegex.test(value)) {
+      return;
+    }
+
+    const cleanValue = value.replace(/,/g, "");
+
+    if (cleanValue === "") {
+      field.onChange(undefined);
+      return;
+    }
+
+    const numValue = Number(cleanValue);
+
+    if (Number.isNaN(numValue) || !Number.isFinite(numValue) || numValue <= 0) {
+      return;
+    }
+
+    field.onChange(numValue);
+  };
 
   return (
     <div className="relative flex justify-between gap-6">
@@ -54,14 +87,8 @@ export default function OrderField({
             isForm
             placeholder={placeholder}
             inputSuffix={inputSuffix}
-            value={
-              field.value ? getKoreanPrice(field.value) : (field.value ?? "")
-            }
-            onChange={(e) =>
-              field.onChange(
-                e.target.value === "" ? undefined : Number(e.target.value),
-              )
-            }
+            value={field.value !== undefined ? getKoreanPrice(field.value) : ""}
+            onChange={(e) => handleInputChange(e.target.value, field)}
             error={errors?.message}
           />
         )}

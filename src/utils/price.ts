@@ -3,7 +3,6 @@ export const getKoreanPrice = (price: string | number | null): string => {
 
   return new Intl.NumberFormat("ko-KR").format(Number(price));
 };
-
 export const calculateTotalOrderAmount = (
   count: number | null,
   bidding: number | null,

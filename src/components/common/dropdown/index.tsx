@@ -158,7 +158,7 @@ function Item({ children, value, className }: ItemProps): JSX.Element {
     <button
       type="button"
       className={cn(
-        "transition-linear text-black/80 rounded-2 relative w-full py-10 text-left hover:bg-gray-100 focus:bg-green-700/5 focus:!text-green-900",
+        "transition-linear text-black/80 rounded-2 relative w-full py-10 px-8 text-left hover:bg-gray-100 focus:bg-green-700/5 focus:!text-green-900",
         {
           "bg-green-500/10 !text-green-900": isSelected,
         },
