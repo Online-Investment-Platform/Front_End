@@ -10,6 +10,7 @@ import { useStockInfoContext } from "@/context/stock-info-context";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/store/use-toast-store";
 
+import LoadingSpinner from "../../loading-spiner";
 import Trade from "../trade";
 import TransactionTable from "../transaction-table";
 import EditTableBody from "./edit-table-body";
@@ -21,7 +22,11 @@ export default function EditCancel() {
   const { showToast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: limitOrderData } = useQuery({
+  const {
+    data: limitOrderData,
+    isLoading,
+    isPending,
+  } = useQuery({
     queryKey: ["limitOrder"],
     queryFn: () => getTrade(token, stockName),
     enabled: !!isAuthenticated && !!token,
@@ -65,6 +70,9 @@ export default function EditCancel() {
     onSettled: () => {
       setIsCancelTable(false);
     },
+    onError: (error) => {
+      showToast(error.message, "error");
+    },
   });
 
   const { mutate: modifyTradeMutate } = useMutation({
@@ -77,6 +85,9 @@ export default function EditCancel() {
       setIsEditForm(false);
       setSelectedOrders([]);
     },
+    onError: (error) => {
+      showToast(error.message, "error");
+    },
   });
 
   const handleCancelConfirm = (orderId: string) => {
@@ -88,6 +99,10 @@ export default function EditCancel() {
     return (
       <Trade type="edit" defaultData={order} handleMutate={modifyTradeMutate} />
     );
+  }
+
+  if (isLoading || isPending) {
+    return <LoadingSpinner className="mt-230" />;
   }
 
   if (isCancelTable) {
@@ -125,17 +140,19 @@ export default function EditCancel() {
         <table className="w-full text-center text-14-500">
           <EditTableHeader />
           {limitOrderData && limitOrderData.length > 0 ? (
-            limitOrderData.map((data) => (
-              <EditTableBody
-                key={data.OrderId}
-                data={data}
-                isChecked={selectedOrders.includes(data.OrderId.toString())}
-                toggleSelection={toggleOrderSelection}
-              />
-            ))
+            [...limitOrderData]
+              .sort((a, b) => b.OrderId - a.OrderId)
+              .map((data) => (
+                <EditTableBody
+                  key={data.OrderId}
+                  data={data}
+                  isChecked={selectedOrders.includes(data.OrderId.toString())}
+                  toggleSelection={toggleOrderSelection}
+                />
+              ))
           ) : (
             <tr>
-              <td colSpan={5} className="py-20 text-center text-gray-500">
+              <td colSpan={5} className="py-20 text-center text-16-500">
                 <Image
                   src="/images/green-wallet.png"
                   width={150}
@@ -149,18 +166,20 @@ export default function EditCancel() {
           )}
         </table>
       </div>
-      <div className="mt-20 text-center">
-        <Button
-          variant="red"
-          className="mr-10 w-120 bg-[#1DA65A] hover:bg-[#1DA65A]/95"
-          onClick={handleEdit}
-        >
-          정정
-        </Button>
-        <Button variant="red" className="w-120" onClick={handleCancel}>
-          취소
-        </Button>
-      </div>
+      {limitOrderData && limitOrderData.length > 0 && (
+        <div className="mt-20 text-center">
+          <Button
+            variant="red"
+            className="mr-10 w-120 text-black bg-[#0FED78] hover:bg-[#0FED78]/95"
+            onClick={handleEdit}
+          >
+            정정
+          </Button>
+          <Button variant="red" className="w-120" onClick={handleCancel}>
+            취소
+          </Button>
+        </div>
+      )}
     </>
   );
 }

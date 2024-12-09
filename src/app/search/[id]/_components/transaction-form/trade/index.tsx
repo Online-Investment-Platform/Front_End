@@ -15,6 +15,7 @@ import {
 import { useTabsContext } from "@/components/common/tabs";
 import { useStockInfoContext } from "@/context/stock-info-context";
 import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/store/use-toast-store";
 import { calculateTotalOrderAmount } from "@/utils/price";
 import {
   BuyFormData,
@@ -42,6 +43,7 @@ export default function Trade({ type, defaultData, handleMutate }: TradeProps) {
   const { setActiveTab } = useTabsContext();
   const { stockName, stockInfo } = useStockInfoContext();
   const { token } = useAuth();
+  const { showToast } = useToast();
   const queryClient = useQueryClient();
 
   const {
@@ -92,14 +94,11 @@ export default function Trade({ type, defaultData, handleMutate }: TradeProps) {
     mutationFn: buyAtMarketPrice,
     onSuccess: () => {
       setActiveTab("history");
+      showToast("현재가로 매수가 완료되었습니다.", "success");
+      queryClient.invalidateQueries({ queryKey: ["tradeHistory"] });
     },
-  });
-
-  const { mutate: buyAtLimitPriceMutate } = useMutation({
-    mutationFn: buyAtLimitPrice,
-    onSuccess: () => {
-      setActiveTab("history");
-      queryClient.invalidateQueries({ queryKey: ["limitOrder"] });
+    onError: (error) => {
+      showToast(error.message, "error");
     },
   });
 
@@ -107,14 +106,35 @@ export default function Trade({ type, defaultData, handleMutate }: TradeProps) {
     mutationFn: sellAtMarketPrice,
     onSuccess: () => {
       setActiveTab("history");
+      showToast("현재가로 매도가 완료되었습니다.", "success");
+      queryClient.invalidateQueries({ queryKey: ["tradeHistory"] });
+    },
+    onError: (error) => {
+      showToast(error.message, "error");
+    },
+  });
+
+  const { mutate: buyAtLimitPriceMutate } = useMutation({
+    mutationFn: buyAtLimitPrice,
+    onSuccess: () => {
+      setActiveTab("edit-cancel");
+      queryClient.invalidateQueries({ queryKey: ["limitOrder"] });
+      showToast("지정가로 매수가 완료되었습니다.", "success");
+    },
+    onError: (error) => {
+      showToast(error.message, "error");
     },
   });
 
   const { mutate: sellAtLimitPriceMutate } = useMutation({
     mutationFn: sellAtLimitPrice,
     onSuccess: () => {
-      setActiveTab("history");
+      setActiveTab("edit-cancel");
       queryClient.invalidateQueries({ queryKey: ["limitOrder"] });
+      showToast("지정가로 매도가 완료되었습니다.", "success");
+    },
+    onError: (error) => {
+      showToast(error.message, "error");
     },
   });
 

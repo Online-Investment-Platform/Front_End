@@ -258,11 +258,20 @@ export async function cancelTrade({
   }
 }
 
+export interface TradeHistory {
+  id: number;
+  buyPrice: number;
+  remainCount: number;
+  stockCount: number;
+  stockName: string;
+  buyOrder: string;
+}
+
 // 매수/매도 체결내역
 export async function getTradeHistory(
   token: string | null,
   stockName: string,
-): Promise<OrderHistory[]> {
+): Promise<TradeHistory[]> {
   if (token === null) {
     throw new Error();
   }
