@@ -1,8 +1,10 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 
+import { fetchStockInfo } from "@/api/candle-chart";
 import BackIcon from "@/icons/arrow-left.svg";
 
 import { StockInfo } from "../types";
@@ -14,8 +16,16 @@ interface StockHeaderProps {
 
 function StockHeader({ stockName, initialStockInfo }: StockHeaderProps) {
   const router = useRouter();
-  const isPositive = parseFloat(initialStockInfo.contrastRatio) > 0;
-  const isNegative = parseFloat(initialStockInfo.contrastRatio) < 0;
+
+  const { data: stockInfo } = useQuery({
+    queryKey: ["stockInfo", stockName],
+    queryFn: () => fetchStockInfo(stockName),
+    initialData: initialStockInfo,
+    // refetchInterval: 5000,
+  });
+
+  const isPositive = parseFloat(stockInfo.contrastRatio) > 0;
+  const isNegative = parseFloat(stockInfo.contrastRatio) < 0;
 
   const formatPrice = (price: string) =>
     parseInt(price, 10).toLocaleString("ko-KR");
@@ -35,7 +45,7 @@ function StockHeader({ stockName, initialStockInfo }: StockHeaderProps) {
         </div>
         <div className="ml-30 flex items-center gap-4">
           <div className="text-16-700">
-            현재가 {formatPrice(initialStockInfo.stockPrice)}원
+            현재가 {formatPrice(stockInfo.stockPrice)}원
           </div>
           <div
             className={clsx("text-14-500", {
@@ -45,8 +55,8 @@ function StockHeader({ stockName, initialStockInfo }: StockHeaderProps) {
             })}
           >
             {isPositive ? "+" : ""}
-            {formatPrice(initialStockInfo.previousStockPrice)}원 (
-            {initialStockInfo.contrastRatio}
+            {formatPrice(stockInfo.previousStockPrice)}원 (
+            {stockInfo.contrastRatio}
             %)
           </div>
         </div>
@@ -55,13 +65,13 @@ function StockHeader({ stockName, initialStockInfo }: StockHeaderProps) {
         <div className="flex flex-col gap-5">
           <div className="text-gray-600">1일 최저</div>
           <div className="text-right">
-            {formatPrice(initialStockInfo.lowStockPrice)}원
+            {formatPrice(stockInfo.lowStockPrice)}원
           </div>
         </div>
         <div className="flex flex-col gap-5">
           <div className="text-gray-600">1일 최고</div>
           <div className="text-right">
-            {formatPrice(initialStockInfo.highStockPrice)}원
+            {formatPrice(stockInfo.highStockPrice)}원
           </div>
         </div>
       </div>
