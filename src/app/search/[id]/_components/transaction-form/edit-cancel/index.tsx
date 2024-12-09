@@ -170,7 +170,7 @@ export default function EditCancel() {
         <div className="mt-20 text-center">
           <Button
             variant="red"
-            className="mr-10 w-120 bg-[#1DA65A] hover:bg-[#1DA65A]/95"
+            className="mr-10 w-120 text-black bg-[#0FED78] hover:bg-[#0FED78]/95"
             onClick={handleEdit}
           >
             정정

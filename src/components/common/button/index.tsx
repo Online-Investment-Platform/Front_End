@@ -31,7 +31,7 @@ export default function Button({
             variant === "outline" && !isDisabled,
           "bg-white text-black border border-[#B6B6B6] hover:bg-[#B6B6B6]/10 !rounded-4 px-24 py-9":
             variant === "outline-gray" && !isDisabled,
-          "bg-[#E43851] text-white hover:bg-[#E43851]/95 !rounded-4 px-24 py-9":
+          "bg-[#F12E35] hover:bg-[#F12E35]/95 text-white !rounded-4 px-24 py-9":
             variant === "red" && !isDisabled,
           "opacity-50 cursor-not-allowed bg-neutral-300": isDisabled,
         },
