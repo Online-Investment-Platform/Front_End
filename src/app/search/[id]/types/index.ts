@@ -30,24 +30,3 @@ export interface StockInfo {
   highStockPrice: string;
   lowStockPrice: string;
 }
-
-export interface TradeAtMarketPriceFormDataType {
-  token: string | null;
-  data: {
-    stockName: string;
-    quantity: number;
-  };
-}
-
-export interface TradeAtLimitPriceFormDataType {
-  token: string | null;
-  data: {
-    stockName: string;
-    limitPrice: number;
-    quantity: number;
-  };
-}
-
-export interface ModifyTradeFormData extends TradeAtLimitPriceFormDataType {
-  orderId: string | number | undefined;
-}
