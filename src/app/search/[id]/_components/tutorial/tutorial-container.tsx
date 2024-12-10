@@ -2,14 +2,22 @@
 
 import { useEffect, useState } from "react";
 
-import TutorialModal from "./tutorial-modal";
+import ChartTutorialModal from "./tutorial-modal";
 
-export default function TutorialContainer() {
+export default function ChartTutorialContainer() {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    setIsOpen(true);
+    const hasCompletedTutorial = localStorage.getItem(
+      "chart-tutorial-completed",
+    );
+    if (!hasCompletedTutorial) {
+      setIsOpen(true);
+      localStorage.setItem("chart-tutorial-completed", "true");
+    }
   }, []);
 
-  return <TutorialModal isOpen={isOpen} onClose={() => setIsOpen(false)} />;
+  return (
+    <ChartTutorialModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+  );
 }
