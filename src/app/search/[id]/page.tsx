@@ -3,6 +3,7 @@ import Link from "next/link";
 import CandlestickChartContainer from "./_components/candle-chart-container";
 import StockHeader from "./_components/stock-header";
 import TransactionForm from "./_components/transaction-form";
+import TutorialContainer from "./_components/tutorial/tutorial-container";
 import { ChartResponse, StockInfo, VolumeResponse } from "./types";
 
 async function getInitialData(id: string) {
@@ -59,6 +60,7 @@ export default async function StockPage({
     const stockName = decodeURIComponent(params.id);
     return (
       <div className="p-30">
+        <TutorialContainer />
         <StockHeader
           stockName={params.id}
           initialStockInfo={initialData.stockData}

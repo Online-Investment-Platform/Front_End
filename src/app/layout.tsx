@@ -4,6 +4,7 @@ import { dehydrate, QueryClient } from "@tanstack/react-query";
 import type { Metadata } from "next";
 
 import Toast from "@/components/common/toast/index";
+import TutorialContainer from "@/components/common/tutorial/_components/tutorial-container";
 import MainContent from "@/components/main-content";
 import NavBar from "@/components/nav-bar";
 import AuthInitializer from "@/provider/AuthInitializer";
@@ -52,6 +53,7 @@ export default async function RootLayout({
           <AuthRefreshHandler />
           <NavBar />
           <Toast />
+          <TutorialContainer />
           <MainContent>{children}</MainContent>
         </Providers>
       </body>
