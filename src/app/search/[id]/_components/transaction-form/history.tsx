@@ -17,7 +17,7 @@ export default function History() {
     isLoading,
     isPending,
   } = useQuery({
-    queryKey: ["tradeHistory"],
+    queryKey: ["tradeHistory", `${stockName}`],
     queryFn: () => getTradeHistory(token, stockName),
     enabled: !!isAuthenticated && !!token,
   });
