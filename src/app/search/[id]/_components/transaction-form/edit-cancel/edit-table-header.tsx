@@ -10,15 +10,17 @@ const titles = [
 
 export default function EditTableHeader() {
   return (
-    <tr className="h-48 border-y border-solid text-[#A1A1A1]">
-      {titles.map((title, index) => (
-        <th
-          // eslint-disable-next-line react/no-array-index-key
-          key={`title-${index}`}
-        >
-          {title}
-        </th>
-      ))}
-    </tr>
+    <thead>
+      <tr className="h-48 border-y border-solid text-[#A1A1A1]">
+        {titles.map((title, index) => (
+          <th
+            // eslint-disable-next-line react/no-array-index-key
+            key={`title-${index}`}
+          >
+            {title}
+          </th>
+        ))}
+      </tr>
+    </thead>
   );
 }

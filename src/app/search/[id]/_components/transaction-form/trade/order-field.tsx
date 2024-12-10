@@ -63,7 +63,7 @@ export default function OrderField({
 
     const numValue = Number(cleanValue);
 
-    if (Number.isNaN(numValue) || !Number.isFinite(numValue) || numValue <= 0) {
+    if (Number.isNaN(numValue) || !Number.isFinite(numValue)) {
       return;
     }
 

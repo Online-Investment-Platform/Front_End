@@ -13,7 +13,7 @@ export const BuyFormSchema = z.object({
       required_error: "호가를 입력해주세요",
       invalid_type_error: "호가는 숫자여야 합니다",
     })
-    .min(0, "호가는 0보다 커야 합니다"),
+    .gt(0, "호가는 0보다 커야 합니다"),
 });
 
 export type BuyFormData = z.infer<typeof BuyFormSchema>;

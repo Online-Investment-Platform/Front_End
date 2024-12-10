@@ -48,7 +48,7 @@ export default function TransactionForm({
             stockInfo,
           }}
         >
-          <Tabs defaultValue="buy">
+          <Tabs defaultValue="buy" areaLabel="거래옵션">
             <TabsList>
               <TabsTrigger value="buy" buttonColor="red">
                 매수
