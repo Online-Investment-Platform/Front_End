@@ -1,12 +1,13 @@
 "use client";
 
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 
 import BaseModal from "@/components/common/modal";
-import TutorialContent from "@/components/common/tutorial/_components/tutorial-contents";
 
-import TUTORIAL_STEPS from "./constant";
+import TUTORIAL_STEPS from "../constant";
+import TutorialContent from "./tutorial-contents";
 
 interface TutorialModalProps {
   isOpen: boolean;
@@ -15,18 +16,39 @@ interface TutorialModalProps {
 
 export default function TutorialModal({ isOpen, onClose }: TutorialModalProps) {
   const [currentStep, setCurrentStep] = useState(0);
+  const router = useRouter();
+
+  // 스텝에 따른 경로 반환
+  const getPathForStep = (step: number) => {
+    switch (step) {
+      case 0:
+        return "/";
+      case 1:
+        return "/search";
+      case 2:
+        return "/my-account";
+      case 3:
+        return "/portfolio";
+      default:
+        return "/";
+    }
+  };
 
   const handleNext = useCallback(() => {
     setCurrentStep((prev) => Math.min(prev + 1, TUTORIAL_STEPS.length - 1));
-  }, []);
+    // 페이지 이동
+    router.push(getPathForStep(currentStep + 1));
+  }, [currentStep, router]);
 
   const handlePrev = useCallback(() => {
     setCurrentStep((prev) => Math.max(prev - 1, 0));
-  }, []);
+    // 페이지 이동
+    router.push(getPathForStep(currentStep - 1));
+  }, [currentStep, router]);
 
   const handleComplete = useCallback(() => {
     if (typeof window !== "undefined") {
-      localStorage.setItem("stock-tutorial-completed", "true");
+      localStorage.setItem("nav-tutorial-completed", "true");
     }
     onClose();
   }, [onClose]);
@@ -35,11 +57,11 @@ export default function TutorialModal({ isOpen, onClose }: TutorialModalProps) {
     <BaseModal isOpen={isOpen} onClose={onClose}>
       <div className="shadow-xl rounded-lg bg-white px-26 py-20">
         <div className="mb-15 flex items-center justify-between">
-          <h2 className="text-24-600 text-gray-900">주식 거래 시작하기</h2>
+          <h2 className="text-24-600 text-gray-900">GrowFoilo 둘러보기</h2>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-full p-1 hover:bg-gray-100"
+            className="rounded-full p-3 hover:bg-gray-100"
           >
             <X className="size-25 text-gray-500" />
           </button>

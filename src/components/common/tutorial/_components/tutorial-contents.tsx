@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { TutorialStep } from "./types";
+import { TutorialStep } from "../types";
 
 interface TutorialContentProps {
   step: TutorialStep;
