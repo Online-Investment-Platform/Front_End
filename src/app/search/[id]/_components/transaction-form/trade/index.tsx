@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form";
 import {
   buyAtLimitPrice,
   buyAtMarketPrice,
-  OrderHistory,
   sellAtLimitPrice,
   sellAtMarketPrice,
 } from "@/api/transaction";
@@ -16,13 +15,16 @@ import { useTabsContext } from "@/components/common/tabs";
 import { useStockInfoContext } from "@/context/stock-info-context";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/store/use-toast-store";
+import {
+  LimitPriceOrderHistory,
+  ModifyTradeFormData,
+} from "@/types/transaction";
 import { calculateTotalOrderAmount } from "@/utils/price";
 import {
   BuyFormData,
   BuyFormSchema,
 } from "@/validation/schema/transaction-form";
 
-import { ModifyTradeFormData } from "../../../types";
 import TransactionTable from "../transaction-table";
 import BuyFormButtons from "./buy-form-buttons";
 import BuyableQuantity from "./buyable-quantity";
@@ -33,7 +35,7 @@ import TotalAmount from "./total-amount";
 
 interface TradeProps {
   type: "buy" | "sell" | "edit";
-  defaultData?: OrderHistory;
+  defaultData?: LimitPriceOrderHistory;
   handleMutate?: (data: ModifyTradeFormData) => void;
 }
 

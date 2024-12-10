@@ -31,9 +31,11 @@ const useTabsContext = () => {
 function Tabs({
   children,
   defaultValue,
+  areaLabel,
 }: {
   children: ReactNode;
   defaultValue: string;
+  areaLabel?: string;
 }) {
   const [activeTab, setActiveTab] = useState(defaultValue);
 
@@ -43,7 +45,9 @@ function Tabs({
   );
 
   return (
-    <TabsContext.Provider value={contextValue}>{children}</TabsContext.Provider>
+    <TabsContext.Provider value={contextValue} area-label={areaLabel}>
+      {children}
+    </TabsContext.Provider>
   );
 }
 
