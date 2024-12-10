@@ -29,9 +29,10 @@ export default function BuyFormButtons({
         초기화
       </Button>
       <Button
-        variant="red"
+        variant="custom"
         className={cn(
           "ml-7 w-160",
+          orderType === "buy" && "bg-[#F12E35] hover:bg-[#F12E35]/95",
           orderType === "sell" && "bg-[#4882FA] hover:bg-[#4882FA]/95",
           orderType === "edit" && "bg-[#1DA65A] hover:bg-[#1DA65A]/95",
         )}

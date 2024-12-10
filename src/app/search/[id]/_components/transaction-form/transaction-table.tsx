@@ -15,6 +15,7 @@ interface TransactionTableProps {
   onClickGoBack?: () => void;
   onClickConfirm?: () => void;
 }
+
 export default function TransactionTable({
   color = "red",
   isSubmit = true,
@@ -99,8 +100,9 @@ export default function TransactionTable({
             뒤로가기
           </Button>
           <Button
-            variant="red"
+            variant="custom"
             className={cn("ml-20 w-140", {
+              "bg-[#F12E35] hover:bg-[#F12E35]/95": color === "red",
               "bg-[#4882FA] hover:bg-[#4882FA]/95": color === "blue",
               "bg-[#1DA65A] hover:bg-[#1DA65A]/95": color === "green",
             })}
