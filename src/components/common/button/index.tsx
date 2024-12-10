@@ -3,7 +3,7 @@ import { ComponentProps, ReactNode } from "react";
 import cn from "@/utils/cn";
 
 interface ButtonProps extends ComponentProps<"button"> {
-  variant?: "primary" | "secondary" | "outline" | "outline-gray" | "red";
+  variant?: "primary" | "secondary" | "outline" | "outline-gray" | "custom";
   isDisabled?: boolean;
   children: ReactNode;
   className?: string;
@@ -31,8 +31,8 @@ export default function Button({
             variant === "outline" && !isDisabled,
           "bg-white text-black border border-[#B6B6B6] hover:bg-[#B6B6B6]/10 !rounded-4 px-24 py-9":
             variant === "outline-gray" && !isDisabled,
-          "bg-[#F12E35] hover:bg-[#F12E35]/95 text-white !rounded-4 px-24 py-9":
-            variant === "red" && !isDisabled,
+          "text-white !rounded-4 px-24 py-9":
+            variant === "custom" && !isDisabled,
           "opacity-50 cursor-not-allowed bg-neutral-300": isDisabled,
         },
         className,

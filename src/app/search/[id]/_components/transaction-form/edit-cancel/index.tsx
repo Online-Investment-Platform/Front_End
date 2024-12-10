@@ -139,43 +139,49 @@ export default function EditCancel() {
       <div className="h-400 w-full overflow-scroll">
         <table className="w-full text-center text-14-500">
           <EditTableHeader />
-          {limitOrderData && limitOrderData.length > 0 ? (
-            [...limitOrderData]
-              .sort((a, b) => b.OrderId - a.OrderId)
-              .map((data) => (
-                <EditTableBody
-                  key={data.OrderId}
-                  data={data}
-                  isChecked={selectedOrders.includes(data.OrderId.toString())}
-                  toggleSelection={toggleOrderSelection}
-                />
-              ))
-          ) : (
-            <tr>
-              <td colSpan={5} className="py-20 text-center text-16-500">
-                <Image
-                  src="/images/green-wallet.png"
-                  width={150}
-                  height={150}
-                  className="mx-auto my-30"
-                  alt="지갑 그림"
-                />
-                지정가 거래 내역이 없습니다!
-              </td>
-            </tr>
-          )}
+          <tbody>
+            {limitOrderData && limitOrderData.length > 0 ? (
+              [...limitOrderData]
+                .sort((a, b) => b.OrderId - a.OrderId)
+                .map((data) => (
+                  <EditTableBody
+                    key={data.OrderId}
+                    data={data}
+                    isChecked={selectedOrders.includes(data.OrderId.toString())}
+                    toggleSelection={toggleOrderSelection}
+                  />
+                ))
+            ) : (
+              <tr>
+                <td colSpan={5} className="py-20 text-center text-16-500">
+                  <Image
+                    src="/images/green-wallet.png"
+                    width={150}
+                    height={150}
+                    className="mx-auto my-30"
+                    alt="지갑 그림"
+                  />
+                  지정가 거래 내역이 없습니다!
+                </td>
+              </tr>
+            )}
+          </tbody>
         </table>
       </div>
       {limitOrderData && limitOrderData.length > 0 && (
         <div className="mt-20 text-center">
           <Button
-            variant="red"
+            variant="custom"
             className="mr-10 w-120 bg-[#0FED78] text-black hover:bg-[#0FED78]/95"
             onClick={handleEdit}
           >
             정정
           </Button>
-          <Button variant="red" className="w-120" onClick={handleCancel}>
+          <Button
+            variant="custom"
+            className="w-120 bg-[#F12E35] hover:bg-[#F12E35]/95"
+            onClick={handleCancel}
+          >
             취소
           </Button>
         </div>

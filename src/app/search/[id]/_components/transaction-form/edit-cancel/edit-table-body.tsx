@@ -1,10 +1,10 @@
-import { OrderHistory } from "@/api/transaction";
 import CheckButton from "@/components/common/check-button";
+import { LimitPriceOrderHistory } from "@/types/transaction";
 import cn from "@/utils/cn";
 import { getKoreanPrice } from "@/utils/price";
 
 interface EditTableBodyProps {
-  data: OrderHistory;
+  data: LimitPriceOrderHistory;
   isChecked: boolean;
   toggleSelection: (orderId: string) => void;
 }
