@@ -35,7 +35,7 @@ export default function EditTable({
     <div className="h-400 w-full overflow-scroll">
       <table className="w-full text-center text-14-500">
         <thead>
-          <tr className="h-48 border-y border-solid text-[#A1A1A1]">
+          <tr className="h-48 border-y border-solid text-gray-300">
             {titles.map((title, index) => (
               <th
                 // eslint-disable-next-line react/no-array-index-key

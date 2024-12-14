@@ -90,9 +90,9 @@ function TabsTrigger({
 
   const isActive = activeTab === value;
   const backgroundColors: { [key in "green" | "red" | "blue"]: string } = {
-    green: "bg-[#E9FFF0]",
-    red: "bg-[#FDEBEB]",
-    blue: "bg-[#EDF1FC]",
+    green: "bg-green-100",
+    red: "bg-red-100",
+    blue: "bg-blue-100",
   };
 
   return (

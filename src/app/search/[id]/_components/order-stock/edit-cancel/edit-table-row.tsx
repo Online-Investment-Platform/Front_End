@@ -36,7 +36,7 @@ export default function EditTableRow({
           >
             {data.type} 정정
           </span>
-          <span className="text-[#9B9B9B]">{data.OrderId}</span>
+          <span className="text-gray-500">{data.OrderId}</span>
         </div>
         {data.stockName}
       </td>

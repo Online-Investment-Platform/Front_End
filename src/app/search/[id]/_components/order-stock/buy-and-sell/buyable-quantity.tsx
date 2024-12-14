@@ -31,8 +31,8 @@ export default function BuyableQuantity({
       <span className="w-110">
         {type === TradeType.Buy ? "매수" : "매도"} 가능 주식
       </span>
-      <div className="flex-1 cursor-not-allowed border-b border-solid border-[#505050] pb-2 text-right">
-        <span className="pr-5 text-[#B7B7B7]">
+      <div className="flex-1 cursor-not-allowed border-b border-solid border-gray-600 pb-2 text-right">
+        <span className="pr-5 text-gray-200">
           {type === TradeType.Buy
             ? getKoreanPrice(calculateBuyableQuantity(deposit, bidding))
             : stockMap.findStockCount(stockName)}
