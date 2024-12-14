@@ -30,3 +30,14 @@ export interface StockInfo {
   highStockPrice: string;
   lowStockPrice: string;
 }
+
+export enum TradeType {
+  Buy = "buy",
+  Sell = "sell",
+  Edit = "edit",
+}
+
+export enum PriceType {
+  Market = "현재가",
+  Limit = "지정가",
+}

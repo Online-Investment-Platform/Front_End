@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 import CandlestickChartContainer from "./_components/candle-chart-container";
+import OrderStock from "./_components/order-stock";
 import StockHeader from "./_components/stock-header";
-import TransactionForm from "./_components/transaction-form";
 import TutorialContainer from "./_components/tutorial/tutorial-container";
 import { ChartResponse, StockInfo, VolumeResponse } from "./types";
 
@@ -72,10 +72,7 @@ export default async function StockPage({
             initialVolumeData={initialData.volumeData}
           />
 
-          <TransactionForm
-            stockName={stockName}
-            stockInfo={initialData.stockData}
-          />
+          <OrderStock stockName={stockName} stockInfo={initialData.stockData} />
         </div>
       </div>
     );
