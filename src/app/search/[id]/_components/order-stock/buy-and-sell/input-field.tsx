@@ -10,9 +10,9 @@ import { useStockInfoContext } from "@/context/stock-info-context";
 import { getKoreanPrice } from "@/utils/price";
 import { BuyFormData } from "@/validation/schema/transaction-form";
 
-import CountDropdown from "./count-dropdown";
+import NumberDropdown from "./number-dropdown";
 
-interface OrderFieldProps {
+interface InputFieldProps {
   title: string;
   type: "count" | "bidding";
   placeholder: string;
@@ -24,7 +24,7 @@ interface OrderFieldProps {
   quantity?: number;
 }
 
-export default function OrderField({
+export default function InputField({
   title,
   type,
   placeholder,
@@ -34,7 +34,7 @@ export default function OrderField({
   control,
   errors,
   quantity,
-}: OrderFieldProps) {
+}: InputFieldProps) {
   const { stockInfo } = useStockInfoContext();
   const numberRegex = /^[0-9,]*$/;
 
@@ -72,7 +72,7 @@ export default function OrderField({
 
   return (
     <div className="relative flex justify-between gap-6">
-      <CountDropdown
+      <NumberDropdown
         title={title}
         number={type === "count" && quantity}
         state={state ?? ""}

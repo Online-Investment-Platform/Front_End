@@ -4,7 +4,7 @@ import { Dispatch, memo, SetStateAction } from "react";
 import Dropdown from "@/components/common/dropdown";
 import { getKoreanPrice } from "@/utils/price";
 
-interface CountDropdownProps<T> {
+interface NumberDropdownProps<T> {
   state: T;
   setState: Dispatch<SetStateAction<T>>;
   title: string;
@@ -12,13 +12,13 @@ interface CountDropdownProps<T> {
   stockPrice?: string | boolean;
 }
 
-function CountDropdown<T extends string | number>({
+function NumberDropdown<T extends string | number>({
   state,
   setState,
   number,
   title,
   stockPrice,
-}: CountDropdownProps<T>) {
+}: NumberDropdownProps<T>) {
   return (
     <Dropdown
       className="w-120"
@@ -59,4 +59,4 @@ function CountDropdown<T extends string | number>({
   );
 }
 
-export default memo(CountDropdown);
+export default memo(NumberDropdown);

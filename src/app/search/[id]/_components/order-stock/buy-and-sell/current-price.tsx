@@ -11,12 +11,12 @@ export default function CurrentPrice() {
   return (
     <div>
       {Array.from({ length: 4 }).map((_, index) => (
-        <div key={index} className="w-127 bg-[#EDF1FC] py-11 text-center">
+        <div key={index} className="w-127 bg-blue-100 py-11 text-center">
           {getKoreanPrice(stockInfo.stockPrice)}
         </div>
       ))}
       {Array.from({ length: 4 }).map((_, index) => (
-        <div key={index} className="w-127 bg-[#FDEBEB] py-11 text-center">
+        <div key={index} className="w-127 bg-red-100 py-11 text-center">
           {getKoreanPrice(stockInfo.stockPrice)}
         </div>
       ))}
