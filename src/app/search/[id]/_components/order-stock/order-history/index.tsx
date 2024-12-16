@@ -5,10 +5,10 @@ import { getTradeHistory } from "@/api/transaction";
 import { useStockInfoContext } from "@/context/stock-info-context";
 import { useAuth } from "@/hooks/use-auth";
 
-import LoadingSpinner from "../loading-spiner";
-import TransactionTable from "./transaction-table";
+import LoadingSpinner from "../../loading-spiner";
+import TradeTable from "../trade-table";
 
-export default function History() {
+export default function OrderHistory() {
   const { token, isAuthenticated } = useAuth();
   const { stockName } = useStockInfoContext();
 
@@ -32,7 +32,7 @@ export default function History() {
         [...tradeHistoryData]
           .sort((a, b) => b.id - a.id)
           .map((history) => (
-            <TransactionTable
+            <TradeTable
               key={history.id}
               color={history.buyOrder === "매수" ? "red" : "blue"}
               isSubmit={false}

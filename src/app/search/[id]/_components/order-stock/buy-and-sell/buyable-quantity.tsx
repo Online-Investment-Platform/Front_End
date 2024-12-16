@@ -6,8 +6,10 @@ import { useAuth } from "@/hooks/use-auth";
 import MyStockMap from "@/utils/my-stock-count";
 import { calculateBuyableQuantity, getKoreanPrice } from "@/utils/price";
 
+import { TradeType } from "../../../types";
+
 interface BuyableQuantityProps {
-  type: "buy" | "sell" | "edit";
+  type: TradeType;
   bidding: number;
 }
 
@@ -27,11 +29,11 @@ export default function BuyableQuantity({
   return (
     <div className="relative flex justify-between gap-6">
       <span className="w-110">
-        {type === "buy" ? "매수" : "매도"} 가능 주식
+        {type === TradeType.Buy ? "매수" : "매도"} 가능 주식
       </span>
-      <div className="flex-1 cursor-not-allowed border-b border-solid border-[#505050] pb-2 text-right">
-        <span className="pr-5 text-[#B7B7B7]">
-          {type === "buy"
+      <div className="flex-1 cursor-not-allowed border-b border-solid border-gray-600 pb-2 text-right">
+        <span className="pr-5 text-gray-200">
+          {type === TradeType.Buy
             ? getKoreanPrice(calculateBuyableQuantity(deposit, bidding))
             : stockMap.findStockCount(stockName)}
         </span>

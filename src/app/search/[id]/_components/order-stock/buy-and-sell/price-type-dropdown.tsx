@@ -1,9 +1,11 @@
 import Dropdown from "@/components/common/dropdown";
 
+import { PriceType, TradeType } from "../../../types";
+
 interface PriceTypeDropdownProps {
-  orderType: "buy" | "sell" | "edit";
-  priceType: string;
-  setPriceType: (value: string) => void;
+  orderType: TradeType;
+  priceType: PriceType;
+  setPriceType: (newPriceType: PriceType) => void;
 }
 export default function PriceTypeDropdown({
   orderType,
@@ -12,14 +14,14 @@ export default function PriceTypeDropdown({
 }: PriceTypeDropdownProps) {
   return (
     <div className="flex gap-8">
-      {orderType === "edit" ? (
+      {orderType === TradeType.Edit ? (
         <span className="mb-4 grow rounded-2 border border-solid border-[#B6B6B6] p-13 text-left">
           지정가
         </span>
       ) : (
         <Dropdown
           selectedValue={priceType}
-          onSelect={(value) => setPriceType(value as string)}
+          onSelect={(value) => setPriceType(value as PriceType)}
           className="flex-1"
         >
           <Dropdown.Toggle>{priceType}</Dropdown.Toggle>

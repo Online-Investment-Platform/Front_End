@@ -9,7 +9,7 @@ interface EditTableBodyProps {
   toggleSelection: (orderId: string) => void;
 }
 
-export default function EditTableBody({
+export default function EditTableRow({
   data,
   isChecked,
   toggleSelection,
@@ -30,13 +30,13 @@ export default function EditTableBody({
           <span
             className={cn(
               "pr-3",
-              data.type === "매수" && "text-[#F20000]",
-              data.type === "매도" && "text-[#4882FA]",
+              data.type === "매수" && "text-red-500",
+              data.type === "매도" && "text-blue-500",
             )}
           >
             {data.type} 정정
           </span>
-          <span className="text-[#9B9B9B]">{data.OrderId}</span>
+          <span className="text-gray-500">{data.OrderId}</span>
         </div>
         {data.stockName}
       </td>
