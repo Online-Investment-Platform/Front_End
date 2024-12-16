@@ -4,6 +4,7 @@ import CandlestickChartContainer from "./_components/candle-chart-container";
 import OrderStock from "./_components/order-stock";
 import StockHeader from "./_components/stock-header";
 import TutorialContainer from "./_components/tutorial/tutorial-container";
+import DetailInfo from "./detail-info";
 import { ChartResponse, StockInfo, VolumeResponse } from "./types";
 
 async function getInitialData(id: string) {
@@ -74,6 +75,7 @@ export default async function StockPage({
 
           <OrderStock stockName={stockName} stockInfo={initialData.stockData} />
         </div>
+        <DetailInfo />
       </div>
     );
   } catch (error) {
