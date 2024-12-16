@@ -4,6 +4,16 @@ export interface StockIndexResponse {
   fluctuationRate: string;
 }
 
+export interface StockData {
+  kospi: StockIndexResponse | null;
+  kosdaq: StockIndexResponse | null;
+}
+
+export interface News {
+  title: string;
+  link: string;
+}
+
 export interface TradingVolume {
   stockName: string;
   rank: number;
@@ -13,7 +23,11 @@ export interface TradingVolume {
   volumeChangeRate: number;
 }
 
-export interface News {
-  title: string;
-  link: string;
+export interface Fluctuation {
+  rank: number;
+  stockName: string;
+  currentPrice: number;
+  prevChangePrice: number;
+  prevSign: string;
+  prevChangeRate: number;
 }
