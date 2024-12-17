@@ -1,13 +1,4 @@
-export interface StockIndexResponse {
-  indexName: string;
-  indexValue: string;
-  fluctuationRate: string;
-}
-
-interface StockData {
-  kospi: StockIndexResponse | null;
-  kosdaq: StockIndexResponse | null;
-}
+import { StockData } from "@/app/main/types";
 
 async function getInitialStockData(): Promise<StockData> {
   try {
