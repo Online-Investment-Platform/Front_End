@@ -1,10 +1,10 @@
 import Link from "next/link";
 
 import CandlestickChartContainer from "./_components/candle-chart-container";
+import DetailInfo from "./_components/detail-info";
 import OrderStock from "./_components/order-stock";
 import StockHeader from "./_components/stock-header";
 import TutorialContainer from "./_components/tutorial/tutorial-container";
-import DetailInfo from "./detail-info";
 import { ChartResponse, StockInfo, VolumeResponse } from "./types";
 
 async function getInitialData(id: string) {
