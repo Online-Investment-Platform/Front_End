@@ -1,5 +1,6 @@
 "use client";
 
+import Consensus from "./consensus";
 import FinancialStatements from "./financial-statements";
 import TargetPrice from "./target-price";
 
@@ -17,6 +18,7 @@ export default function CompanyOverview() {
       </ul>
 
       <FinancialStatements />
+      <Consensus />
       <TargetPrice />
       <div className="text-14-500 text-gray-100">
         전 세계 1200개 리서치 회사의 정보를 종합적으로 분석합니다. <br />
