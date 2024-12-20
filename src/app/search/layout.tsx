@@ -10,5 +10,5 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div className="lg:max-w-2000 flex h-screen flex-col">{children}</div>;
+  return <div className="lg:max-w-2000 flex flex-col">{children}</div>;
 }
