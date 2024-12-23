@@ -10,9 +10,5 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <div className="lg:max-w-2000 flex h-screen flex-col bg-[#F5F6F8]">
-      {children}
-    </div>
-  );
+  return <div className="lg:max-w-2000 bg-[#F5F6F8]">{children}</div>;
 }

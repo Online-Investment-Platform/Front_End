@@ -105,7 +105,7 @@ export default function NavMenu() {
   };
 
   return (
-    <menu className="fixed left-0 top-0 z-[999] flex h-screen w-82 flex-col items-center border-r bg-white py-20">
+    <menu className="fixed left-0 top-0 z-[999] flex h-full w-82 flex-col items-center border-r bg-white py-20">
       <LogoIcon />
       <div className="mt-30 flex flex-col items-center space-y-45">
         {NAV_ITEMS.map((item) => (

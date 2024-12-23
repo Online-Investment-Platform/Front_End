@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import CandlestickChartContainer from "./_components/candle-chart-container";
+import DetailInfo from "./_components/detail-info";
 import OrderStock from "./_components/order-stock";
 import StockHeader from "./_components/stock-header";
 import TutorialContainer from "./_components/tutorial/tutorial-container";
@@ -74,6 +75,7 @@ export default async function StockPage({
 
           <OrderStock stockName={stockName} stockInfo={initialData.stockData} />
         </div>
+        <DetailInfo />
       </div>
     );
   } catch (error) {
