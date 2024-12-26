@@ -1,21 +1,18 @@
 "use client";
 
-type FinancialRatio = {
-  stockAccountingYearMonth: string;
-  grossMarginRatio: number;
-  businessProfitRate: number;
-  netInterestRate: number;
-  roeValue: number;
-  earningsPerShare: number;
-  salesPerShare: number;
-  bookValuePerShare: number;
-  reserveRate: number;
-  liabilityRate: number;
-};
+import { useQuery } from "@tanstack/react-query";
+
+import getFinancialStatements from "@/api/company-details";
+import { useStockInfoContext } from "@/context/stock-info-context";
+import { FinancialRatio } from "@/types/company-details";
+
+import LoadingSpinner from "../../loading-spinner";
+
+type FinancialRatioKey = keyof FinancialRatio;
 
 type NumberKeys = {
-  [K in keyof FinancialRatio]: FinancialRatio[K] extends number ? K : never;
-}[keyof FinancialRatio];
+  [K in FinancialRatioKey]: FinancialRatio[K] extends number ? K : never;
+}[FinancialRatioKey];
 
 type FinancialMetric = {
   label: string;
@@ -24,15 +21,27 @@ type FinancialMetric = {
 };
 
 const FINANCIAL_METRICS: FinancialMetric[] = [
-  { label: "총마진율", key: "grossMarginRatio", isPercentage: true },
-  { label: "사업 수익률", key: "businessProfitRate", isPercentage: true },
-  { label: "순이자율", key: "netInterestRate", isPercentage: true },
-  { label: "ROE", key: "roeValue", isPercentage: true },
-  { label: "EPS(주당순이익)", key: "earningsPerShare" },
-  { label: "SPS(주당매출액)", key: "salesPerShare" },
-  { label: "BPS(주당순자산)", key: "bookValuePerShare" },
-  { label: "주식유보율", key: "reserveRate", isPercentage: true },
-  { label: "부채율", key: "liabilityRate", isPercentage: true },
+  {
+    label: "총마진율",
+    key: "grossMarginRatio" as NumberKeys,
+    isPercentage: true,
+  },
+  {
+    label: "사업 수익률",
+    key: "businessProfitRate" as NumberKeys,
+    isPercentage: true,
+  },
+  {
+    label: "순이자율",
+    key: "netInterestRate" as NumberKeys,
+    isPercentage: true,
+  },
+  { label: "ROE", key: "roeValue" as NumberKeys, isPercentage: true },
+  { label: "EPS(주당순이익)", key: "earningsPerShare" as NumberKeys },
+  { label: "SPS(주당매출액)", key: "salesPerShare" as NumberKeys },
+  { label: "BPS(주당순자산)", key: "bookValuePerShare" as NumberKeys },
+  { label: "주식유보율", key: "reserveRate" as NumberKeys, isPercentage: true },
+  { label: "부채율", key: "liabilityRate" as NumberKeys, isPercentage: true },
 ];
 
 const formatValue = (value: number | null, isPercentage?: boolean) => {
@@ -104,18 +113,29 @@ function NoDataMessage() {
   );
 }
 
-interface FinancialStatementsProps {
-  data?: FinancialRatio[];
-}
+export default function FinancialStatements() {
+  const { stockName } = useStockInfoContext();
 
-export default function FinancialStatements({
-  data,
-}: FinancialStatementsProps) {
-  if (!data || data.length === 0) {
+  const {
+    data: financialStatements,
+    isLoading,
+    isPending,
+  } = useQuery({
+    queryKey: ["financialStatements", `${stockName}`],
+    queryFn: () => getFinancialStatements(stockName),
+  });
+
+  if (!financialStatements || financialStatements.length === 0) {
     return <NoDataMessage />;
   }
 
-  const years = data.map((item) => item.stockAccountingYearMonth);
+  if (isLoading || isPending) {
+    return <LoadingSpinner />;
+  }
+
+  const years = financialStatements.map(
+    (item) => item.stockAccountingYearMonth,
+  );
 
   return (
     <table className="mb-20 w-full">
@@ -126,7 +146,7 @@ export default function FinancialStatements({
           <TableRow
             key={metric.key}
             label={metric.label}
-            values={data.map((item) =>
+            values={financialStatements.map((item) =>
               item[metric.key] !== undefined ? Number(item[metric.key]) : null,
             )}
             isPercentage={metric.isPercentage}

@@ -75,7 +75,7 @@ export default async function StockPage({
 
           <OrderStock stockName={stockName} stockInfo={initialData.stockData} />
         </div>
-        <DetailInfo />
+        <DetailInfo stockName={stockName} />
       </div>
     );
   } catch (error) {
