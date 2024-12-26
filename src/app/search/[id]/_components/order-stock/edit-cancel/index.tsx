@@ -9,7 +9,7 @@ import { useToast } from "@/store/use-toast-store";
 import useLimitOrderData from "../../../hooks/use-limit-order-data";
 import useOrderMutations from "../../../hooks/use-limit-order-mutations";
 import { TradeType } from "../../../types";
-import LoadingSpinner from "../../loading-spiner";
+import LoadingSpinner from "../../loading-spinner";
 import BuyAndSell from "../buy-and-sell";
 import TradeTable from "../trade-table";
 import EditTable from "./edit-table";
