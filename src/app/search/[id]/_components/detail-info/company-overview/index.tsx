@@ -1,10 +1,16 @@
 "use client";
 
+import { RelativeNews } from "@/types/company-details";
+import cleanText from "@/utils/cleanText";
+
 import Consensus from "./consensus";
 import FinancialStatements from "./financial-statements";
 import TargetPrice from "./target-price";
 
-export default function CompanyOverview() {
+interface CompanyOverviewProps {
+  newsData: RelativeNews[] | undefined;
+}
+export default function CompanyOverview({ newsData }: CompanyOverviewProps) {
   return (
     <div>
       <div className="mb-10 flex justify-between">
@@ -12,9 +18,15 @@ export default function CompanyOverview() {
         <span className="text-14-500 text-gray-100">[기준: 2024. 08. 16]</span>
       </div>
       <ul className="list-style mb-24 border-y-2 border-solid border-gray-100 py-14 text-14-500">
-        <li>한국 및 DX 부문 해외 9개</li>
-        <li>한국 및 DX 부문 해외 9개</li>
-        <li>한국 및 DX 부문 해외 9개</li>
+        {newsData
+          ?.map((news) => (
+            <li key={news.title}>
+              <a href={news.link} target="_blank">
+                {cleanText(news.title)}
+              </a>
+            </li>
+          ))
+          .slice(0, 3)}
       </ul>
 
       <FinancialStatements />

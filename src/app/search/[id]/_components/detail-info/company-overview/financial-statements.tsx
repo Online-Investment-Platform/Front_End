@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-import getFinancialStatements from "@/api/company-details";
+import { getFinancialStatements } from "@/api/company-details";
 import { useStockInfoContext } from "@/context/stock-info-context";
 import { FinancialRatio } from "@/types/company-details";
 

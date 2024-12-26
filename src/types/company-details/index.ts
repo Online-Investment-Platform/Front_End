@@ -10,3 +10,9 @@ export interface FinancialRatio {
   reserveRate: string;
   liabilityRate: string;
 }
+
+export interface RelativeNews {
+  title: string;
+  link: string;
+  pubDate: string;
+}
