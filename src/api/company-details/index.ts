@@ -1,4 +1,8 @@
-import { FinancialRatio, RelativeNews } from "@/types/company-details";
+import {
+  Consensus,
+  FinancialRatio,
+  RelativeNews,
+} from "@/types/company-details";
 
 import makeApiRequest from "../make-api-request";
 
@@ -18,4 +22,13 @@ export async function getRelativeNews(
   stockName: string,
 ): Promise<RelativeNews[]> {
   return makeApiRequest("GET", `/search/news?stockName=${stockName}`, {});
+}
+
+// 기업 컨센서스
+export async function getConsensus(stockName: string): Promise<Consensus> {
+  return makeApiRequest(
+    "GET",
+    `/search/investmentRecommendation?stockName=${stockName}`,
+    {},
+  );
 }

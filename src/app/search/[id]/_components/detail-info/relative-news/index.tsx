@@ -3,7 +3,7 @@
 import dayjs from "dayjs";
 
 import { RelativeNews as RelativeNewsType } from "@/types/company-details";
-import cleanText from "@/utils/cleanText";
+import cleanText from "@/utils/clean-text";
 
 interface RelativeNewsProps {
   newsData: RelativeNewsType[] | undefined;

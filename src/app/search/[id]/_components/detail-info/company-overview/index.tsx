@@ -1,7 +1,11 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+
+import { getConsensus } from "@/api/company-details";
+import { useStockInfoContext } from "@/context/stock-info-context";
 import { RelativeNews } from "@/types/company-details";
-import cleanText from "@/utils/cleanText";
+import cleanText from "@/utils/clean-text";
 
 import Consensus from "./consensus";
 import FinancialStatements from "./financial-statements";
@@ -10,7 +14,13 @@ import TargetPrice from "./target-price";
 interface CompanyOverviewProps {
   newsData: RelativeNews[] | undefined;
 }
+
 export default function CompanyOverview({ newsData }: CompanyOverviewProps) {
+  const { stockName } = useStockInfoContext();
+  const { data: investmentRecommendationData } = useQuery({
+    queryKey: ["investmentRecommendation", `${stockName}`],
+    queryFn: () => getConsensus(stockName),
+  });
   return (
     <div>
       <div className="mb-10 flex justify-between">
@@ -30,7 +40,7 @@ export default function CompanyOverview({ newsData }: CompanyOverviewProps) {
       </ul>
 
       <FinancialStatements />
-      <Consensus />
+      <Consensus investmentRecommendationData={investmentRecommendationData} />
       <TargetPrice />
       <div className="text-14-500 text-gray-100">
         전 세계 1200개 리서치 회사의 정보를 종합적으로 분석합니다. <br />

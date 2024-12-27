@@ -16,3 +16,9 @@ export interface RelativeNews {
   link: string;
   pubDate: string;
 }
+
+export interface Consensus {
+  avgTargetPrice: string;
+  avgStockPrice: string;
+  avgStockDifferencePrice: string;
+}

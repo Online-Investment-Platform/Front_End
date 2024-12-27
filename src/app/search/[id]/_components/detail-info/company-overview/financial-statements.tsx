@@ -138,7 +138,7 @@ export default function FinancialStatements() {
   );
 
   return (
-    <table className="mb-20 w-full">
+    <table className="mb-40 w-full">
       <caption className="mb-10 text-left text-16-500">재무비율</caption>
       <TableHeader years={years} />
       <tbody className="text-center">
