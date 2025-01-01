@@ -15,7 +15,7 @@ export default function PriceTypeDropdown({
   return (
     <div className="flex gap-8">
       {orderType === TradeType.Edit ? (
-        <span className="mb-4 grow rounded-2 border border-solid border-[#B6B6B6] p-13 text-left">
+        <span className="mb-4 grow rounded-2 border border-solid border-gray-100 p-13 text-left">
           지정가
         </span>
       ) : (
@@ -31,7 +31,7 @@ export default function PriceTypeDropdown({
           </Dropdown.Wrapper>
         </Dropdown>
       )}
-      <span className="mb-4 w-100 rounded-2 border border-solid border-[#B6B6B6] p-13">
+      <span className="mb-4 w-100 rounded-2 border border-solid border-gray-100 p-13">
         시장가
       </span>
     </div>

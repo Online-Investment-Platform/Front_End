@@ -20,7 +20,7 @@ export function AssetInfoSkeleton() {
 
 export function MyStockInfoSkeleton() {
   return (
-    <div className="relative h-308 w-300 rounded-10 bg-[#F5F5F5] p-21">
+    <div className="relative h-308 w-300 rounded-10 bg-blue-200 p-21">
       <div className="mb-10">
         <div className="h-7 w-20 animate-pulse rounded bg-gray-200" />
         <div className="mt-12 space-y-2">

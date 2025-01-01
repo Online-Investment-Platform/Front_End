@@ -40,7 +40,7 @@ const columns: CommonTableColumn<TradingVolume>[] = [
     header: "",
     width: "40px",
     render: (value, row) => (
-      <span className="text-16-700 text-[#1DA65A]">{row.rank}</span>
+      <span className="text-16-700 text-green-500">{row.rank}</span>
     ),
   },
   {

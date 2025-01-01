@@ -83,7 +83,7 @@ const NavItem = memo(
     isActive: boolean;
   }) => (
     <li className="relative flex w-82 justify-center">
-      {isActive && <div className="absolute left-4 h-full w-3 bg-[#26db7a]" />}
+      {isActive && <div className="absolute left-4 h-full w-3 bg-lime-200" />}
       <NavLink
         href={href}
         icon={icon}

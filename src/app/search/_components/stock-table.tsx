@@ -34,7 +34,7 @@ export default function StockTable({ initialData }: Props) {
       width: "60px",
       align: "center",
       render: (value) => (
-        <span className="text-15-400 font-medium text-[#757575]">{value}</span>
+        <span className="text-15-400 font-medium text-gray-400">{value}</span>
       ),
     },
     {
@@ -48,7 +48,7 @@ export default function StockTable({ initialData }: Props) {
               <span className="text-15-600 mr-2 hover:text-blue-600">
                 {row.stockName}
               </span>
-              <div className="inline-flex items-center rounded bg-[#E8F5E9] px-2 py-0.5">
+              <div className="inline-flex items-center rounded bg-green-200 px-2 py-0.5">
                 <span className="whitespace-nowrap text-14-600 text-black">
                   주식
                 </span>
@@ -95,7 +95,7 @@ export default function StockTable({ initialData }: Props) {
         <TableHeader
           columns={columns}
           className="h-12"
-          cellClassName="px-6 text-15-500 text-[#757575] font-normal"
+          cellClassName="px-6 text-15-500 text-gray-400 font-normal"
         />
         <TableBody
           columns={columns}
