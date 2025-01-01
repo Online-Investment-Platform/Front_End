@@ -95,7 +95,7 @@ export default function StockTable({ initialData }: Props) {
         <TableHeader
           columns={columns}
           className="h-12"
-          cellClassName="px-6 text-15-500 text-gray-400 font-normal"
+          cellClassName="px-6 text-15-500 text-gray-800 font-normal"
         />
         <TableBody
           columns={columns}
