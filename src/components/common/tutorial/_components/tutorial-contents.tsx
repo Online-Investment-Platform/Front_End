@@ -16,7 +16,7 @@ export default function TutorialContent({ step }: TutorialContentProps) {
       <div className="space-y-20">
         {step.content.map((item, idx) => (
           <div key={`${step.title}-content-${idx}`}>
-            <h4 className="text-16-600 text-gray-700 mb-10">{item.subtitle}</h4>
+            <h4 className="text-16-600 text-gray-800 mb-10">{item.subtitle}</h4>
             <p className="text-14-500 text-gray-600">{item.description}</p>
           </div>
         ))}

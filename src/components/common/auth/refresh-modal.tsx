@@ -57,7 +57,7 @@ const ModalContent = memo(
             onClick={handleLogout}
             className={clsx(
               "rounded-lg border border-gray-300 px-8 py-6",
-              "text-16-600 text-gray-700",
+              "text-16-600 text-gray-800",
               "transition",
               "hover:bg-gray-50",
               "active:bg-gray-100",
