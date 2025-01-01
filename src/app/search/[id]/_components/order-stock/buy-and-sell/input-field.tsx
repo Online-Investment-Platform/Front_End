@@ -77,7 +77,7 @@ export default function InputField({
         number={type === "count" && quantity}
         state={state ?? ""}
         setState={(value) => setState(type, value ? Number(value) : 0)}
-        stockPrice={type === "bidding" && stockInfo.stockPrice}
+        stockPrice={type === "bidding" ? stockInfo?.stockPrice : undefined}
       />
       <Controller
         name={type}

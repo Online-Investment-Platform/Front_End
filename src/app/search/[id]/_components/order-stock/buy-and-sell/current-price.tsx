@@ -8,6 +8,10 @@ import { getKoreanPrice } from "@/utils/price";
 export default function CurrentPrice() {
   const { stockInfo } = useStockInfoContext();
 
+  if (!stockInfo) {
+    return <div>주식 정보를 불러오고 있습니다.</div>;
+  }
+
   return (
     <div>
       {Array.from({ length: 4 }).map((_, index) => (

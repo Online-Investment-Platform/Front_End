@@ -81,7 +81,9 @@ export default function BuyAndSell({
     setPriceType(newPriceType);
     setValue(
       "bidding",
-      newPriceType === PriceType.Market ? Number(stockInfo.stockPrice) : 0,
+      newPriceType === PriceType.Market
+        ? Number(stockInfo?.stockPrice ?? 0)
+        : 0,
     );
   };
 
