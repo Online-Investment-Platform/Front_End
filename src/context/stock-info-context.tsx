@@ -8,7 +8,7 @@ import { StockInfo } from "@/app/search/[id]/types";
 
 interface StockInfoContextType {
   stockName: string;
-  stockInfo: StockInfo;
+  stockInfo: StockInfo | null;
   isLoading: boolean;
 }
 
@@ -20,7 +20,7 @@ interface StockInfoProviderProps {
   children: ReactNode;
   value: {
     stockName: string;
-    stockInfo: StockInfo;
+    stockInfo?: StockInfo;
   };
 }
 
@@ -38,7 +38,7 @@ export function StockInfoProvider({
   const contextValue = useMemo(
     () => ({
       stockName,
-      stockInfo: stockInfo ?? initialStockInfo,
+      stockInfo: stockInfo ?? initialStockInfo ?? null,
       isLoading,
     }),
     [stockName, stockInfo, initialStockInfo, isLoading],

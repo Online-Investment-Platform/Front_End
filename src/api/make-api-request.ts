@@ -2,20 +2,16 @@ export default async function makeApiRequest<T, R = string>(
   method: "GET" | "POST" | "PUT" | "DELETE",
   endpoint: string,
   options: {
-    token: string | null;
+    token?: string | null;
     data?: T;
     responseType?: "json" | "text";
   },
 ): Promise<R> {
   const { token, data, responseType = "json" } = options;
 
-  if (!token) {
-    throw new Error("로그인이 필요합니다.");
-  }
-
   const headers: HeadersInit = {
-    Authorization: `Bearer ${token}`,
     ...(data && { "Content-Type": "application/json" }),
+    ...(token && { Authorization: `Bearer ${token}` }),
   };
 
   const config: RequestInit = {

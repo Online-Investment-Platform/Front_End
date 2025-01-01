@@ -9,7 +9,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 
 import { ChartDTO, VolumeDTO } from "../types";
-import LoadingSpinner from "./loading-spiner";
+import LoadingSpinner from "./loading-spinner";
 import PriceTooltip from "./price-tooltip";
 
 interface Props {

@@ -5,7 +5,7 @@ import { getTradeHistory } from "@/api/transaction";
 import { useStockInfoContext } from "@/context/stock-info-context";
 import { useAuth } from "@/hooks/use-auth";
 
-import LoadingSpinner from "../../loading-spiner";
+import LoadingSpinner from "../../loading-spinner";
 import TradeTable from "../trade-table";
 
 export default function OrderHistory() {

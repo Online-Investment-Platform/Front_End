@@ -10,7 +10,7 @@ import { StockInfoProvider } from "@/context/stock-info-context";
 import { useAuth } from "@/hooks/use-auth";
 
 import { StockInfo, TradeType } from "../../types";
-import LoadingSpinner from "../loading-spiner";
+import LoadingSpinner from "../loading-spinner";
 import BuyAndSell from "./buy-and-sell";
 import EditCancel from "./edit-cancel";
 import OrderStockLayout from "./layout";
