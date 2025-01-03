@@ -200,11 +200,11 @@ function Carousel({
           <button
             type="button"
             onClick={nextSlide}
-            className="rounded-full p-1 hover:bg-gray-100 disabled:opacity-50"
+            className="rounded-full p-1 disabled:opacity-50"
             aria-label="Next slide"
             disabled={isTransitioning}
           >
-            <Arrowright className="stroke-[#B6B6B6]" />
+            <Arrowright className="stroke-gray-100" />
           </button>
         </div>
       </div>

@@ -10,5 +10,5 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div className="lg:max-w-2000 h-full bg-[#F5F6F8]">{children}</div>;
+  return <div className="lg:max-w-2000 h-full bg-blue-200">{children}</div>;
 }

@@ -23,13 +23,13 @@ export default function Button({
       className={cn(
         "inline-flex items-center justify-center rounded-md px-8 transition-colors focus:outline-none",
         {
-          "bg-[#0FED60] text-black hover:bg-[#0FED88]":
+          "bg-green-400 text-black hover:bg-green-600":
             variant === "primary" && !isDisabled,
           "bg-gray-200 text-gray-800 hover:bg-gray-300":
             variant === "secondary" && !isDisabled,
           "bg-white text-blue-600 border border-blue-600 hover:bg-blue-50":
             variant === "outline" && !isDisabled,
-          "bg-white text-black border border-[#B6B6B6] hover:bg-[#B6B6B6]/10 !rounded-4 px-24 py-9":
+          "bg-white text-black border border-gray-100 hover:bg-gray-100/10 !rounded-4 px-24 py-9":
             variant === "outline-gray" && !isDisabled,
           "text-white !rounded-4 px-24 py-9":
             variant === "custom" && !isDisabled,

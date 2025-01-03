@@ -97,7 +97,7 @@ function Toggle({
       className={cn(
         "mb-4 flex w-full items-center justify-between rounded-2 text-left",
         {
-          "border border-solid border-[#B6B6B6] p-13": border === true,
+          "border border-solid border-gray-100 p-13": border === true,
         },
         className,
       )}

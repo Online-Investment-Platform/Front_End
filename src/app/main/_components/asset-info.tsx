@@ -122,7 +122,7 @@ export default function AssetInfo() {
         <div className="mt-110">
           <Link
             href="/login"
-            className="block w-full rounded-8 bg-[#11E977] py-16 text-center text-16-700 text-white"
+            className="block w-full rounded-8 bg-lime-300 py-16 text-center text-16-700 text-white"
           >
             로그인 하기
           </Link>
@@ -160,7 +160,7 @@ export default function AssetInfo() {
       <div className="absolute top-4 ml-100">
         <Image src={coinsIcon} alt="자산 아이콘" width={210} height={210} />
       </div>
-      <div className="mt-30 flex h-105 w-264 flex-col items-center justify-center rounded-8 bg-[#11E977] p-16">
+      <div className="mt-30 flex h-105 w-264 flex-col items-center justify-center rounded-8 bg-lime-300 p-16">
         <p className="text-14-500 text-gray-600">
           {memberNickName}님의 총 자산
         </p>

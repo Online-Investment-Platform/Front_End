@@ -78,7 +78,7 @@ export default function TutorialModal({ isOpen, onClose }: TutorialModalProps) {
               <button
                 type="button"
                 onClick={handlePrev}
-                className="flex items-center gap-4 rounded-md border border-gray-300 px-8 py-4 text-16-600 text-gray-700 hover:bg-gray-50"
+                className="flex items-center gap-4 rounded-md border border-gray-300 px-8 py-4 text-16-600 text-gray-800 hover:bg-gray-50"
               >
                 <ChevronLeft className="size-16" />
                 이전

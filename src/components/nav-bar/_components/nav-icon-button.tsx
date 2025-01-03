@@ -20,7 +20,7 @@ function IconButtonComponent({
       type="button"
       className={clsx(
         "flex flex-col items-center justify-center p-2",
-        isActive ? "text-[#24d075]" : "text-gray-500 hover:text-zinc-900",
+        isActive ? "text-lime-100" : "text-gray-500 hover:text-zinc-900",
         className,
       )}
       {...props}

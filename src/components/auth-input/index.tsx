@@ -24,7 +24,7 @@ export const EmailInput = memo(({ control, error }: FormInputProps) => {
         <Input
           {...field}
           id="memberEmail"
-          className="h-66 w-full rounded-10 bg-[#F3F4F6]"
+          className="h-66 w-full rounded-10 bg-blue-400"
           placeholder="이메일"
           type="email"
           error={error}
@@ -51,7 +51,7 @@ export const PasswordInput = memo(({ control, error }: FormInputProps) => {
         <Input
           {...field}
           id="memberPassword"
-          className="mt-15 h-66 w-full rounded-10 bg-[#F3F4F6]"
+          className="mt-15 h-66 w-full rounded-10 bg-blue-400"
           placeholder="비밀번호"
           type="password"
           error={error}
@@ -78,7 +78,7 @@ export const NameInput = memo(({ control, error }: FormInputProps) => {
         <Input
           {...field}
           id="memberName"
-          className="mt-15 h-66 w-full rounded-10 bg-[#F3F4F6]"
+          className="mt-15 h-66 w-full rounded-10 bg-blue-400"
           placeholder="이름"
           type="text"
           error={error}
@@ -105,7 +105,7 @@ export const NicknameInput = memo(({ control, error }: FormInputProps) => {
         <Input
           {...field}
           id="memberNickName"
-          className="mt-15 h-66 w-full rounded-10 bg-[#F3F4F6]"
+          className="mt-15 h-66 w-full rounded-10 bg-blue-400"
           placeholder="닉네임"
           type="text"
           error={error}
@@ -143,7 +143,7 @@ export const ConfirmPasswordInput = memo(
           <Input
             {...field}
             id="confirmPassword"
-            className="mt-15 h-66 w-full rounded-10 bg-[#F3F4F6]"
+            className="mt-15 h-66 w-full rounded-10 bg-blue-400"
             placeholder="비밀번호 확인"
             type="password"
             error={passwordMatchError || error}
@@ -188,7 +188,7 @@ export const AnnualIncomeInput = memo(({ control, error }: FormInputProps) => {
                 onChange(wonValue);
               }}
               id="annualIncome"
-              className="h-66 w-full rounded-lg bg-[#F3F4F6] pr-24"
+              className="h-66 w-full rounded-lg bg-blue-400 pr-24"
               placeholder="연간 소득"
               type="text"
               error={error}

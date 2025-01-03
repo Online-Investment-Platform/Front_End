@@ -96,7 +96,7 @@ export default function MyStockInfo() {
 
   if (!isAuthenticated || stockCount === "0") {
     return (
-      <div className="relative h-308 w-300 rounded-10 bg-[#F5F5F5] p-21">
+      <div className="relative h-308 w-300 rounded-10 bg-red-300 p-21">
         <div className="mb-10">
           <h2 className="text-20-700">내 투자</h2>
           <p className="mt-12 text-14-600">
@@ -119,7 +119,7 @@ export default function MyStockInfo() {
   }
 
   return (
-    <div className="relative h-auto min-h-308 w-300 rounded-10 bg-[#F5F5F5] p-21">
+    <div className="relative h-auto min-h-308 w-300 rounded-10 bg-red-300 p-21">
       <div className="mb-10">
         <h2 className="text-20-700">내 투자</h2>
         <p className="mt-12 text-14-600">

@@ -100,7 +100,7 @@ function TabsTrigger({
       type="button"
       className={cn(
         "px-13 py-8 rounded-2",
-        isActive ? backgroundColors[buttonColor] : "text-[#B6B6B6]",
+        isActive ? backgroundColors[buttonColor] : "text-gray-100",
         rounded === "md" && "rounded-4",
         padding === "md" && "px-16 py-4",
         className,

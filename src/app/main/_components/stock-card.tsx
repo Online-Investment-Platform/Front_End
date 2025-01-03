@@ -26,8 +26,8 @@ function MarketIndexCard({ endpoint, data }: MarketIndexCardProps) {
       className={clsx(
         "relative h-116 w-308 shrink-0 flex-col items-start gap-12 rounded-10 p-20",
         {
-          "bg-[#EFF6FB]": isNegative,
-          "bg-[#FDEDED]": !isNegative,
+          "bg-blue-400": isNegative,
+          "bg-red-200": !isNegative,
         },
       )}
       aria-label={`${endpoint} market index`}
@@ -40,12 +40,12 @@ function MarketIndexCard({ endpoint, data }: MarketIndexCardProps) {
           </span>
           <div
             className={clsx("flex items-center", {
-              "text-[#1A00DF]": isNegative,
-              "text-[#F12E35]": !isNegative,
+              "text-blue-500": isNegative,
+              "text-red-500": !isNegative,
             })}
           >
             {isNegative ? (
-              <ArrowDownIcon className="fill-[#1A00DF]" />
+              <ArrowDownIcon className="fill-blue-900" />
             ) : (
               <ArrowUpIcon />
             )}
