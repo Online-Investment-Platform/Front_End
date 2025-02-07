@@ -1,6 +1,7 @@
 "use client";
 
 import clsx from "clsx";
+import Link from "next/link";
 import { useMemo } from "react";
 
 import { Stock } from "../types";
@@ -18,7 +19,6 @@ export default function StockTable({ stocks }: StockTableProps) {
     }));
   }, [stocks]);
 
-  // 수익률의 부호에 따라 평가손익의 부호를 보정
   const getEvaluationProfitWithSign = (profit: number, rate: number) => {
     const absProfit = Math.abs(profit);
     return rate < 0 ? -absProfit : absProfit;
@@ -31,51 +31,56 @@ export default function StockTable({ stocks }: StockTableProps) {
           <tr>
             <th
               rowSpan={2}
-              className="w-[16%] border-r border-gray-200 bg-green-50 p-8 text-left text-16-600"
+              className="w-[16%] border-r border-gray-200 bg-green-50 p-8 text-left text-16-500"
             >
               종목명
             </th>
             <th
               colSpan={2}
-              className="w-[42%] border-b border-r border-gray-200 bg-green-50 p-8 text-center text-16-600"
+              className="w-[42%] border-b border-r border-gray-200 bg-green-50 p-8 text-center text-16-500"
             >
               평가손익
             </th>
             <th
               rowSpan={2}
-              className="w-[16%] border-r border-gray-200 bg-green-50 p-8 text-center text-16-600"
+              className="w-[16%] border-r border-gray-200 bg-green-50 p-8 text-center text-16-500"
             >
               보유수량
             </th>
             <th
               colSpan={2}
-              className="w-[26%] border-b border-gray-200 bg-green-50 p-8 text-center text-16-600"
+              className="w-[26%] border-b border-gray-200 bg-green-50 p-8 text-center text-16-500"
             >
               평가금액
             </th>
           </tr>
           <tr className="bg-green-50">
-            <th className="border-r border-gray-200 p-8 text-center text-16-600">
+            <th className="border-r border-gray-200 p-8 text-center text-16-500">
               금액
             </th>
-            <th className="border-r border-gray-200 p-8 text-center text-16-600">
+            <th className="border-r border-gray-200 p-8 text-center text-16-500">
               수익률
             </th>
-            <th className="border-r border-gray-200 p-8 text-center text-16-600">
+            <th className="border-r border-gray-200 p-8 text-center text-16-500">
               매입가
             </th>
-            <th className="p-8 text-center text-16-600">현재가</th>
+            <th className="p-8 text-center text-16-500">현재가</th>
           </tr>
         </thead>
         <tbody>
           {stockRows.map((stock) => (
             <tr key={stock.id} className="border-b border-gray-200">
-              <td className="border-r border-gray-200 p-4 text-18-600">
-                {stock.stockName}
+              <td className="border-r border-gray-200 p-4">
+                <Link
+                  href={`/search/${encodeURIComponent(stock.stockName)}`}
+                  className="cursor-pointer text-16-500 hover:text-blue-600 hover:underline"
+                >
+                  {stock.stockName}
+                </Link>
               </td>
               <td
                 className={clsx(
-                  "border-r border-gray-200 p-8 text-right text-16-600",
+                  "border-r border-gray-200 p-8 text-right text-16-500",
                   {
                     "text-red-500": stock.ProfitRate > 0,
                     "text-blue-500": stock.ProfitRate < 0,
@@ -93,7 +98,7 @@ export default function StockTable({ stocks }: StockTableProps) {
               </td>
               <td
                 className={clsx(
-                  "border-r border-gray-200 p-8 text-right text-16-600",
+                  "border-r border-gray-200 p-8 text-right text-16-500",
                   {
                     "text-red-500": stock.ProfitRate > 0,
                     "text-blue-500": stock.ProfitRate < 0,
@@ -103,18 +108,18 @@ export default function StockTable({ stocks }: StockTableProps) {
                 {stock.ProfitRate > 0 && "+"}
                 {stock.ProfitRate?.toFixed(2) ?? 0} %
               </td>
-              <td className="border-r border-gray-200 p-8 text-center text-16-600">
+              <td className="border-r border-gray-200 p-8 text-center text-16-500">
                 {stock.stockCount ?? 0}
               </td>
-              <td className="border-r border-gray-200 p-8 text-right text-16-600">
+              <td className="border-r border-gray-200 p-8 text-right text-16-500">
                 {stock.purchaseAmount?.toLocaleString() ?? 0}
               </td>
               <td className="p-4">
-                <div className="mb-5 text-right text-16-600">
+                <div className="mb-5 text-right text-16-500">
                   {stock.currentPrice?.toLocaleString() ?? 0}
                 </div>
                 <div
-                  className={clsx("text-right text-14-600", {
+                  className={clsx("text-right text-14-500", {
                     "text-red-500": stock.prevChangeRate > 0,
                     "text-blue-500": stock.prevChangeRate < 0,
                   })}
