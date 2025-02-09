@@ -71,12 +71,18 @@ export default function BuyAndSell({
   const watchedBidding = watch("bidding");
 
   const handleReset = () => {
-    reset({
-      count: undefined,
-      bidding: undefined,
-    });
+    if (priceType === PriceType.Market) {
+      reset({
+        count: undefined,
+        bidding: watchedBidding,
+      });
+    } else if (priceType === PriceType.Limit) {
+      reset({
+        count: undefined,
+        bidding: undefined,
+      });
+    }
   };
-
   const handlePriceTypeChange = (newPriceType: PriceType) => {
     setPriceType(newPriceType);
     setValue(
