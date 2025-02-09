@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import dayjs from "dayjs";
 
 import { getFinancialStatements } from "@/api/company-details";
 import { useStockInfoContext } from "@/context/stock-info-context";
@@ -70,7 +71,7 @@ function TableHeader({ years }: { years: string[] }) {
             key={year}
             className="border-x border-solid border-gray-100 text-16-500 last:border-r-0"
           >
-            {year}
+            {dayjs(year, "YYYYMM").format("YYYY.MM")}
           </th>
         ))}
       </tr>
