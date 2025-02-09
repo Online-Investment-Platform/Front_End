@@ -21,19 +21,14 @@ function NumberDropdown<T extends string | number>({
 }: NumberDropdownProps<T>) {
   return (
     <Dropdown
-      className="w-120"
+      className="w-fit"
       selectedValue={state}
       onSelect={(value) => setState(value as T)}
     >
       <Dropdown.Toggle border={false} className={clsx(stockPrice && "mb-2")}>
         <span className="pr-10">{title}</span>
       </Dropdown.Toggle>
-      <Dropdown.Wrapper
-        className={clsx(
-          "h-300 overflow-scroll",
-          stockPrice && "w-120 break-keep",
-        )}
-      >
+      <Dropdown.Wrapper className="h-300 w-fit overflow-scroll">
         {typeof number === "number" &&
           number > 0 &&
           Array.from({ length: number }, (_, index) => (
