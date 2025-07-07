@@ -60,3 +60,4 @@ const useAuth = create<AuthStore>((set) => ({
 }));
 
 export default useAuth;
+export const getAuthState = () => useAuth.getState();
