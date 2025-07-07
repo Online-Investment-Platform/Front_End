@@ -3,15 +3,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { memo } from "react";
+import { memo, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
+import { loginAction } from "@/actions/auth";
 import { EmailInput, PasswordInput } from "@/components/auth-input/index";
 import Button from "@/components/common/button/index";
-import { useAuth } from "@/hooks/use-auth";
+import useAuth from "@/hooks/use-auth";
 import { useToast } from "@/store/use-toast-store";
 import { AuthFormData } from "@/types/auth";
-import { LoginResponse, loginSchema } from "@/validation/schema/auth/index";
+import { loginSchema } from "@/validation/schema/auth/index";
 
 const FormLinks = memo(() => (
   <div className="flex flex-col items-center justify-center gap-13">
@@ -28,8 +29,9 @@ FormLinks.displayName = "FormLinks";
 
 export default function LoginForm() {
   const router = useRouter();
-  const { setAuth } = useAuth();
+  const { setUserInfo, setAuthenticated } = useAuth();
   const { showToast } = useToast();
+  const [isPending, startTransition] = useTransition();
 
   const {
     control,
@@ -41,40 +43,26 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (data: AuthFormData) => {
-    showToast("로그인 시도 중...", "pending");
+    startTransition(async () => {
+      showToast("로그인 시도 중...", "pending");
 
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        },
-      );
+      const result = await loginAction({
+        memberEmail: data.memberEmail,
+        memberPassword: data.memberPassword,
+      });
 
-      if (response.ok) {
-        const responseData: LoginResponse = await response.json();
+      if (result.success && result.data) {
+        // 클라이언트 스토어에는 사용자 정보만 저장 (토큰 제외)
+        setUserInfo(result.data);
+        setAuthenticated(true);
 
-        await setAuth(responseData);
         showToast("로그인에 성공했습니다.", "success");
-
         router.push("/");
         router.refresh();
       } else {
-        const errorData = await response.json();
-        showToast(errorData.message || "로그인에 실패했습니다.", "error");
-        throw new Error(errorData.message || "로그인에 실패했습니다.");
+        showToast(result.error || "로그인에 실패했습니다.", "error");
       }
-    } catch (error) {
-      if (error instanceof Error) {
-        showToast(error.message, "error");
-      } else {
-        showToast("로그인 중 오류가 발생했습니다.", "error");
-      }
-    }
+    });
   };
 
   return (
@@ -83,10 +71,10 @@ export default function LoginForm() {
       <PasswordInput control={control} error={errors.memberPassword?.message} />
       <Button
         className="mb-20 mt-15 h-66 w-full rounded-10 text-20-700"
-        isDisabled={!isValid}
+        isDisabled={!isValid || isPending}
         type="submit"
       >
-        로그인
+        {isPending ? "로그인 중..." : "로그인"}
       </Button>
       <FormLinks />
     </form>

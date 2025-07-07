@@ -2,7 +2,7 @@
 
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 
-import { useAuth } from "@/hooks/use-auth";
+import useAuth from "@/hooks/use-auth";
 
 import { CHART_ITEMS, COLORS } from "../constants";
 import { ChartDataItem, PortfolioData } from "../types";
@@ -14,7 +14,7 @@ interface PortfolioRecommendProps {
 export default function PortfolioRecommend({
   portfolios,
 }: PortfolioRecommendProps) {
-  const { annualIncome } = useAuth();
+  const { userInfo } = useAuth(); // annualIncome 대신 userInfo 사용
 
   const getPortfolioTypeText = (type: PortfolioData["type"]) => {
     switch (type) {
@@ -61,7 +61,12 @@ export default function PortfolioRecommend({
 
       <div className="mb-30 rounded-lg p-8 text-center">
         <h2 className="mb-5 text-24-400">연봉</h2>
-        <p className="text-24-600">{annualIncome?.toLocaleString() ?? 0}원</p>
+        <p className="text-24-600">
+          {userInfo.annualIncome
+            ? parseInt(userInfo.annualIncome).toLocaleString() //eslint-disable-line
+            : 0}
+          원
+        </p>
       </div>
 
       <div className="grid grid-cols-1 gap-10 md:grid-cols-3">

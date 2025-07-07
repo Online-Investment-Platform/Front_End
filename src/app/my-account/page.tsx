@@ -1,16 +1,11 @@
-import { getCookie } from "@/utils/next-cookies";
+import { makeAuthenticatedRequest, requireAuth } from "@/lib/auth-server";
 
 import StockSummary from "./_components/stock-summary";
 import StockTable from "./_components/stock-table";
 
-async function getStocks(token: string) {
-  const response = await fetch(
+async function getStocks() {
+  const response = await makeAuthenticatedRequest(
     `${process.env.NEXT_PUBLIC_API_URL}/account/stocks`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
   );
 
   if (!response.ok) {
@@ -20,14 +15,9 @@ async function getStocks(token: string) {
   return response.json();
 }
 
-async function getTotalStocks(token: string) {
-  const response = await fetch(
+async function getTotalStocks() {
+  const response = await makeAuthenticatedRequest(
     `${process.env.NEXT_PUBLIC_API_URL}/account/all-stocks`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
   );
 
   if (!response.ok) {
@@ -38,16 +28,13 @@ async function getTotalStocks(token: string) {
 }
 
 export default async function StockPortfolioPage() {
+  // 인증 필수 - 인증되지 않으면 자동으로 /login으로 리다이렉트
+  await requireAuth();
+
   try {
-    const token = await getCookie("token");
-
-    if (!token) {
-      throw new Error("토큰이 없습니다");
-    }
-
     const [stocks, totalStocks] = await Promise.all([
-      getStocks(token),
-      getTotalStocks(token),
+      getStocks(),
+      getTotalStocks(),
     ]);
 
     return (
@@ -73,7 +60,6 @@ export default async function StockPortfolioPage() {
       rank: 0,
     };
 
-    // 에러 발생 시에도 UI는 표시하되, 빈 데이터로 표시
     return (
       <div className="p-30">
         <h1 className="mb-30 ml-20 text-24-700">내 계좌</h1>

@@ -1,19 +1,13 @@
-import { redirect } from "next/navigation";
-
 import fetchPortfolios from "@/api/portfolio/index";
-import { getCookie } from "@/utils/next-cookies";
+import { requireAuth } from "@/lib/auth-server";
 
 import PortfolioRecommend from "./_components/portfoilo-card";
 
 export default async function PortfolioPage() {
-  const token = await getCookie("token");
-
-  if (!token) {
-    redirect("/login");
-  }
+  await requireAuth(); // 간단한 인증 확인
 
   try {
-    const portfolios = await fetchPortfolios(token);
+    const portfolios = await fetchPortfolios(); // 토큰 제거
     return <PortfolioRecommend portfolios={portfolios} />;
   } catch (error) {
     throw new Error(

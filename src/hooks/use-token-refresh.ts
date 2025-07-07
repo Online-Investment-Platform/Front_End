@@ -1,10 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 
-import { useAuth } from "@/hooks/use-auth";
-import { setCookie } from "@/utils/next-cookies";
+import { extendSessionAction, logoutAction } from "@/actions/auth"; // 서버 액션만 사용
+import useAuth from "@/hooks/use-auth";
 
 const MAX_REFRESH_COUNT = 4;
 const SESSION_DURATION = 30 * 60 * 1000; // 30분
@@ -19,31 +18,24 @@ interface UseTokenRefreshReturn {
 }
 
 export default function useTokenRefresh(): UseTokenRefreshReturn {
-  const {
-    token,
-    memberId,
-    memberName,
-    memberNickName,
-    annualIncome,
-    deposit,
-    clearAuth,
-  } = useAuth();
-
-  const router = useRouter();
+  const { isAuthenticated, clearAuth } = useAuth();
   const refreshCountRef = useRef(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
   const sessionTimerRef = useRef<NodeJS.Timeout>();
   const responseTimerRef = useRef<NodeJS.Timeout>();
+  const [isPending, startTransition] = useTransition();
 
   const handleLogout = useCallback(async () => {
     if (responseTimerRef.current) clearTimeout(responseTimerRef.current);
     if (sessionTimerRef.current) clearTimeout(sessionTimerRef.current);
     setIsModalOpen(false);
-    await clearAuth();
-    router.push("/login");
-    router.refresh();
-  }, [clearAuth, router]);
+
+    clearAuth(); // 클라이언트 상태 먼저 정리
+    startTransition(async () => {
+      await logoutAction(); // 서버 액션으로 쿠키 정리 및 리다이렉트
+    });
+  }, [clearAuth]);
 
   const startResponseTimer = useCallback(() => {
     if (responseTimerRef.current) clearTimeout(responseTimerRef.current);
@@ -75,40 +67,34 @@ export default function useTokenRefresh(): UseTokenRefreshReturn {
       return;
     }
 
-    // Refresh all auth information
-    if (token) {
-      await setCookie("token", token);
-      if (memberId) await setCookie("memberId", memberId.toString());
-      if (memberName) await setCookie("memberName", memberName);
-      if (memberNickName) await setCookie("memberNickName", memberNickName);
-      if (annualIncome)
-        await setCookie("annualIncome", annualIncome.toString());
-      if (deposit) await setCookie("deposit", deposit.toString());
-    }
+    // ✅ API Route 없이 서버 액션 직접 사용
+    startTransition(async () => {
+      try {
+        const result = await extendSessionAction(); // 서버 액션 직접 호출
 
-    setIsWaitingForResponse(false);
-    if (responseTimerRef.current) clearTimeout(responseTimerRef.current);
+        if (result.success) {
+          setIsWaitingForResponse(false);
+          if (responseTimerRef.current) clearTimeout(responseTimerRef.current);
 
-    refreshCountRef.current += 1;
-    setIsModalOpen(false);
-    startSessionTimer();
-  }, [
-    handleLogout,
-    startSessionTimer,
-    token,
-    memberId,
-    memberName,
-    memberNickName,
-    annualIncome,
-    deposit,
-  ]);
+          refreshCountRef.current += 1;
+          setIsModalOpen(false);
+          startSessionTimer();
+        } else {
+          handleLogout();
+        }
+      } catch (error) {
+        console.error("세션 연장 실패:", error); //eslint-disable-line
+        handleLogout();
+      }
+    });
+  }, [handleLogout, startSessionTimer]);
 
   const handleRefreshDecline = useCallback(() => {
     handleLogout();
   }, [handleLogout]);
 
   useEffect(() => {
-    if (token && !isWaitingForResponse) {
+    if (isAuthenticated && !isWaitingForResponse && !isPending) {
       refreshCountRef.current = 0;
       startSessionTimer();
     }
@@ -117,7 +103,7 @@ export default function useTokenRefresh(): UseTokenRefreshReturn {
       if (sessionTimerRef.current) clearTimeout(sessionTimerRef.current);
       if (responseTimerRef.current) clearTimeout(responseTimerRef.current);
     };
-  }, [token, isWaitingForResponse, startSessionTimer]);
+  }, [isAuthenticated, isWaitingForResponse, isPending, startSessionTimer]);
 
   return {
     isModalOpen,

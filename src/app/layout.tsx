@@ -7,6 +7,7 @@ import Toast from "@/components/common/toast/index";
 import TutorialContainer from "@/components/common/tutorial/_components/tutorial-container";
 import MainContent from "@/components/main-content";
 import NavBar from "@/components/nav-bar";
+import { getServerAuth } from "@/lib/auth-server";
 import AuthInitializer from "@/provider/AuthInitializer";
 import AuthRefreshHandler from "@/utils/auth-handler";
 
@@ -45,11 +46,17 @@ export default async function RootLayout({
   const queryClient = new QueryClient();
   const dehydratedState = dehydrate(queryClient);
 
+  // 서버에서 인증 상태 확인
+  const { userInfo, isAuthenticated } = await getServerAuth();
+
   return (
     <html lang="ko">
       <body className="flex">
         <Providers dehydratedState={dehydratedState}>
-          <AuthInitializer />
+          <AuthInitializer
+            initialUserInfo={userInfo}
+            isAuthenticated={isAuthenticated}
+          />
           <AuthRefreshHandler />
           <NavBar />
           <Toast />

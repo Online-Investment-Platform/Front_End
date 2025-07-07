@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form";
 
 import { colorMap } from "@/constants/trade";
 import { useStockInfoContext } from "@/context/stock-info-context";
-import { useAuth } from "@/hooks/use-auth";
 import {
   LimitPriceOrderHistory,
   ModifyTradeFormData,
@@ -43,7 +42,6 @@ export default function BuyAndSell({
   const [isConfirmationPage, setIsConfirmationPage] = useState(false);
 
   const { stockName, stockInfo } = useStockInfoContext();
-  const { token } = useAuth();
   const trades = useTradeMutations();
 
   const {
@@ -101,11 +99,9 @@ export default function BuyAndSell({
     [TradeType.Buy]: () =>
       priceType === PriceType.Market
         ? trades.buyAtMarketPrice.mutate({
-            token,
             data: { stockName, quantity: watchedCount },
           })
         : trades.buyAtLimitPrice.mutate({
-            token,
             data: {
               stockName,
               limitPrice: watchedBidding,
@@ -116,11 +112,9 @@ export default function BuyAndSell({
     [TradeType.Sell]: () =>
       priceType === PriceType.Market
         ? trades.sellAtMarketPrice.mutate({
-            token,
             data: { stockName, quantity: watchedCount },
           })
         : trades.sellAtLimitPrice.mutate({
-            token,
             data: {
               stockName,
               limitPrice: watchedBidding,
@@ -131,7 +125,6 @@ export default function BuyAndSell({
     [TradeType.Edit]: () => {
       if (type !== TradeType.Edit || !handleMutate) return;
       handleMutate({
-        token,
         orderId: defaultData?.OrderId,
         data: {
           stockName,
