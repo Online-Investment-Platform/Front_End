@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 
-interface UserInfo {
+export interface UserInfo {
   memberId: string | null;
   memberName: string | null;
   memberNickName: string | null;

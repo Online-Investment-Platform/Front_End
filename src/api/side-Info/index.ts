@@ -10,12 +10,13 @@ interface StockCountResponse {
   count: string;
 }
 
-export async function fetchMyStocks(token: string): Promise<StockHolding[]> {
+export async function fetchMyStocks(): Promise<StockHolding[]> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/account/accounts`,
     {
+      credentials: "include", // httpOnly 쿠키 자동 포함
       headers: {
-        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     },
   );
@@ -27,14 +28,13 @@ export async function fetchMyStocks(token: string): Promise<StockHolding[]> {
   return response.json();
 }
 
-export async function fetchStockCount(
-  token: string,
-): Promise<StockCountResponse> {
+export async function fetchStockCount(): Promise<StockCountResponse> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/home/sidebar/myStockCount`,
     {
+      credentials: "include", // httpOnly 쿠키 자동 포함
       headers: {
-        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     },
   );

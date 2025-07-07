@@ -2,20 +2,18 @@ export default async function makeApiRequest<T, R = string>(
   method: "GET" | "POST" | "PUT" | "DELETE",
   endpoint: string,
   options: {
-    token?: string | null;
     data?: T;
     responseType?: "json" | "text";
   },
 ): Promise<R> {
-  const { token, data, responseType = "json" } = options;
-
+  const { data, responseType = "json" } = options;
   const headers: HeadersInit = {
     ...(data && { "Content-Type": "application/json" }),
-    ...(token && { Authorization: `Bearer ${token}` }),
   };
 
   const config: RequestInit = {
     method,
+    credentials: "include", // httpOnly 쿠키 자동 포함
     headers,
     ...(data && { body: JSON.stringify(data) }),
   };
