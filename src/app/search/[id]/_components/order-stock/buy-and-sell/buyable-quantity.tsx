@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { fetchMyStocks } from "@/api/side-Info";
 import { useStockInfoContext } from "@/context/stock-info-context";
-import { useAuth } from "@/hooks/use-auth";
+import useAuth from "@/hooks/use-auth";
 import MyStockMap from "@/utils/my-stock-count";
 import { calculateBuyableQuantity, getKoreanPrice } from "@/utils/price";
 
@@ -17,12 +17,12 @@ export default function BuyableQuantity({
   type,
   bidding,
 }: BuyableQuantityProps) {
-  const { isAuthenticated, token, deposit } = useAuth();
+  const { isAuthenticated, userInfo } = useAuth(); // token 제거, userInfo 사용
   const { stockName } = useStockInfoContext();
   const { data: stockHoldings } = useQuery({
     queryKey: ["myStocks"],
-    queryFn: () => fetchMyStocks(token!),
-    enabled: !!isAuthenticated && !!token,
+    queryFn: () => fetchMyStocks(), // token 제거
+    enabled: !!isAuthenticated, // token 조건 제거
   });
 
   const stockMap = new MyStockMap(stockHoldings);
@@ -34,7 +34,9 @@ export default function BuyableQuantity({
       <div className="flex-1 cursor-not-allowed border-b border-solid border-gray-600 pb-2 text-right">
         <span className="pr-5 text-gray-200">
           {type === TradeType.Buy
-            ? getKoreanPrice(calculateBuyableQuantity(deposit, bidding))
+            ? getKoreanPrice(
+                calculateBuyableQuantity(userInfo.deposit, bidding),
+              )
             : stockMap.findStockCount(stockName)}
         </span>
         주

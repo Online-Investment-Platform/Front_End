@@ -7,7 +7,7 @@ import {
   TabsTrigger,
 } from "@/components/common/tabs";
 import { StockInfoProvider } from "@/context/stock-info-context";
-import { useAuth } from "@/hooks/use-auth";
+import useAuth from "@/hooks/use-auth";
 
 import { StockInfo, TradeType } from "../../types";
 import LoadingSpinner from "../loading-spinner";

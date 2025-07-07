@@ -3,13 +3,13 @@ import Image from "next/image";
 
 import { getTradeHistory } from "@/api/transaction";
 import { useStockInfoContext } from "@/context/stock-info-context";
-import { useAuth } from "@/hooks/use-auth";
+import useAuth from "@/hooks/use-auth";
 
 import LoadingSpinner from "../../loading-spinner";
 import TradeTable from "../trade-table";
 
 export default function OrderHistory() {
-  const { token, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth(); // token 제거
   const { stockName } = useStockInfoContext();
 
   const {
@@ -18,8 +18,8 @@ export default function OrderHistory() {
     isPending,
   } = useQuery({
     queryKey: ["tradeHistory", `${stockName}`],
-    queryFn: () => getTradeHistory(token, stockName),
-    enabled: !!isAuthenticated && !!token,
+    queryFn: () => getTradeHistory(stockName), // token 제거
+    enabled: !!isAuthenticated, // token 조건 제거
   });
 
   if (isLoading || isPending) {

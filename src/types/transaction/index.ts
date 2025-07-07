@@ -1,5 +1,4 @@
 export interface CancelData {
-  token: string | null;
   orderId: string;
 }
 
@@ -54,7 +53,6 @@ export interface SellMarketPriceResponse {
 }
 
 export interface TradeAtMarketPriceFormDataType {
-  token: string | null;
   data: {
     stockName: string;
     quantity: number;
@@ -62,7 +60,6 @@ export interface TradeAtMarketPriceFormDataType {
 }
 
 export interface TradeAtLimitPriceFormDataType {
-  token: string | null;
   data: {
     stockName: string;
     limitPrice: number;

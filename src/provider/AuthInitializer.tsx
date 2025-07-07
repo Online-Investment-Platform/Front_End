@@ -2,14 +2,28 @@
 
 import { useEffect } from "react";
 
-import { useAuth } from "@/hooks/use-auth";
+import useAuth from "@/hooks/use-auth";
 
-export default function AuthInitializer() {
-  const { initAuth } = useAuth();
+interface AuthInitializerProps {
+  initialUserInfo: {
+    memberId: string | null;
+    memberName: string | null;
+    memberNickName: string | null;
+    annualIncome: string | null;
+    deposit: string | null;
+  };
+  isAuthenticated: boolean;
+}
+
+export default function AuthInitializer({
+  initialUserInfo,
+  isAuthenticated,
+}: AuthInitializerProps) {
+  const { initializeAuth } = useAuth();
 
   useEffect(() => {
-    initAuth();
-  }, []); //eslint-disable-line
+    initializeAuth(initialUserInfo, isAuthenticated);
+  }, [initialUserInfo, isAuthenticated, initializeAuth]);
 
-  return null; // 아무것도 렌더링하지 않음
+  return null;
 }

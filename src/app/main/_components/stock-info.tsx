@@ -8,7 +8,7 @@ import type { StockHolding } from "@/api/side-Info/index";
 import { fetchMyStocks, fetchStockCount } from "@/api/side-Info/index";
 import type { CommonTableColumn } from "@/components/common/table";
 import { TableBody } from "@/components/common/table";
-import { useAuth } from "@/hooks/use-auth";
+import useAuth from "@/hooks/use-auth";
 import magnifierIcon from "@/images/stockInfo.png";
 
 import { MyStockInfoSkeleton } from "./skeleton";
@@ -64,13 +64,13 @@ function StockTable({ data }: { data: StockHolding[] }) {
 }
 
 export default function MyStockInfo() {
-  const { isAuthenticated, token, isInitialized } = useAuth();
+  const { isAuthenticated, isInitialized } = useAuth();
   const [stockCount, setStockCount] = useState<string | null>(null);
 
   const { data: stockHoldings } = useQuery({
     queryKey: ["myStocks"],
-    queryFn: () => fetchMyStocks(token!),
-    enabled: !!isAuthenticated && !!token,
+    queryFn: () => fetchMyStocks(),
+    enabled: !!isAuthenticated,
     refetchOnMount: true,
     staleTime: 0,
   });
@@ -78,17 +78,17 @@ export default function MyStockInfo() {
   useEffect(() => {
     const getStockCount = async () => {
       try {
-        const countData = await fetchStockCount(token!);
+        const countData = await fetchStockCount();
         setStockCount(countData.count);
       } catch (error) {
         console.error("보유 주식 수 조회 실패:", error); //eslint-disable-line
       }
     };
 
-    if (isAuthenticated && token) {
+    if (isAuthenticated) {
       getStockCount();
     }
-  }, [isAuthenticated, token]);
+  }, [isAuthenticated]);
 
   if (!isInitialized) {
     return <MyStockInfoSkeleton />;

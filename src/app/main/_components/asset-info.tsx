@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 
-import { useAuth } from "@/hooks/use-auth";
+import { logoutAction } from "@/actions/auth";
+import useAuth from "@/hooks/use-auth";
 import coinsIcon from "@/images/coin.png";
 import shieldIcon from "@/images/shield.png";
 import { useToast } from "@/store/use-toast-store";
@@ -36,10 +37,10 @@ const formatKoreanCurrency = (amount: number) => {
 const INITIAL_ASSET = 100_000_000;
 
 export default function AssetInfo() {
-  const { isAuthenticated, memberNickName, token, clearAuth, isInitialized } =
-    useAuth();
+  const { isAuthenticated, userInfo, clearAuth, isInitialized } = useAuth();
   const { showToast } = useToast();
   const [assetInfo, setAssetInfo] = useState<AssetResponse | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     const fetchAssetInfo = async () => {
@@ -47,9 +48,9 @@ export default function AssetInfo() {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/home/sidebar/asset`,
           {
+            credentials: "include", // httpOnly 쿠키 자동 포함
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
             },
           },
         );
@@ -59,14 +60,14 @@ export default function AssetInfo() {
           setAssetInfo(data);
         }
       } catch (error) {
-        console.error("자산 정보 조회 실패:", error); // eslint-disable-line
+        console.error("자산 정보 조회 실패:", error); // eslint-disable-line no-console
       }
     };
 
-    if (isAuthenticated && token) {
+    if (isAuthenticated) {
       fetchAssetInfo();
     }
-  }, [isAuthenticated, token]);
+  }, [isAuthenticated]);
 
   // 상승 또는 하락 비율 계산
   const getChangeText = () => {
@@ -97,9 +98,11 @@ export default function AssetInfo() {
 
   // 로그아웃 처리
   const handleLogout = async () => {
-    showToast("로그아웃 중...", "pending");
-    await clearAuth();
-    showToast("로그아웃되었습니다.", "success");
+    startTransition(async () => {
+      showToast("로그아웃 중...", "pending");
+      clearAuth(); // 클라이언트 상태 먼저 정리
+      await logoutAction(); // 서버 액션으로 쿠키 정리 및 리다이렉트
+    });
   };
 
   if (!isInitialized) {
@@ -150,9 +153,10 @@ export default function AssetInfo() {
             <button
               type="button"
               onClick={handleLogout}
-              className="h-30 rounded-5 border-none bg-red-300 px-10 text-16-700 text-gray-600"
+              disabled={isPending}
+              className="h-30 rounded-5 border-none bg-red-300 px-10 text-16-700 text-gray-600 disabled:opacity-50"
             >
-              로그아웃
+              {isPending ? "로그아웃 중..." : "로그아웃"}
             </button>
           </div>
         </div>
@@ -162,7 +166,7 @@ export default function AssetInfo() {
       </div>
       <div className="mt-30 flex h-105 w-264 flex-col items-center justify-center rounded-8 bg-lime-300 p-16">
         <p className="text-14-500 text-gray-600">
-          {memberNickName}님의 총 자산
+          {userInfo.memberNickName}님의 총 자산
         </p>
         <p className="mt-4 text-24-700">
           {assetInfo?.asset

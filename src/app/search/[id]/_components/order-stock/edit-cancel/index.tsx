@@ -1,9 +1,8 @@
-// "use client";
+"use client";
 
 import { useState } from "react";
 
 import Button from "@/components/common/button";
-import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/store/use-toast-store";
 
 import useLimitOrderData from "../../../hooks/use-limit-order-data";
@@ -20,7 +19,6 @@ export default function EditCancel() {
   const [isCancelTable, setIsCancelTable] = useState(false);
 
   const { showToast } = useToast();
-  const { token } = useAuth();
   const {
     data: limitOrderData,
     isLoading,
@@ -46,7 +44,7 @@ export default function EditCancel() {
   };
 
   const handleCancelConfirm = (orderId: string) => {
-    cancelTradeMutation.mutate({ token, orderId });
+    cancelTradeMutation.mutate({ orderId });
     setIsCancelTable(false);
   };
 
